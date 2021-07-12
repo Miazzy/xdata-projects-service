@@ -1022,28 +1022,22 @@
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>减损金额</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否再审</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.secDetractionSum" :options="options.zoneOptions" placeholder="请输入减损金额！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input v-model="legal.secAppeal" :options="options.zoneOptions" placeholder="请选择是否再审！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判生效</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判是否生效</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.secValid" :readonly='false' placeholder="请输入裁判生效情况！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input v-model="legal.secValid" :readonly='false' placeholder="请选择裁判是否生效！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                             </a-row>
                           </div>
 
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>上诉</span>
-                              </a-col>
-                              <a-col :span="8">
-                                <a-input v-model="legal.secAppeal" :options="options.zoneOptions" placeholder="请输入上诉情况！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                              </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>上诉截止日</span>
                               </a-col>
@@ -1240,13 +1234,7 @@
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>减损金额</span>
-                              </a-col>
-                              <a-col :span="8">
-                                <a-input v-model="legal.reviewDetractionSum" :options="options.zoneOptions" placeholder="请输入减损金额！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                              </a-col>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判生效</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判是否生效</span>
                               </a-col>
                               <a-col :span="8">
                                 <a-input v-model="legal.reviewValid" :readonly='false' placeholder="请输入裁判生效情况！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
