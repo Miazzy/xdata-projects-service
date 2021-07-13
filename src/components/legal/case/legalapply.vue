@@ -39,7 +39,21 @@
             <!-- 案件申请 -->
             <div style="background-color:#f0f0f0;">
 
-              <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 2.5rem; margin-right: 2.5rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
+              <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 1.25rem; margin-right: 1.25rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
+
+                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag !== '是' " style="position:absolute; width:575px; right:-1.750rem; float:right; height:30px; transform:scale(0.625); float:right; transform-origin: right center;  margin-right:0.025rem;" >
+                  <a-tag color="#0e8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execFinish(legal)"> 归档闭单 </a-tag>
+                  <a-tag color="#87d068" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; margin-right:0.125rem;" @click="execPatch(legal)"> 修改案件 </a-tag>
+                  <a-tag color="#c05890" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPrint(legal)"> 打印案件 </a-tag>
+                  <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execProcess(legal)"> 录入进展 </a-tag>
+                  <a-tag color="#009ec9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起知会 </a-tag>
+                  <a-tag color="#a03ea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起流程 </a-tag>
+                  <a-tag color="#30aea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起委外 </a-tag>
+                  <a-tag color="#50ce39" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execCollectApply(legal)"> 发起证据收集 </a-tag>
+                  <a-tag color="#d08710" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPaperApply(legal)"> 发起文章盖章 </a-tag>
+                  <a-tag color="#b0c02d" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execConditionApply(legal)"> 发起情况说明 </a-tag>
+                  <a-tag color="#2db7f5" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPlanApply(legal)"> 发起诉讼预案 </a-tag>
+                </div>
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
                   {{ role == 'add' ? legal.caseSType + '发起申请' : legal.caseSType + '详情' }}
@@ -121,7 +135,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>案件级别</span>
@@ -167,7 +181,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       区域信息
@@ -175,7 +189,7 @@
                    </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>所属区域</span>
@@ -192,7 +206,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       诉讼信息
@@ -200,7 +214,7 @@
                    </a-row>
                 </div>
 
-                <div id="van-user-list" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" id="van-user-list" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>案由信息</span>
@@ -239,7 +253,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:none;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:none;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>业务接收时间</span>
@@ -256,7 +270,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>诉讼发起人</span>
@@ -273,7 +287,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>第三人</span>
@@ -292,7 +306,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>诉讼请求</span>
@@ -308,7 +322,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       涉案金额
@@ -316,7 +330,7 @@
                    </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>诉讼标的额</span>
@@ -327,7 +341,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>诉讼违约金</span>
@@ -344,7 +358,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       事项披露
@@ -352,7 +366,7 @@
                    </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="height:auto;margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process'" class="reward-apply-content-item" style="height:auto;margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row style="height:auto;">
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>事项披露</span>
@@ -369,10 +383,10 @@
                   </a-row>
                 </div>
                 
-                <div v-if="!(role == 'add' && legal.stage == '一审阶段' && (legal.caseSType == '起诉案件' || legal.caseSType == '应诉案件') )" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-if="!(role == 'add' && (legal.stage == '' || legal.stage == '一审阶段' || legal.stage == '二审阶段' || legal.stage == '再审阶段' || legal.stage == '执行阶段' || legal.stage == '劳动仲裁' || legal.stage == '行政复议' )  && (legal.caseSType == '起诉案件' || legal.caseSType == '应诉案件'))" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      {{ stage == 'evaluate' ? '案件评价' : '案件周期'}}
+                      {{ stage == 'evaluate' ? '案件评价' : role == 'process' ? '案件进展': '案件周期'}}
                     </a-col>
                    </a-row>
                 </div>
@@ -382,7 +396,7 @@
 
                         <template v-if="stage != 'evaluate' ">
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="0" tab="仲裁管理" style="margin-left:-35px;">
+                        <a-tab-pane v-if="stage != 'evaluate' && role != 'process' " key="0" tab="仲裁管理" style="margin-left:-35px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -398,7 +412,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>受理仲裁庭</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.arbCourt" placeholder="请输入受理仲裁庭！" @blur="validFieldToast('arbCourt')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input id="legal-apply-content-court-cascader"  v-model="legal.arbCourt" placeholder="请输入受理仲裁庭！" @blur="validFieldToast('arbCourt')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>仲裁庭受理时间</span>
@@ -609,7 +623,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="1" tab="一审管理" style="margin-left:0px;">
+                        <a-tab-pane v-if="stage != 'evaluate' && role != 'process'  " key="1" tab="一审管理" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -836,7 +850,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="2" tab="二审管理" style="margin-left:0px;">
+                        <a-tab-pane v-if="stage != 'evaluate' && role != 'process'  " key="2" tab="二审管理" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -1065,7 +1079,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="3" tab="再审管理" style="margin-left:0px;" >
+                        <a-tab-pane v-if="stage != 'evaluate' && role != 'process'  " key="3" tab="再审管理" style="margin-left:0px;" >
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -1270,7 +1284,7 @@
                           </div>
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="4" tab="执行管理" style="margin-left:0px;">
+                        <a-tab-pane v-if="stage != 'evaluate' && role != 'process'  " key="4" tab="执行管理" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -1358,7 +1372,15 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="5" tab="归档闭单" style="margin-left:0px;">
+                        <a-tab-pane v-if="stage != 'evaluate' && role != 'process'  " key="5" tab="归档闭单" style="margin-left:0px;">
+
+                          <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                            <a-row style="border-top: 1px dash #f0f0f0;" >
+                              <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                                归档信息
+                              </a-col>
+                            </a-row>
+                          </div>
 
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
@@ -1396,14 +1418,14 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="100" tab="案件进展" style="margin-left:0px;">
+                        <a-tab-pane v-if="stage != 'evaluate' && role == 'process' " key="100" tab="案件进展" style="margin-left:-10px;">
 
-                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:-20px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>案件进展</span>
                               </a-col>
-                              <a-col :span="20">
+                              <a-col :span="15">
                                 <a-textarea
                                   v-model="legal.lawcase"
                                   placeholder="请输入本案件的案件进展！"
@@ -2025,13 +2047,6 @@ export default {
 
       // 验证字段有效性
       validField(fieldName){
-        const userinfo = Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
-        const regMail = workconfig.system.config.regexp.mail; // 邮箱验证正则表达式
-        this.message[fieldName] = Betools.tools.isNull(this.legal[fieldName]) ? this.valid[fieldName] : '';
-        if(fieldName.toLocaleLowerCase().includes('mail')) {
-          this.message[fieldName] = regMail.test(this.legal[fieldName]) ? '' : '请输入正确的邮箱地址！';
-        }
-        Betools.storage.setStore(`system_${this.tablename}_item#${this.legal.type}#@${userinfo.realname}` , JSON.stringify(this.legal) , 3600 * 2 );
         return Betools.tools.isNull(this.message[fieldName]);
       },
 
@@ -2175,6 +2190,50 @@ export default {
         userlist = this.release_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         this.release_userlist = userlist; 
+      },
+
+      // 案件记录修改申请
+      async execPatch(elem){
+          const { $router } = this;
+          this.role = 'edit';
+          vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
+          const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
+          const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', elem.apply_username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+          vant.Toast.clear();
+          if (resp && resp.length > 0 && resp[0].userlist.includes(userinfo.username)) {
+            $router.push(`/legal/case/legalapply?id=${elem.id}&type=1&tname=案件修改&apply=edit&role=edit`);
+          } else {
+            const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
+            const response = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+            const permission = (response && response.length > 0 && (JSON.stringify(response).includes('领地集团总部')||JSON.stringify(response).includes('所有权限')));
+            if(!permission){
+              return vant.Dialog.alert({  title: '温馨提示',  message: `您好，案件只能由同部门的同事进行修改操作！`, }); 
+            } else {
+              $router.push(`/legal/case/legalapply?id=${elem.id}&type=1&tname=案件修改&apply=edit&role=edit`);
+            }
+          }
+      },
+
+      // 案件记录追加进展
+      async execProcess(elem){
+          const { $router } = this;
+          this.role = 'process';
+          vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
+          const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
+          const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', elem.apply_username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+          vant.Toast.clear();
+          if (resp && resp.length > 0 && resp[0].userlist.includes(userinfo.username)) {
+            $router.push(`/legal/case/legalapply?id=${elem.id}&type=1&tname=案件进展&apply=process&role=process`);
+          } else {
+            const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
+            const response = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+            const permission = (response && response.length > 0 && (JSON.stringify(response).includes('领地集团总部')||JSON.stringify(response).includes('所有权限')));
+            if(!permission){
+              return vant.Dialog.alert({  title: '温馨提示',  message: `您好，案件只能由同部门的同事进行案件进展追加操作！`, }); 
+            } else {
+              $router.push(`/legal/case/legalapply?id=${elem.id}&type=1&tname=案件进展&apply=process&role=process`);
+            }
+          }
       },
 
       // 用户提交入职登记表函数
