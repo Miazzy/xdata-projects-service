@@ -42,7 +42,7 @@
               <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 2.5rem; margin-right: 2.5rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  {{ legal.caseSType }}发起申请
+                  {{ role == 'add' ? legal.caseSType + '发起申请' : legal.caseSType + '详情' }}
                 </div>
 
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
@@ -1902,7 +1902,7 @@ export default {
       lawyerInNamelist:[],
       processLogList:[],
       switchList:['是','否'],
-      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管控',path:'/legal/workspace'},{icon:'user',text:'案件管理',path:'/legal/case/legallist?type=99&status=all&legalTname=all'},{icon:'form',text:'案件发起',path:''}],
+      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管控',path:'/legal/workspace'},{icon:'user',text:'案件管理',path:'/legal/case/legallist?type=99&status=all&legalTname=all'},{icon:'form',text: Betools.tools.getUrlParam('role') == 'add' ? '案件发起' : '案件详情' ,path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
       zoneType:{'领地集团总部':'领地集团总部','成渝区域':'成渝区域','两湖区域':'两湖区域','川北区域':'川北区域','成渝区域':'成渝区域','乐眉区域':'乐眉区域','中原区域':'中原区域','攀西区域':'攀西区域','新疆区域':'新疆区域','大湾区域':'大湾区域','北京区域':'北京区域'},
     };
