@@ -631,7 +631,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>一审受理时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.fstHtime" placeholder="请输入一审法院受理时间！" @blur="validFieldToast('fstHtime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.fstHtime" placeholder="请输入一审受理时间！" @blur="validFieldToast('fstHtime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -855,10 +855,10 @@
                                 <a-input id="legal-apply-content-court-cascader"  v-model="legal.secCourt" placeholder="请输入二审受理法院！" @blur="validFieldToast('secCourt')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法院二审时间</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>二审受理时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.secHtime" placeholder="请输入法院二审时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.secHtime" placeholder="请输入二审受理时间！" @blur="validFieldToast('secHtime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -1084,10 +1084,10 @@
                                 <a-input id="legal-apply-content-court-cascader"  v-model="legal.revCourt" placeholder="请输入再审法院！" @blur="validFieldToast('revCourt')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>再审时间</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>再审受理时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.revHtime" placeholder="请输入法院再审时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.revHtime" placeholder="请输入再审受理时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
