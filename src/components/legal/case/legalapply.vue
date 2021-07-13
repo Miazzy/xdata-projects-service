@@ -377,8 +377,8 @@
                    </a-row>
                 </div>
 
-                <div v-if="!(role == 'add' && legal.stage == '一审阶段' && (legal.caseSType == '起诉案件' || legal.caseSType == '应诉案件'))" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;padding-left:70px;" >
-                      <a-tabs default-active-key="1" @change="callback">
+                <div v-if="!(role == 'add' && (legal.stage == '' || legal.stage == '一审阶段' || legal.stage == '二审阶段' || legal.stage == '再审阶段' || legal.stage == '执行阶段' || legal.stage == '劳动仲裁' || legal.stage == '行政复议' )  && (legal.caseSType == '起诉案件' || legal.caseSType == '应诉案件'))" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;padding-left:70px;" >
+                      <a-tabs default-active-key="0" @change="callback">
 
                         <template v-if="stage != 'evaluate' ">
 
@@ -610,7 +610,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="1" tab="一审管理" style="margin-left:-35px;">
+                        <a-tab-pane v-if="stage != 'evaluate' " key="1" tab="一审管理" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -838,7 +838,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="2" tab="二审管理">
+                        <a-tab-pane v-if="stage != 'evaluate' " key="2" tab="二审管理" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -851,17 +851,16 @@
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px;margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>受理法院</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>二审法院</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.court" :options="options.courtOptions" placeholder="请输入受理法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                                <a-input v-if="(role != 'edit' && role != 'add') || role == 'view' " v-model="legal.court" readonly placeholder="请输入受理法院！" @blur="validFieldToast('court')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.court" :options="options.courtOptions" placeholder="请输入二审受理法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法院受理时间</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法院二审时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.handledTime" placeholder="请输入法院受理时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.handledTime" placeholder="请输入法院二审时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -869,10 +868,10 @@
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>承办法官</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>二审法官</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.judge"  placeholder="请输入承办法官！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-model="legal.judge"  placeholder="请输入二审承办法官！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法官联系方式</span>
@@ -1008,7 +1007,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>与预案是否相符</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.secConform" :options="options.zoneOptions" placeholder="请输入与预案是否相符！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-select  v-model="legal.secConform" default-value="否"  placeholder="请选择与预案是否相符！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                  <template v-for="(element,index) in switchList">
+                                    <a-select-option :index="index" :key="index" :value="element">
+                                      {{element}}
+                                    </a-select-option>
+                                  </template>
+                                </a-select>
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>不符原因</span>
@@ -1025,24 +1030,36 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否再审</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.secAppeal" :options="options.zoneOptions" placeholder="请选择是否再审！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-select  v-model="legal.secAppeal" default-value="否"  placeholder="请选择是否再审！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                  <template v-for="(element,index) in switchList">
+                                    <a-select-option :index="index" :key="index" :value="element">
+                                      {{element}}
+                                    </a-select-option>
+                                  </template>
+                                </a-select>
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判是否生效</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.secValid" :readonly='false' placeholder="请选择裁判是否生效！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-select  v-model="legal.secValid" default-value="否"  placeholder="请输入裁判生效情况！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                  <template v-for="(element,index) in switchList">
+                                    <a-select-option :index="index" :key="index" :value="element">
+                                      {{element}}
+                                    </a-select-option>
+                                  </template>
+                                </a-select>
                               </a-col>
                             </a-row>
                           </div>
 
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>上诉截止日</span>
+                              <a-col v-if="legal.secAppeal == '是' " :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>再审截止日</span>
                               </a-col>
-                              <a-col :span="8">
-                                <a-input v-model="legal.secAppealTime" :readonly='false' placeholder="请输入上诉截止日！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                              <a-col v-if="legal.secAppeal == '是' " :span="8">
+                                <a-input v-model="legal.secAppealTime" :readonly='false' placeholder="请输入再审截止日！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                             </a-row>
                           </div>
@@ -1050,7 +1067,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="3" tab="再审管理" >
+                        <a-tab-pane v-if="stage != 'evaluate' " key="3" tab="再审管理" style="margin-left:0px;" >
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -1063,17 +1080,16 @@
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px;margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>受理法院</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>再审法院</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.court" :options="options.courtOptions" placeholder="请输入受理法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                                <a-input v-if="(role != 'edit' && role != 'add') || role == 'view' " v-model="legal.court" readonly placeholder="请输入受理法院！" @blur="validFieldToast('court')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.court" :options="options.courtOptions" placeholder="请输入再审法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法院受理时间</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>再审时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.handledTime" placeholder="请输入法院受理时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.handledTime" placeholder="请输入法院再审时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -1081,7 +1097,7 @@
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>承办法官</span>
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>再审法官</span>
                               </a-col>
                               <a-col :span="8">
                                 <a-input v-model="legal.judge"  placeholder="请输入承办法官！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
@@ -1220,7 +1236,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>与预案是否相符</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.reviewConform" :options="options.zoneOptions" placeholder="请输入与预案是否相符！" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-select  v-model="legal.reviewConform" default-value="否"  placeholder="请选择与预案是否相符！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                  <template v-for="(element,index) in switchList">
+                                    <a-select-option :index="index" :key="index" :value="element">
+                                      {{element}}
+                                    </a-select-option>
+                                  </template>
+                                </a-select>
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>不符原因</span>
@@ -1237,14 +1259,71 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判是否生效</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.reviewValid" :readonly='false' placeholder="请输入裁判生效情况！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-select  v-model="legal.reviewValid" default-value="否"  placeholder="请输入裁判生效情况！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                  <template v-for="(element,index) in switchList">
+                                    <a-select-option :index="index" :key="index" :value="element">
+                                      {{element}}
+                                    </a-select-option>
+                                  </template>
+                                </a-select>
                               </a-col>
                             </a-row>
                           </div>
                           </div>
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="4" tab="执行管理">
+                        <a-tab-pane v-if="stage != 'evaluate' " key="4" tab="执行管理" style="margin-left:0px;">
+
+                          <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                            <a-row style="border-top: 1px dash #f0f0f0;" >
+                              <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                                法院信息
+                              </a-col>
+                            </a-row>
+                          </div>
+
+                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px;margin-right:10px;">
+                            <a-row>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行法院</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.court" :options="options.courtOptions" placeholder="请输入执行法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input v-if="(role != 'edit' && role != 'add') || role == 'view' " v-model="legal.court" readonly placeholder="请输入执行法院！" @blur="validFieldToast('court')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                              </a-col>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行时间</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-date-picker v-model="legal.handledTime" placeholder="请输入执行时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                              </a-col>
+                            </a-row>
+                          </div>
+
+                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                            <a-row>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行法官</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-model="legal.judge"  placeholder="请输入执行法官！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                              </a-col>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法官联系方式</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-model="legal.judgeMobile"  placeholder="请输入承办法官联系方式！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                              </a-col>
+                            </a-row>
+                          </div>  
+
+                          <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                            <a-row style="border-top: 1px dash #f0f0f0;" >
+                              <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                                执行信息
+                              </a-col>
+                            </a-row>
+                          </div>
 
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
@@ -1282,7 +1361,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="5" tab="归档闭单">
+                        <a-tab-pane v-if="stage != 'evaluate' " key="5" tab="归档闭单" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
@@ -1320,7 +1399,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="stage != 'evaluate' " key="100" tab="案件进展">
+                        <a-tab-pane v-if="stage != 'evaluate' " key="100" tab="案件进展" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
@@ -1648,7 +1727,7 @@ export default {
         caseID :'', // varchar(64)  default '' not null comment '案件编号',
         caseType :'', // varchar(64)  default '' not null comment '一级案由',
         caseSType :'起诉案件', // varchar(64)  default '' not null comment '二级案由',
-        stage :'一审阶段', // varchar(64)  default '' not null comment '程序阶段',
+        stage :'', // varchar(64)  default '' not null comment '程序阶段',
         receiveTime: dayjs().format('YYYY-MM-DD'), // timestamp    default CURRENT_TIMESTAMP not null comment '业务部门接收时间',
         lawRTime: dayjs().format('YYYY-MM-DD'), // timestamp    default CURRENT_TIMESTAMP not null comment '法律部门接收时间',
         accuser :'', // varchar(64)  default '' not null comment '诉讼发起人(原告/上诉人)',
