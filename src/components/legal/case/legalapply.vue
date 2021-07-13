@@ -398,14 +398,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>受理仲裁庭</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.court" :options="options.courtOptions" placeholder="请输入受理法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                                <a-input v-if="(role != 'edit' && role != 'add') || role == 'view' " v-model="legal.court" readonly placeholder="请输入受理仲裁庭！" @blur="validFieldToast('court')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-if="role != 'view' " id="legal-apply-content-court-cascader"  v-model="legal.arbCourt" placeholder="请输入受理仲裁庭！" @blur="validFieldToast('arbCourt')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>仲裁庭受理时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.handledTime" placeholder="请输入仲裁庭受理时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.arbHtime" placeholder="请输入仲裁庭受理时间！" @blur="validFieldToast('arbHtime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -416,13 +415,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>承办仲裁员</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.judge"  placeholder="请输入承办仲裁员！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-model="legal.arbJudge"  placeholder="请输入承办仲裁员！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>仲裁员联系方式</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.judgeMobile"  placeholder="请输入仲裁员联系方式！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-model="legal.arbJudgeMobile"  placeholder="请输入仲裁员联系方式！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>  
@@ -441,7 +440,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否委外</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-select  v-model="legal.externalFlag" default-value="是" @blur="validFieldToast('externalFlag')"  placeholder="请选择是否聘用外部律所" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                <a-select  v-model="legal.arbFirmFlag" default-value="是" @blur="validFieldToast('externalFlag')"  placeholder="请选择是否聘用外部律所" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                                   <template v-for="(element,index) in switchList">
                                     <a-select-option :index="index" :key="index" :value="element">
                                       {{element}}
@@ -452,36 +451,36 @@
                             </a-row>
                           </div>
 
-                          <div v-if="legal.externalFlag == '是' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                          <div v-if="legal.arbFirmFlag == '是' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>律师事务所</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-auto-complete :data-source="firmNamelist" v-model="legal.lawOffice" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请输入律所名称！" :filter-option="filterOption" />
+                                <a-auto-complete :data-source="firmNamelist" v-model="legal.arbFirm" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请输入律所名称！" :filter-option="filterOption" />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>委托时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.lawOfficeTime" placeholder="请选择外聘律所委托时间！" @blur="validFieldToast('lawOfficeTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.arbFtime" placeholder="请选择外聘律所委托时间！" @blur="validFieldToast('arbFtime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
 
-                          <div v-if="legal.externalFlag == '是' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                          <div v-if="legal.arbFirmFlag == '是' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                             <a-row>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>外聘律师</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-auto-complete :data-source="lawyerNamelist" v-model="legal.lawyer" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请输入外聘律师！" :filter-option="filterOption" />
+                                <a-auto-complete :data-source="lawyerNamelist" v-model="legal.arbLawyer" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请输入外聘律师！" :filter-option="filterOption" />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>律师联系电话</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.lawyerMobile" placeholder="请输入外聘律师联系电话！" @blur="validFieldToast('lawyerMobile')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-model="legal.arbLawyerMobile" placeholder="请输入外聘律师联系电话！" @blur="validFieldToast('arbLawyerMobile')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -492,13 +491,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>内部律师</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-auto-complete :data-source="lawyerInNamelist" v-model="legal.inHouseLawyers" @blur="validFieldToast('inHouseLawyers')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请输入内部律师！" :filter-option="filterOption" />
+                                <a-auto-complete :data-source="lawyerInNamelist" v-model="legal.arbEmployee" @blur="validFieldToast('arbEmployee')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请输入内部律师！" :filter-option="filterOption" />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>律师联系电话</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.inHouseLawyersMobile"  placeholder="请输入内部律师联系电话！" @blur="validFieldToast('inHouseLawyersMobile')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-input v-model="legal.arbEmployeeMobile"  placeholder="请输入内部律师联系电话！" @blur="validFieldToast('arbEmployeeMobile')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>    
@@ -517,13 +516,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>举证截止日</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.fstEvidence" placeholder="请输入举证截止日！" @blur="validFieldToast('receiveTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.arbEvidence" placeholder="请输入举证截止日！" @blur="validFieldToast('receiveTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>开庭时间</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.fstCourtDate" placeholder="请输入开庭时间！" @blur="validFieldToast('lawRTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                                <a-date-picker v-model="legal.arbCourtDate" placeholder="请输入开庭时间！" @blur="validFieldToast('lawRTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                               </a-col>
                             </a-row>
                           </div>
@@ -534,13 +533,13 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>诉讼预案</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.fstPlan" placeholder="请输入诉讼预案" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input v-model="legal.arbPlan" placeholder="请输入诉讼预案" @blur="validFieldToast('zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                               <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>未填写原因</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.fstReason" placeholder="请输入未填写原因！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input v-model="legal.arbReason" placeholder="请输入未填写原因！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                             </a-row>
                           </div>
@@ -551,7 +550,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>与预案是否相符</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-select  v-model="legal.fstConform" default-value="否"  placeholder="请选择与预案是否相符！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                <a-select  v-model="legal.arbConform" default-value="否"  placeholder="请选择与预案是否相符！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                                   <template v-for="(element,index) in switchList">
                                     <a-select-option :index="index" :key="index" :value="element">
                                       {{element}}
@@ -563,7 +562,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>不符原因</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-input v-model="legal.fstUnConformReasom" :readonly='false' placeholder="请输入不符原因！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-input v-model="legal.arbUnConformReasom" :readonly='false' placeholder="请输入不符原因！" @blur="validFieldToast('zoneProject')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                             </a-row>
                           </div>
@@ -574,7 +573,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否上诉</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-select  v-model="legal.fstAppeal" default-value="否"  placeholder="请选择是否上诉！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                <a-select  v-model="legal.arbAppeal" default-value="否"  placeholder="请选择是否上诉！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                                   <template v-for="(element,index) in switchList">
                                     <a-select-option :index="index" :key="index" :value="element">
                                       {{element}}
@@ -586,7 +585,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>裁判是否生效</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-select  v-model="legal.fstValid" default-value="否"  placeholder="请输入裁判生效情况！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                <a-select  v-model="legal.arbValid" default-value="否"  placeholder="请输入裁判生效情况！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                                   <template v-for="(element,index) in switchList">
                                     <a-select-option :index="index" :key="index" :value="element">
                                       {{element}}
@@ -603,7 +602,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>上诉截止日</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-date-picker v-model="legal.fstAppealTime" placeholder="请输入上诉截止日！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                                <a-date-picker v-model="legal.arbAppealTime" placeholder="请输入上诉截止日！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                               </a-col>
                             </a-row>
                           </div>
@@ -1802,6 +1801,27 @@ export default {
         lawyer_score:0,
         case_remark:'',
         lawyer_remark:'',
+
+        arbCourt:'',
+        arbHtime:'',
+        arbJudge:'',
+        arbJudgeMobile:'',
+        arbFirmFlag:'',
+        arbFirm:'',
+        arbFtime:'',
+        arbLawyer:'',
+        arbLawyerMobile:'',
+        arbEmployee:'',
+        arbEmployeeMobile:'',
+        arbEvidence:'',
+        arbCourtDate:'',
+        arbPlan:'',
+        arbReason:'',
+        arbConform:'',
+        arbUnConformReasom:'',
+        arbAppeal:'',
+        arbValid:'',
+        arbAppealTime:'',
 
         files:'', // 起诉状/授权文书
       },
