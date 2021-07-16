@@ -166,6 +166,14 @@ export default {
         this.usertitle = weworkinfo.usertitle;
         const userinfo = await Betools.storage.getStore('system_userinfo');
 
+        (async() => {
+          try {
+            gwm.creation({ txt:userinfo.realname + ' ' + userinfo.username + ' ' + dayjs().format('YY-MM-DD'), width: 128, height: 80, x: 10, y: 70, fontSize: 10, color: '#ff99aa' });
+          } catch (error) {
+            console.error(`watermark error:`, error);
+          }
+        })();
+
         (async() => { //获取操作权限信息,权限管控功能
           try {
             const role = await Betools.query.queryRoleInfo();
