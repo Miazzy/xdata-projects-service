@@ -2062,7 +2062,7 @@ export default {
       // 查询基础信息
       async queryInfo() {
         try {
-          vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
+          vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
           const id = this.id = Betools.tools.getUrlParam('id');
           this.legal.caseSType = (Betools.tools.getUrlParam('legalTname') || '起诉') + '案件';
           this.role = Betools.tools.getUrlParam('role');
@@ -2075,6 +2075,7 @@ export default {
           this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
           this.iswework = Betools.tools.isWework(); //查询是否为企业微信
           this.userinfo = await this.weworkLogin(); //查询当前登录用户
+          vant.Toast.clear();
 
           this.legal.apply_realname = userinfo && userinfo.realname ? userinfo.realname : '';
           this.legal.apply_username = userinfo && userinfo.username ? userinfo.username : '';
@@ -2110,7 +2111,6 @@ export default {
           this.lawyerNamelist = this.lawyerlist.map(item => { return item.lawyer_name });
           const lawyerInnerList = this.lawyerInnerList.map(item => {return item.name });
           this.lawyerInNamelist = [...new Set(lawyerInnerList)];
-          vant.Toast.clear();
           
           if(Betools.tools.isNull(id)){ //自动回显刚才填写的用户基础信息
             try {
