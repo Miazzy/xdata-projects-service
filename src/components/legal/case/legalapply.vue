@@ -2094,6 +2094,14 @@ export default {
               this.processLogList = await Betools.query.queryProcessLog();
             })();
           } 
+
+          (async() => {
+            try {
+              gwm.creation({ txt:userinfo.realname + ' ' + userinfo.username + ' ' + dayjs().format('YY-MM-DD'), width: 128, height: 80, x: 10, y: 70, fontSize: 10, color: '#ff99aa' });
+            } catch (error) {
+              console.error(`watermark error:`, error);
+            }
+          })();
           
           this.lawyerInnerList = await Betools.query.queryLawyerList();
           this.firmlist = await Betools.manage.queryTableData('bs_law_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
