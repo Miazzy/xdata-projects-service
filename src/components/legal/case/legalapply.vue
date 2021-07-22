@@ -299,7 +299,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>起诉状/授权文书</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-upload name="file" :multiple="false" action="https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload" @change="uploadComplete" style="width:85%;" >
+                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:85%;" >
                         <a-button> <a-icon type="upload" /> 上传 </a-button>
                       </a-upload>
                     </a-col>
@@ -1721,7 +1721,7 @@ export default {
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
-      uploadURL:'',
+      uploadURL:'https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload',
       tablename:'bs_legal',
       size: 0,
       options:{
