@@ -17,12 +17,6 @@
             <a-menu-item key="setting:2" :to="`/legal/workspace`" @click="redirectView('/legal/workspace')" >
                 工作台
             </a-menu-item>
-            <a-menu-item key="setting:3" :to="`/stock/ranking`" @click="redirectView('/stock/ranking')" >
-                排行榜
-            </a-menu-item>
-            <a-menu-item key="setting:4" :to="`/stock/setting`"  >
-                系统设置
-            </a-menu-item>
             </a-menu-item-group>
         </a-sub-menu>
       </a-menu>
