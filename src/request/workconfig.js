@@ -209,6 +209,51 @@ export const reward = ($router) => {
             }
         }],
     }, {
+        id: 'process-pane',
+        title: '关联流程',
+        display: true,
+        taskflows: [{
+            name: "发起委外申请",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xinwen_jy.png`,
+            href: "/account/todolist",
+            description: '发起委外申请',
+            click: () => {
+                $router.push(`/legal/firm/firmapply?type=1&tname=律所录入&apply=new`, '_blank');
+            }
+        }, {
+            name: "发起证据收集",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xiangmuxinxi_jy.png`,
+            href: "/account/donelist",
+            description: '发起证据收集',
+            click: () => {
+                $router.push(`/legal/lawyer/lawyerapply?type=1&tname=律师录入&apply=new`, '_blank');
+            }
+        }, {
+            name: "发起文书盖章",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xiezuowendangku_jy.png`,
+            href: "/account/todolist",
+            description: '发起文书盖章',
+            click: () => {
+                $router.push(`/legal/firm/firmlist?type=1&tname=律所管理&apply=管理`, '_blank');
+            }
+        }, {
+            name: "发起情况说明",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/baomingfei.png`,
+            href: "/account/todolist",
+            description: '发起情况说明',
+            click: () => {
+                $router.push(`/legal/lawyer/lawyerlist?type=1&tname=律师管理&apply=管理`, '_blank');
+            }
+        }, {
+            name: "发起诉讼预案",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/baomingfei.png`,
+            href: "/account/todolist",
+            description: '发起诉讼预案',
+            click: () => {
+                $router.push(`/legal/lawyer/lawyerlist?type=1&tname=律师管理&apply=管理`, '_blank');
+            }
+        }],
+    }, {
         id: 'common-pane',
         title: '律所律师',
         display: true,
