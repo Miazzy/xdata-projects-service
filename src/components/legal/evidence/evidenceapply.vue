@@ -42,19 +42,19 @@
               </a-breadcrumb>
             </div>
 
-            <!-- 录入账户记录 -->
+            <!-- 发起证据收集申请 -->
             <div style="background-color:#f0f0f0;">
 
               <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 2.5rem; margin-right: 2.5rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  录入账户记录
+                  发起证据收集申请
                 </div>
 
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      账户信息
+                      基础信息
                     </a-col>
                    </a-row>
                 </div>
@@ -79,33 +79,26 @@
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>账户类型</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>标题</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.account_type" :readonly="false" placeholder="请输入账号类型！" @blur="validFieldToast('account_type')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                    </a-col>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>关联系统</span>
-                    </a-col>
-                    <a-col :span="8">
-                      <a-input v-model="element.system" :readonly="false" placeholder="请输入关联系统！" @blur="validFieldToast('system')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.title" :readonly="false" placeholder="请输入标题内容！" @blur="validFieldToast('account_type')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
 
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>账户账号</span>
+                    <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>申请内容</span>
                     </a-col>
-                    <a-col :span="8">
-                      <a-input v-model="element.account" :readonly="false" placeholder="请输入账户账号！" @blur="validFieldToast('account')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                    </a-col>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>账户密码</span>
-                    </a-col>
-                    <a-col :span="8">
-                      <a-input v-model="element.password" :readonly="false" placeholder="请输入账户密码！" @blur="validFieldToast('password')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    <a-col :span="20">
+                      <a-textarea
+                        v-model="element.content"
+                        placeholder="请输入申请内容！"
+                        :auto-size="{ minRows: 3, maxRows: 100 }"
+                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                      />
                     </a-col>
                   </a-row>
                 </div>
