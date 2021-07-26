@@ -214,31 +214,31 @@ export const reward = ($router) => {
         display: true,
         taskflows: [{
             name: "发起委外申请",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xinwen_jy.png`,
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_phone_workmate_.png`,
             href: "/account/todolist",
             description: '发起委外申请',
             click: () => {
                 $router.push(`/legal/firm/firmapply?type=1&tname=律所录入&apply=new`, '_blank');
             }
         }, {
-            name: "发起证据收集",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xiangmuxinxi_jy.png`,
-            href: "/account/donelist",
-            description: '发起证据收集',
-            click: () => {
-                $router.push(`/legal/lawyer/lawyerapply?type=1&tname=律师录入&apply=new`, '_blank');
-            }
-        }, {
             name: "发起文书盖章",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xiezuowendangku_jy.png`,
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/laodongnenglijianding.png`,
             href: "/account/todolist",
             description: '发起文书盖章',
             click: () => {
                 $router.push(`/legal/firm/firmlist?type=1&tname=律所管理&apply=管理`, '_blank');
             }
         }, {
+            name: "发起证据收集",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/shiyedengjishenqing.png`,
+            href: "/account/donelist",
+            description: '发起证据收集',
+            click: () => {
+                $router.push(`/legal/lawyer/lawyerapply?type=1&tname=律师录入&apply=new`, '_blank');
+            }
+        }, {
             name: "发起情况说明",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/baomingfei.png`,
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_schedule_study_.png`,
             href: "/account/todolist",
             description: '发起情况说明',
             click: () => {
@@ -246,7 +246,7 @@ export const reward = ($router) => {
             }
         }, {
             name: "发起诉讼预案",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/baomingfei.png`,
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_app_report_.png`,
             href: "/account/todolist",
             description: '发起诉讼预案',
             click: () => {
