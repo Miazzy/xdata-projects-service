@@ -206,14 +206,14 @@ const routes = [{
     }
 }, {
     path: '/legal/stampedapply',
-    name: "stampedapply",
+    name: "发起文书盖章申请",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/stamped/stampedapply.vue"], resolve)
     }
 }, {
     path: '/legal/representationapply',
-    name: "representationapply",
+    name: "发起情况说明",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/representation/representationapply.vue"], resolve)
