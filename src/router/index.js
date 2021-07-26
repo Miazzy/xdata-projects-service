@@ -204,6 +204,41 @@ const routes = [{
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/report/legalquarter.vue"], resolve)
     }
+}, {
+    path: '/legal/stampedapply',
+    name: "stampedapply",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/stamped/stampedapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/representationapply',
+    name: "representationapply",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/representation/representationapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/planapply',
+    name: "发起诉讼预案申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/plan/planapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/outsourceapply',
+    name: "发起委外申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/outsource/outsourceapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/evidenceapply',
+    name: "发起证据收集申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/evidence/evidenceapply.vue"], resolve)
+    }
 }];
 
 // 设置路由信息
