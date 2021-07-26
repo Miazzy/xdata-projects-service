@@ -1,6 +1,6 @@
 <template>
   <div id="reward-home" style="background-color:#f0f0f0;width:100%;height:auto;">
-      <div style="background-color:#f0f0f0;width:100%;height:auto;">
+      <div style="background-color:#f0f0f0;width:100%;height:1200px;">
       <a-menu mode="horizontal">
         <a-sub-menu>
             <span slot="title" class="submenu-title-wrapper" >
@@ -79,7 +79,7 @@
                     </div>
                   </div>
                 </a-card>
-                <div id="nav-content-process" style="">
+                <div id="nav-content-process" style="display:none;">
                   <a-card :loading="loading" title="诉讼案件流程" :bordered="false" style="margin-top:10px;">
                     <a-tag color="blue" style="margin-bottom:10px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
                     <div class="members">
