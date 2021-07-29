@@ -265,6 +265,17 @@ export default {
           );
       },
 
+      // 执行上传操作
+      uploadComplete(info) {
+        if (info.file.status === 'done') {
+          const tempfile = info.file.response.name + `###${info.file.name}`;
+          this.legal.files = Betools.tools.isNull(this.legal.files) ? tempfile : this.legal.files + ',' + tempfile ;
+          this.$message.success(`${info.file.name} file uploaded successfully`);
+        } else if (info.file.status === 'error') {
+          this.$message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+
       // 企业微信登录处理函数
       async  weworkLogin  (codeType = 'search', systemType = 'search')  {
           const userinfo_work = await Betools.query.queryWeworkUser(codeType, systemType,'v4');
