@@ -269,7 +269,7 @@ export default {
       uploadComplete(info) {
         if (info.file.status === 'done') {
           const tempfile = info.file.response.name + `###${info.file.name}`;
-          this.legal.files = Betools.tools.isNull(this.legal.files) ? tempfile : this.legal.files + ',' + tempfile ;
+          this.element.files = Betools.tools.isNull(this.element.files) ? tempfile : this.element.files + ',' + tempfile ;
           this.$message.success(`${info.file.name} file uploaded successfully`);
         } else if (info.file.status === 'error') {
           this.$message.error(`${info.file.name} file upload failed.`);
