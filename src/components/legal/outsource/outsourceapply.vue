@@ -192,6 +192,8 @@ export default {
       id:'',
       element: {
           id:'',
+          title:'',
+          legal_title:'',
           create_time: dayjs().format('YYYY-MM-DD'),
           create_by:'',
           create_username:'',
