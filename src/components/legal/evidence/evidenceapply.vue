@@ -78,6 +78,12 @@
                     <a-col :span="8">
                       <a-input v-model="element.title" :readonly="false" placeholder="请输入标题内容！" @blur="validFieldToast('account_type')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>关联案件</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.legal_title" :readonly="false" placeholder="请输入关联案件信息！"  style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
                   </a-row>
                 </div>
 
