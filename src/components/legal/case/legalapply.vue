@@ -48,7 +48,7 @@
                   <a-tag color="#87d068" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPatch(legal)"> 修改案件 </a-tag>
                   <a-tag color="#c05890" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPrint(legal)"> 打印案件 </a-tag>
                   <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execProcess(legal)"> 录入进展 </a-tag>
-                  <a-tag color="#30aea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起委外 </a-tag>
+                  <a-tag color="#30aea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起委外申请 </a-tag>
                   <a-tag color="#50ce39" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execCollectApply(legal)"> 发起证据收集 </a-tag>
                   <a-tag color="#d08710" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPaperApply(legal)"> 发起文章盖章 </a-tag>
                   <a-tag color="#b0c02d" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execConditionApply(legal)"> 发起情况说明 </a-tag>
