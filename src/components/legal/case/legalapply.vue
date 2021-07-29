@@ -41,13 +41,13 @@
 
               <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 1.25rem; margin-right: 1.25rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
 
-                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag !== '是' " style="position:absolute; width:575px; right:-1.750rem; float:right; height:30px; transform:scale(0.625); float:right; transform-origin: right center;  margin-right:0.025rem;" >
+                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; width:1000px; left: 4.25rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
                   <a-tag color="#0e8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execFinish(legal)"> 归档闭单 </a-tag>
                   <a-tag color="#87d068" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; margin-right:0.125rem;" @click="execPatch(legal)"> 修改案件 </a-tag>
                   <a-tag color="#c05890" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPrint(legal)"> 打印案件 </a-tag>
                   <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execProcess(legal)"> 录入进展 </a-tag>
-                  <a-tag color="#009ec9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起知会 </a-tag>
-                  <a-tag color="#a03ea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起流程 </a-tag>
+                  <a-tag color="#009ec9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; display:none;" @click="execOutFirmApply(legal)"> 发起知会 </a-tag>
+                  <a-tag color="#a03ea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; display:none;" @click="execOutFirmApply(legal)"> 发起流程 </a-tag>
                   <a-tag color="#30aea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execOutFirmApply(legal)"> 发起委外 </a-tag>
                   <a-tag color="#50ce39" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execCollectApply(legal)"> 发起证据收集 </a-tag>
                   <a-tag color="#d08710" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPaperApply(legal)"> 发起文章盖章 </a-tag>
@@ -55,7 +55,7 @@
                   <a-tag color="#2db7f5" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPlanApply(legal)"> 发起诉讼预案 </a-tag>
                 </div>
 
-                <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
+                <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:35px; font-size: 1.5rem; ">
                   {{ role == 'add' ? legal.caseSType + '发起申请' : legal.caseSType + '详情' }}
                 </div>
 
@@ -1388,7 +1388,7 @@
                                 <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否结案</span>
                               </a-col>
                               <a-col :span="8">
-                                <a-select  v-model="legal.close_flag" default-value="否" @blur="validFieldToast('close_flag')"  placeholder="请输入是否结案！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                                <a-select  v-model="legal.close_flag" default-value="否" placeholder="请输入是否结案！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                                   <template v-for="(element,index) in switchList">
                                     <a-select-option :index="index" :key="index" :value="element">
                                       {{element}}
