@@ -2702,6 +2702,7 @@ export default {
         const id = Betools.tools.queryUniqueID(); // 表单ID
         const create_time = dayjs().format('YYYY-MM-DD');
         const create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+        const create_username =  (userinfo ? userinfo.username || userinfo.loginid : '');
 
         // 验证数据是否已经填写
         if(Betools.tools.isNull(this.legal.lawcase)){
@@ -2714,7 +2715,7 @@ export default {
             content: "是否确认追加此案件进展信息?",
             onOk: async() => {
                   const { lawcase } = this.legal;
-                  const element = { id, create_time, pid, create_by, content:lawcase };
+                  const element = { id, create_time, create_username, pid, create_by, content:lawcase };
                   const result = await Betools.manage.postTableData('bs_legal_progress', element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
