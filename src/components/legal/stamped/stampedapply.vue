@@ -322,7 +322,7 @@ export default {
           } catch (error) {
             console.error(error);
           }
-         
+          
           const id = this.id = Betools.tools.getUrlParam('id');
           const pid = this.id = Betools.tools.getUrlParam('pid');
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
@@ -332,9 +332,9 @@ export default {
           } else {
            
           }
-
+          
           this.element.legal_title = this.legal.title;
-          this.element.pid = this.legal.pid;
+          this.element.pid = pid;
         } catch (error) {
           console.log(error);
         }

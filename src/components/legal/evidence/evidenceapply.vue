@@ -334,7 +334,7 @@ export default {
           }
 
           this.element.legal_title = this.legal.title;
-          this.element.pid = this.legal.pid;
+          this.element.pid = pid;
         } catch (error) {
           console.log(error);
         }
