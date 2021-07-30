@@ -184,12 +184,12 @@ export default {
     return {
       iswechat:false,
       iswework:false,
-      pageName: "工商管理",
+      pageName: "发起证据收集申请",
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL:'https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload',
-      tablename:'bs_company_flow_account',
+      tablename:'bs_legal_evidence',
       size: 0,
       options:{
         create_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
