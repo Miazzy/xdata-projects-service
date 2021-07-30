@@ -68,6 +68,32 @@ export const compcolumns = {
 }
 
 /**
+ * 获取字段组
+ */
+ export const subColumns = {
+    progressColumns: [{
+            title: '填报时间',
+            dataIndex: 'create_time',
+            key: 'create_time',
+            width: 120,
+        },
+        {
+            title: '填报人员',
+            dataIndex: 'create_by',
+            key: 'create_by',
+            width: 120,
+        },
+        {
+            title: '案件进展',
+            dataIndex: 'content',
+            key: 'content',
+            ellipsis: true,
+            width: 180,
+        },
+    ],
+};
+
+/**
  * @description 物品领用管理
  */
 export const goodstype = {

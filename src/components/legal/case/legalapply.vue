@@ -1506,6 +1506,27 @@
                       </a-tabs>
                 </div>
 
+                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && progressData && progressData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      案件进展
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && progressData && progressData.length > 0" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="2" >
+                    </a-col>
+                    <a-col :span="21" >
+                      <a-table :columns="progressColumns" :data-source="progressData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                      </a-table>
+                    </a-col>
+                    <a-col :span="1" >
+                    </a-col>
+                  </a-row>
+                </div>
+
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
@@ -1916,6 +1937,8 @@ export default {
       collection: [{ }],
       userinfo: '',
       usertitle:'',
+      progressColumns:workconfig.subColumns.progressColumns,
+      progressData:[],
       firmlist:[],
       firmNamelist:[],
       lawyerlist:[],
