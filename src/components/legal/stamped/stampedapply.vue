@@ -184,12 +184,12 @@ export default {
     return {
       iswechat:false,
       iswework:false,
-      pageName: "工商管理",
+      pageName: "发起文书盖章",
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL:'https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload',
-      tablename:'bs_company_flow_account',
+      tablename:'bs_legal_stamped',
       size: 0,
       options:{
         create_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
@@ -218,6 +218,7 @@ export default {
           password:'',
           remark: '暂无备注', //备注信息
           xid:'',
+          pid:'',
       },
       data: [],
       readonly: false,
@@ -332,7 +333,7 @@ export default {
           } else {
            
           }
-          
+
           this.element.legal_title = this.legal.title;
           this.element.pid = pid;
         } catch (error) {

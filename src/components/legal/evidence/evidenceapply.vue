@@ -218,6 +218,7 @@ export default {
           password:'',
           remark: '暂无备注', //备注信息
           xid:'',
+          pid:'',
       },
       data: [],
       readonly: false,

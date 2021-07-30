@@ -190,7 +190,7 @@ export default {
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL:'https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload',
-      tablename:'bs_company_flow_account',
+      tablename:'bs_legal_outsource',
       size: 0,
       options:{
         create_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
@@ -219,6 +219,7 @@ export default {
           password:'',
           remark: '暂无备注', //备注信息
           xid:'',
+          pid:'',
       },
       data: [],
       readonly: false,
