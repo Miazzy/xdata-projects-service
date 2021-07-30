@@ -324,7 +324,7 @@ export default {
           }
           
           const id = this.id = Betools.tools.getUrlParam('id');
-          const pid = this.id = Betools.tools.getUrlParam('pid');
+          const pid = this.pid = Betools.tools.getUrlParam('pid');
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
 
           if(!Betools.tools.isNull(id)){
