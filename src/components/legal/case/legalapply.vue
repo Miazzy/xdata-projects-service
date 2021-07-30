@@ -1514,12 +1514,33 @@
                    </a-row>
                 </div>
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && progressData && progressData.length > 0" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && progressData && progressData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="2" >
                     </a-col>
                     <a-col :span="21" >
                       <a-table :columns="progressColumns" :data-source="progressData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                      </a-table>
+                    </a-col>
+                    <a-col :span="1" >
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && outsourceData && outsourceData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      委外申请
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && outsourceData && outsourceData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="2" >
+                    </a-col>
+                    <a-col :span="21" >
+                      <a-table :columns="outsourceColumns" :data-source="outsourceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
                       </a-table>
                     </a-col>
                     <a-col :span="1" >
@@ -1939,6 +1960,16 @@ export default {
       usertitle:'',
       progressColumns:workconfig.subColumns.progressColumns,
       progressData:[],
+      evidenceColumns:workconfig.subColumns.evidenceColumns,
+      evidenceData:[],
+      outsourceColumns:workconfig.subColumns.outsourceColumns,
+      outsourceData:[],
+      planColumns:workconfig.subColumns.planColumns,
+      planData:[],
+      representationColumns:workconfig.subColumns.representationColumns,
+      representationData:[],
+      stampedColumns:workconfig.subColumns.stampedColumns,
+      stampedData:[],
       firmlist:[],
       firmNamelist:[],
       lawyerlist:[],
@@ -2103,7 +2134,7 @@ export default {
           this.legal.apply_realname = userinfo && userinfo.realname ? userinfo.realname : '';
           this.legal.apply_username = userinfo && userinfo.username ? userinfo.username : '';
           this.options.courtOptions = await workconfig.courtList();
-
+           
           if(!Betools.tools.isNull(id)){
             this.legal = null;
             (async()=>{
@@ -2117,6 +2148,24 @@ export default {
             (async()=>{
               this.processLogList = await Betools.query.queryProcessLog();
             })();
+
+            this.progressData = await Betools.manage.queryTableDataDB('bs_legal_progress' , `_where=(pid,eq,${id})&_fields=id,create_time,create_by,content&_sort=-id&_p=0&_size=10000`);
+            this.progressData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
+
+            this.evidenceData = await Betools.manage.queryTableDataDB('bs_legal_evidence' , `_where=(pid,eq,${id})&_sort=-id&_p=0&_size=10000`);
+            this.evidenceData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
+
+            this.outsourceData = await Betools.manage.queryTableDataDB('bs_legal_outsource' , `_where=(pid,eq,${id})&_sort=-id&_p=0&_size=10000`);
+            this.outsourceData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
+
+            this.planData = await Betools.manage.queryTableDataDB('bs_legal_plan' , `_where=(pid,eq,${id})&_sort=-id&_p=0&_size=10000`);
+            this.planData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
+
+            this.representationData = await Betools.manage.queryTableDataDB('bs_legal_representation' , `_where=(pid,eq,${id})&_sort=-id&_p=0&_size=10000`);
+            this.representationData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
+
+            this.stampedData = await Betools.manage.queryTableDataDB('bs_legal_stamped' , `_where=(pid,eq,${id})&_sort=-id&_p=0&_size=10000`);
+            this.stampedData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
           } 
 
           (async() => {
@@ -2723,7 +2772,7 @@ export default {
         const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const pid = Betools.tools.getUrlParam('id'); // 表单ID
         const id = Betools.tools.queryUniqueID(); // 表单ID
-        const create_time = dayjs().format('YYYY-MM-DD');
+        const create_time = dayjs().format('YYYY-MM-DD HH:mm:ss');
         const create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
         const create_username =  (userinfo ? userinfo.username || userinfo.loginid : '');
 
@@ -2803,4 +2852,5 @@ export default {
 <style scoped >
     @import "../../../assets/css/reward.home.css";
     @import "../../../assets/css/reward.apply.css";
+    @import "../../../assets/css/progress.apply.css";
 </style>
