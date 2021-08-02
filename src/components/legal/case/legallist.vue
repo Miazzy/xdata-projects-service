@@ -229,9 +229,6 @@
                                       操作<a-icon type="down" />
                                     </a>
                                     <a-menu slot="overlay" >
-                                      <a-menu-item v-if=" item.stage != '归档闭单'" key="201" @click="execPatch(item)">
-                                        修改案件
-                                      </a-menu-item>
                                       <a-menu-item key="300" @click="execNotify(item)">
                                         发起知会
                                       </a-menu-item>
