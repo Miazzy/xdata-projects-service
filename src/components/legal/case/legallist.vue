@@ -217,7 +217,7 @@
                     </div>
 
                     <div v-show="data && data.length > 0" >
-                      <a-tabs default-active-key="1" @change="callback" style="position:relative; top: 10px ; margin-left:1.750rem; transform:scale(0.85); transform-origin: 0 0;">
+                      <a-tabs default-active-key="1" v-model="activeTabKey" style="position:relative; top: 10px ; margin-left:1.750rem; transform:scale(0.85); transform-origin: 0 0;">
                         <a-tab-pane key="1" tab="列表">
                           <a-empty v-if="data.length == 0" style="margin-top:10%;height:800px;"/>
                           <div v-if="data.length > 0" class="reward-content-table" style="margin-left:0px; width:98%; height:100%; margin-bottom:20px;"> 
@@ -371,6 +371,7 @@ export default {
       },
       data: [],
       exportData:[],
+      activeTabKey:'1',
       readonly: false,
       userList:[],
       selectedSheet: null,
@@ -617,15 +618,12 @@ export default {
       // 案件记录导出功能
       async execExport(){
           const { $router } = this;
-          vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
-          const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
-          if (resp && resp.length > 0 && resp[0].userlist.includes(userinfo.username)) {
-            this.role += ',LEGAL_OPERATE_ADMIN';
-            this.$refs.grid.exportTable('xlsx', false, '案件台账数据');
-          } else {
-            vant.Dialog.alert({  title: '温馨提示',  message: `您好，您没有案件台账导出权限！`, }); 
-          }
+          vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
+          this.activeTabKey = '3';
+          this.exportData = [];
+          await this.execSearch('view', 0 , 15000);
+          this.activeTabKey = '3';
+          await this.$refs.grid.exportTable('xlsx', false, '案件台账数据' + dayjs().format('YYYY-MM-DD'));
           vant.Toast.clear();
       },
 
@@ -779,21 +777,21 @@ export default {
         let createbySQL = Betools.tools.isNull(legal.create_by) ? '': `~and(create_by,like,~${legal.create_by}~)`;
         let progressSQL = Betools.tools.isNull(legal.progress) ? '': `~and(progress,like,~${legal.progress}~)`;
         searchSql = plateSQL + zoneProjectSQL + createbySQL + progressSQL + scopeSQL + zoneSQL + courtSQL + accuserSQL + defendantSQL + caseTypeSQL + lawOfficeSQL + lawyerSQL + judgeSQL + claimsSQL + disclosureSQL + searchSql;
-        this.data = [];
         
         (async()=>{
           if(size <= 10000){
+            this.data = [];
             const data = await this.handleList(tableName , `待处理,处理中,审批中,已完成,已结案,已驳回${cacheRandomKey}`, userinfo, stageSql + permissionSQL + caseSTypeSQL + legalTypeSQL + searchSql , page , size);
-            value == 'view' && data && data.length > 0 && this.data.length == 0 ? (this.data = data) : null ;
+            value == 'view' && data && data.length > 0 && this.data.length == 0 ? (this.data = this.exportData = data) : null ;
             vant.Toast.clear();
           }
         })();
 
-        (async()=>{
+        if(size >= 10000){
           const exportData = await this.handleList(tableName , `待处理,处理中,审批中,已完成,已结案,已驳回${cacheRandomKey}`, userinfo, stageSql + permissionSQL + caseSTypeSQL + legalTypeSQL + searchSql , page , 10000);
           value == 'view' && exportData && exportData.length > 0 && this.exportData.length == 0 ? (this.exportData = exportData) : null;
           vant.Toast.clear();
-        })();
+        }
 
         return this.data; 
       },
