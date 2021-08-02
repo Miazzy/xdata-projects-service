@@ -44,7 +44,7 @@
                 <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; width:1000px; left: 1.75rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
                   <a-tag color="#009ec9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; display:none;" > 发起知会 </a-tag>
                   <a-tag color="#a03ea9" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; display:none;" > 发起流程 </a-tag>
-                  <a-tag color="#c05890" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; display:none;" @click="execPrint(legal)"> 打印 </a-tag>
+                  <a-tag color="#c05890" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center; display:none;" > 打印 </a-tag>
                   <a-tag color="#87d068" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPatch(legal)"> 修改案件信息 </a-tag>
                   <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execStage(legal)"> 修改案件阶段 </a-tag>
                   <a-tag color="#8a39f0" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execProcess(legal)"> 录入案件进展 </a-tag>
