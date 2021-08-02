@@ -254,7 +254,7 @@
                         </a-tab-pane>
                         <a-tab-pane key="3" tab="表单">
                           <a-empty v-if="exportData.length == 0" style="margin-top:10%;height:580px;"/>
-                          <vue-excel-editor v-if="exportData.length > 0" v-model="exportData" ref="grid" width="100%" autocomplete >
+                          <vue-excel-editor v-if="exportData.length > 0" v-model="exportData" ref="grid" width="100%" autocomplete  :localized-label="mylabels" >
                                 <vue-excel-column field="caseID"      label="案件编号"          width="120px" />
                                 <vue-excel-column field="create_time"    label="填报日期"       width="120px" />
                                 <vue-excel-column field="create_by"    label="填报人员"       width="120px" />
@@ -329,6 +329,8 @@
   </div>
 </template>
 <script>
+import * as workconfig from '@/request/workconfig';
+
 export default {
   mixins: [window.mixin],
   data() {
@@ -409,6 +411,7 @@ export default {
         '再审阶段': 2,
         '归档闭单': 100,
       },
+      mylabels: workconfig.excelTableLabels,
       breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管控',path:'/legal/workspace'},{icon:'form',text:'案件管理',path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
       zoneType:{'领地集团总部':'领地集团总部','成渝区域':'成渝区域','两湖区域':'两湖区域','川北区域':'川北区域','成渝区域':'成渝区域','乐眉区域':'乐眉区域','中原区域':'中原区域','攀西区域':'攀西区域','新疆区域':'新疆区域','大湾区域':'大湾区域','北京区域':'北京区域'},
