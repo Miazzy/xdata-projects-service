@@ -365,16 +365,9 @@ export default {
       async execView(elem){
           const { $router } = this;
           vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
-          const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 只有法务部门的同事及管理员具有查看权限 // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+          const url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
+          window.open(url,'_blank');
           vant.Toast.clear();
-          if (resp && resp.length > 0 && resp[0].userlist.includes(userinfo.username)) {
-            this.role += ',LEGAL_OPERATE_ADMIN'; // $router.push(`/legal/case/legalapply?id=${elem.id}&type=1&tname=案件详情&apply=view&role=view`);
-            const url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
-            window.open(url,'_blank');
-          } else {
-            vant.Dialog.alert({  title: '温馨提示',  message: `您好，您没有案件详情查看权限！`, }); 
-          }
       },
       
       // 用户提交入职登记表函数
