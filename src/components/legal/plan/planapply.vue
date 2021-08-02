@@ -82,7 +82,8 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>关联案件</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.legal_title" readonly placeholder="请输入关联案件信息！"  style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.legal_title" readonly placeholder="请输入关联案件信息！"  style="width:80%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.75rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execView(element)"> 查看 </a-tag>
                     </a-col>
                   </a-row>
                 </div>
@@ -112,8 +113,8 @@
                       <a-textarea
                         v-model="element.remark"
                         placeholder="请输入备注信息！"
-                        :auto-size="{ minRows: 4, maxRows: 100 }"
-                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 1, maxRows: 100 }"
+                        style="height:35px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
@@ -358,6 +359,22 @@ export default {
           this.$toast.fail(`${this.message[fieldName]}！` );
           return false;
         }
+      },
+
+      // 案件记录查看申请
+      async execView(elem){
+          const { $router } = this;
+          vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
+          const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
+          const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 只有法务部门的同事及管理员具有查看权限 // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+          vant.Toast.clear();
+          if (resp && resp.length > 0 && resp[0].userlist.includes(userinfo.username)) {
+            this.role += ',LEGAL_OPERATE_ADMIN'; // $router.push(`/legal/case/legalapply?id=${elem.id}&type=1&tname=案件详情&apply=view&role=view`);
+            const url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
+            window.open(url,'_blank');
+          } else {
+            vant.Dialog.alert({  title: '温馨提示',  message: `您好，您没有案件详情查看权限！`, }); 
+          }
       },
       
       // 用户提交入职登记表函数
