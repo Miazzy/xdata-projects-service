@@ -1389,7 +1389,7 @@
 
                         </a-tab-pane>
 
-                        <a-tab-pane v-if="(stage != 'evaluate' && role == 'closeCase') || operate == 'endJudge'  " key="5" tab="归档闭单" style="margin-left:0px;">
+                        <a-tab-pane v-if="(stage != 'evaluate' && (role == 'closeCase' || role != 'process' && role != 'operate' && '|归档闭单|'.includes(legal.stage))) || operate == 'endJudge'  " key="5" tab="归档闭单" style="margin-left:0px;">
 
                           <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
