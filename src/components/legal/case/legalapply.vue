@@ -63,6 +63,10 @@
                   <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execStageDone('arbJudge', '劳动仲裁')"> 进入仲裁阶段 </a-tag>
                 </div>
 
+                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; color:red; width:1000px; left: 5.0rem; top: 3.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem; ">
+                  注：“发起情况说明”指“发起撤诉/和解/调解申请/情况说明”
+                </div>
+
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:35px; font-size: 1.5rem; ">
                   {{ role == 'add' ? legal.caseSType + '发起申请' : legal.caseSType + '详情' }}
                 </div>

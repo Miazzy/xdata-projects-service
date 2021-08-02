@@ -36,13 +36,13 @@
               </a-breadcrumb>
             </div>
 
-            <!-- 发起情况说明 -->
+            <!-- 发起撤诉/和解/调解申请/情况说明 -->
             <div style="background-color:#f0f0f0;">
 
               <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 2.5rem; margin-right: 2.5rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  发起情况说明
+                  发起撤诉/和解/调解申请/情况说明
                 </div>
 
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
