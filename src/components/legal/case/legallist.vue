@@ -425,7 +425,6 @@ export default {
       // 企业微信登录处理函数
       async  weworkLogin  (codeType = 'search', systemType = 'search')  {
         const userinfo = await Betools.storage.getStore('system_userinfo');
-        // this.legal.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
         this.usertitle = (userinfo && userinfo.parent_company && userinfo.parent_company.name ? userinfo.parent_company.name + ' > ' :'')  + (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
         return userinfo;
       },
@@ -456,17 +455,25 @@ export default {
         if(Betools.tools.isNull(userinfo) || Betools.tools.isNull(userinfo.username)){
             return [];
         }
-        const condition = `_where=(status,in,${status})${searchSql}&_fields=id,create_time,create_by,receiveTime,lawRTime,handledTime,legalType,plate,legalTname,zone,zoneProject,thirdParty,legalStatus,caseType,court,caseID,judge,stage,serialID,caseType,accuser,defendant&_sort=-id&_p=${page}&_size=${size}`;
+        const condition = `_where=(status,in,${status})${searchSql}&_fields=id,create_time,create_by,receiveTime,lawRTime,handledTime,legalType,plate,legalTname,zone,zoneProject,thirdParty,legalStatus,caseType,court,caseID,judge,stage,serialID,caseType,accuser,defendant,lawcase,disclosure,claimsBidSum,claims,lawyerMobile,lawyer,lawOfficeTime,lawOffice,inHouseLawyersMobile,inHouseLawyers,judgeMobile,judge,court,fstEvidence,fstCourtDate,fstPlan,fstReason,fstConform,fstUnConformReasom,fstDetractionSum,fstValid,fstAppeal,fstAppealTime,secEvidence,secCourtDate,secPlan,secReason,secConform,secUnConformReasom,secDetractionSum,secValid,secAppeal,secAppealTime,reviewEvidence,reviewCourtDate,reviewPlan,reviewReason,reviewConform,reviewUnConformReasom,reviewDetractionSum,reviewValid,reviewAppeal,reviewAppealTime&_sort=-id&_p=${page}&_size=${size}`;
         let list = await Betools.manage.queryTableData(tableName , condition);
         this.search.total = await Betools.manage.queryTableDataCount(tableName, condition);
         list.map((element)=>{ 
             const item = element; //JSON.parse(JSON.stringify(element));
             item.create_time = dayjs(item.create_time).format('YYYY-MM-DD'); 
+            item.fstCourtDate =  dayjs(item.fstCourtDate).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.fstCourtDate).format('YYYY-MM-DD');
+            item.fstEvidence =  dayjs(item.fstEvidence).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.fstEvidence).format('YYYY-MM-DD');
+            item.secCourtDate =  dayjs(item.secCourtDate).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.secCourtDate).format('YYYY-MM-DD');
+            item.secEvidence =  dayjs(item.secEvidence).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.secEvidence).format('YYYY-MM-DD');
             item.receiveTime = dayjs(item.receiveTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.receiveTime).format('YYYY-MM-DD');
             item.lawRTime = dayjs(item.lawRTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.lawRTime).format('YYYY-MM-DD');
             item.handledTime = dayjs(item.handledTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.handledTime).format('YYYY-MM-DD');
             item.legalStatus = Betools.tools.isNull(item.legalStatus) ? '开庭举证' : item.legalStatus;
-            item.zone = item.zone.toString();
+            try {
+              item.zone = item.zone.toString();
+            } catch (error) {
+              console.error(error);
+            }
             try {
               item.caseType = JSON.parse(item.caseType);
             } catch (error) {
