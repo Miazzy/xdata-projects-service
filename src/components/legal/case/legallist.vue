@@ -253,8 +253,8 @@
                           </div>
                         </a-tab-pane>
                         <a-tab-pane key="3" tab="表单">
-                          <a-empty v-if="data.length == 0" style="margin-top:10%;height:580px;"/>
-                          <vue-excel-editor v-if="data.length > 0" v-model="data" ref="grid" width="100%" autocomplete >
+                          <a-empty v-if="exportData.length == 0" style="margin-top:10%;height:580px;"/>
+                          <vue-excel-editor v-if="exportData.length > 0" v-model="exportData" ref="grid" width="100%" autocomplete >
                                 <vue-excel-column field="caseID"      label="案件编号"          width="120px" />
                                 <vue-excel-column field="create_time"    label="填报日期"       width="120px" />
                                 <vue-excel-column field="create_by"    label="填报人员"       width="120px" />
@@ -370,6 +370,7 @@ export default {
         legalType:'全部',
       },
       data: [],
+      exportData:[],
       readonly: false,
       userList:[],
       selectedSheet: null,
@@ -459,30 +460,34 @@ export default {
         let list = await Betools.manage.queryTableData(tableName , condition);
         this.search.total = await Betools.manage.queryTableDataCount(tableName, condition);
         list.map((element)=>{ 
-            const item = element; //JSON.parse(JSON.stringify(element));
-            item.create_time = dayjs(item.create_time).format('YYYY-MM-DD'); 
-            item.fstCourtDate =  dayjs(item.fstCourtDate).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.fstCourtDate).format('YYYY-MM-DD');
-            item.fstEvidence =  dayjs(item.fstEvidence).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.fstEvidence).format('YYYY-MM-DD');
-            item.secCourtDate =  dayjs(item.secCourtDate).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.secCourtDate).format('YYYY-MM-DD');
-            item.secEvidence =  dayjs(item.secEvidence).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.secEvidence).format('YYYY-MM-DD');
-            item.receiveTime = dayjs(item.receiveTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.receiveTime).format('YYYY-MM-DD');
-            item.lawRTime = dayjs(item.lawRTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.lawRTime).format('YYYY-MM-DD');
-            item.handledTime = dayjs(item.handledTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.handledTime).format('YYYY-MM-DD');
-            item.legalStatus = Betools.tools.isNull(item.legalStatus) ? '开庭举证' : item.legalStatus;
             try {
-              item.zone = item.zone.toString();
-            } catch (error) {
-              console.error(error);
-            }
-            try {
-              item.caseType = JSON.parse(item.caseType);
-            } catch (error) {
-              console.error(error);
-            }
-            try {
-              item.court = JSON.parse(item.court);
-              Betools.tools.isNull(item.court[item.court.length-1]) ? item.court = item.court.slice(0,item.court.length-1) : null;
-              item.court = Betools.tools.deNull(item.court[item.court.length-1],'') ;
+              const item = element; //JSON.parse(JSON.stringify(element));
+              item.create_time = dayjs(item.create_time).format('YYYY-MM-DD'); 
+              item.fstCourtDate =  dayjs(item.fstCourtDate).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.fstCourtDate).format('YYYY-MM-DD');
+              item.fstEvidence =  dayjs(item.fstEvidence).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.fstEvidence).format('YYYY-MM-DD');
+              item.secCourtDate =  dayjs(item.secCourtDate).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.secCourtDate).format('YYYY-MM-DD');
+              item.secEvidence =  dayjs(item.secEvidence).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.secEvidence).format('YYYY-MM-DD');
+              item.receiveTime = dayjs(item.receiveTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.receiveTime).format('YYYY-MM-DD');
+              item.lawRTime = dayjs(item.lawRTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.lawRTime).format('YYYY-MM-DD');
+              item.handledTime = dayjs(item.handledTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.handledTime).format('YYYY-MM-DD');
+              item.legalStatus = Betools.tools.isNull(item.legalStatus) ? '开庭举证' : item.legalStatus;
+              try {
+                item.zone = item.zone.toString();
+              } catch (error) {
+                console.error(error);
+              }
+              try {
+                item.caseType = JSON.parse(item.caseType);
+              } catch (error) {
+                console.error(error);
+              }
+              try {
+                item.court = JSON.parse(item.court);
+                Betools.tools.isNull(item.court[item.court.length-1]) ? item.court = item.court.slice(0,item.court.length-1) : null;
+                item.court = Betools.tools.deNull(item.court[item.court.length-1],'') ;
+              } catch (error) {
+                console.error(error);
+              }
             } catch (error) {
               console.error(error);
             }
@@ -615,13 +620,13 @@ export default {
           vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
           const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
-          vant.Toast.clear();
           if (resp && resp.length > 0 && resp[0].userlist.includes(userinfo.username)) {
             this.role += ',LEGAL_OPERATE_ADMIN';
             this.$refs.grid.exportTable('xlsx', false, '案件台账数据');
           } else {
             vant.Dialog.alert({  title: '温馨提示',  message: `您好，您没有案件台账导出权限！`, }); 
           }
+          vant.Toast.clear();
       },
 
       // 案件记录删除信息
@@ -777,14 +782,16 @@ export default {
         this.data = [];
         
         (async()=>{
-          const data = await this.handleList(tableName , `待处理,处理中,审批中,已完成,已结案,已驳回${cacheRandomKey}`, userinfo, stageSql + permissionSQL + caseSTypeSQL + legalTypeSQL + searchSql , page , size);
-          value == 'view' && data && data.length > 0 && this.data.length == 0 ? (this.data = data) : null ;
-          vant.Toast.clear();
+          if(size <= 10000){
+            const data = await this.handleList(tableName , `待处理,处理中,审批中,已完成,已结案,已驳回${cacheRandomKey}`, userinfo, stageSql + permissionSQL + caseSTypeSQL + legalTypeSQL + searchSql , page , size);
+            value == 'view' && data && data.length > 0 && this.data.length == 0 ? (this.data = data) : null ;
+            vant.Toast.clear();
+          }
         })();
 
         (async()=>{
-          const data = await this.handleList(tableName , `待处理,处理中,审批中,已完成,已结案,已驳回${cacheRandomKey}`, userinfo, stageSql + permissionSQL + caseSTypeSQL + legalTypeSQL + searchSql , page , size);
-          value == 'view' && data && data.length > 0 && this.data.length == 0 ? (this.data = data) : null ;
+          const exportData = await this.handleList(tableName , `待处理,处理中,审批中,已完成,已结案,已驳回${cacheRandomKey}`, userinfo, stageSql + permissionSQL + caseSTypeSQL + legalTypeSQL + searchSql , page , 10000);
+          value == 'view' && exportData && exportData.length > 0 && this.exportData.length == 0 ? (this.exportData = exportData) : null;
           vant.Toast.clear();
         })();
 
