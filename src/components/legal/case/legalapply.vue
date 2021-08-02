@@ -262,7 +262,7 @@
                   </a-row>
                 </div>
 
-                <div v-if="role != 'process' && role != 'operate' && legal.caseSType == '起诉案件' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if="role != 'process' && role != 'operate' && legal.caseSType !== '起诉案件' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>业务接收时间</span>
