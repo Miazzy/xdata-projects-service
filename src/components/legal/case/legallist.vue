@@ -235,24 +235,6 @@
                                       <a-menu-item key="300" @click="execNotify(item)">
                                         发起知会
                                       </a-menu-item>
-                                      <a-menu-item key="0" @click="execProcess(item , '案件进展')">
-                                        录入案件进展
-                                      </a-menu-item>
-                                      <a-menu-item key="1" @click="execHear(item , '一审阶段')">
-                                        进入一审阶段
-                                      </a-menu-item>
-                                      <a-menu-item key="2" @click="execHear(item , '二审阶段')">
-                                        进入二审阶段
-                                      </a-menu-item>
-                                      <a-menu-item key="3" @click="execHear(item , '执行阶段')">
-                                        进入执行阶段
-                                      </a-menu-item>
-                                      <a-menu-item key="4" @click="execHear(item , '再审阶段')">
-                                        进入再审阶段
-                                      </a-menu-item>
-                                      <a-menu-item key="100" @click="execHear(item , '归档闭单')">
-                                        归档闭单
-                                      </a-menu-item>
                                     </a-menu>
                                   </a-dropdown>
 
