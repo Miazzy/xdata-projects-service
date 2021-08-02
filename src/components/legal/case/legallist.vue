@@ -456,16 +456,17 @@ export default {
         if(Betools.tools.isNull(userinfo) || Betools.tools.isNull(userinfo.username)){
             return [];
         }
-        const condition = `_where=(status,in,${status})${searchSql}&_fields=id,create_time,receiveTime,lawRTime,handledTime,legalStatus,caseType,court,caseID,judge,stage,serialID,caseType,accuser,defendant&_sort=-id&_p=${page}&_size=${size}`;
+        const condition = `_where=(status,in,${status})${searchSql}&_fields=id,create_time,create_by,receiveTime,lawRTime,handledTime,legalType,plate,legalTname,zone,zoneProject,thirdParty,legalStatus,caseType,court,caseID,judge,stage,serialID,caseType,accuser,defendant&_sort=-id&_p=${page}&_size=${size}`;
         let list = await Betools.manage.queryTableData(tableName , condition);
         this.search.total = await Betools.manage.queryTableDataCount(tableName, condition);
         list.map((element)=>{ 
-            const item = JSON.parse(JSON.stringify(element));
+            const item = element; //JSON.parse(JSON.stringify(element));
             item.create_time = dayjs(item.create_time).format('YYYY-MM-DD'); 
             item.receiveTime = dayjs(item.receiveTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.receiveTime).format('YYYY-MM-DD');
             item.lawRTime = dayjs(item.lawRTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.lawRTime).format('YYYY-MM-DD');
             item.handledTime = dayjs(item.handledTime).format('YYYY-MM-DD') == 'Invalid Date' ? '/' : dayjs(item.handledTime).format('YYYY-MM-DD');
             item.legalStatus = Betools.tools.isNull(item.legalStatus) ? '开庭举证' : item.legalStatus;
+            item.zone = item.zone.toString();
             try {
               item.caseType = JSON.parse(item.caseType);
             } catch (error) {
