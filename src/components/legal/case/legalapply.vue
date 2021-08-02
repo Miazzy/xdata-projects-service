@@ -395,7 +395,7 @@
                 <div v-if="!(role == 'add' && (legal.stage == '' || legal.stage == '一审阶段' || legal.stage == '二审阶段' || legal.stage == '再审阶段' || legal.stage == '执行阶段' || legal.stage == '劳动仲裁' || legal.stage == '行政复议' )  && (legal.caseSType == '起诉案件' || legal.caseSType == '应诉案件'))" class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      {{ stage == 'evaluate' ? '案件评价' : role == 'process' ? '案件进展': '案件周期'}}
+                      {{ stage == 'evaluate' ? '案件评价' : role == 'process' ? '案件周期': '案件周期'}}
                     </a-col>
                    </a-row>
                 </div>
@@ -1523,130 +1523,147 @@
                       </a-tabs>
                 </div>
 
-                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && progressData && progressData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      案件进展
-                    </a-col>
-                   </a-row>
-                </div>
+                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;padding-left:70px;">
+                  <a-tabs default-active-key="1" >
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && progressData && progressData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="2" >
-                    </a-col>
-                    <a-col :span="21" >
-                      <a-table :columns="progressColumns" :data-source="progressData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
-                      </a-table>
-                    </a-col>
-                    <a-col :span="1" >
-                    </a-col>
-                  </a-row>
-                </div>
+                    <a-tab-pane key="1" tab="案件进展">
+                      <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && progressData && progressData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px; margin-top:-5px; margin-left:-60px;">
+                        <a-row style="border-top: 1px dash #f0f0f0;" >
+                          <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                            案件进展
+                          </a-col>
+                        </a-row>
+                      </div>
 
-                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && outsourceData && outsourceData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      委外申请
-                    </a-col>
-                   </a-row>
-                </div>
+                      <div v-show="(role == 'view' || role == 'print') && !isNull(id) && progressData && progressData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; margin-left:-100px;">
+                        <a-row>
+                          <a-col :span="2" >
+                          </a-col>
+                          <a-col :span="21" >
+                            <a-table :columns="progressColumns" :data-source="progressData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                            </a-table>
+                          </a-col>
+                          <a-col :span="1" >
+                          </a-col>
+                        </a-row>
+                      </div>
+                    </a-tab-pane>
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && outsourceData && outsourceData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="2" >
-                    </a-col>
-                    <a-col :span="21" >
-                      <a-table :columns="outsourceColumns" :data-source="outsourceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
-                      </a-table>
-                    </a-col>
-                    <a-col :span="1" >
-                    </a-col>
-                  </a-row>
-                </div>
+                    <a-tab-pane key="2" tab="委外申请" >
+                      <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && outsourceData && outsourceData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px; margin-top:-5px; margin-left:-60px;">
+                        <a-row style="border-top: 1px dash #f0f0f0;" >
+                          <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                            委外申请
+                          </a-col>
+                        </a-row>
+                      </div>
 
-                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && evidenceData && evidenceData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      证据收集
-                    </a-col>
-                   </a-row>
-                </div>
+                      <div v-show="(role == 'view' || role == 'print') && !isNull(id) && outsourceData && outsourceData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; margin-left:-100px;">
+                        <a-row>
+                          <a-col :span="2" >
+                          </a-col>
+                          <a-col :span="21" >
+                            <a-table :columns="outsourceColumns" :data-source="outsourceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                            </a-table>
+                          </a-col>
+                          <a-col :span="1" >
+                          </a-col>
+                        </a-row>
+                      </div>
+                    </a-tab-pane>
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && evidenceData && evidenceData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="2" >
-                    </a-col>
-                    <a-col :span="21" >
-                      <a-table :columns="evidenceColumns" :data-source="evidenceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
-                      </a-table>
-                    </a-col>
-                    <a-col :span="1" >
-                    </a-col>
-                  </a-row>
-                </div>
+                    <a-tab-pane key="3" tab="证据收集">
+                      <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && evidenceData && evidenceData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px; margin-top:-5px; margin-left:-60px;">
+                        <a-row style="border-top: 1px dash #f0f0f0;" >
+                          <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                            证据收集
+                          </a-col>
+                        </a-row>
+                      </div>
 
-                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && stampedData && stampedData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      文书盖章
-                    </a-col>
-                   </a-row>
-                </div>
+                      <div v-show="(role == 'view' || role == 'print') && !isNull(id) && evidenceData && evidenceData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; margin-left:-100px;">
+                        <a-row>
+                          <a-col :span="2" >
+                          </a-col>
+                          <a-col :span="21" >
+                            <a-table :columns="evidenceColumns" :data-source="evidenceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                            </a-table>
+                          </a-col>
+                          <a-col :span="1" >
+                          </a-col>
+                        </a-row>
+                      </div>
+                    </a-tab-pane>
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && stampedData && stampedData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="2" >
-                    </a-col>
-                    <a-col :span="21" >
-                      <a-table :columns="stampedColumns" :data-source="stampedData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
-                      </a-table>
-                    </a-col>
-                    <a-col :span="1" >
-                    </a-col>
-                  </a-row>
-                </div>
+                    <a-tab-pane key="4" tab="文书盖章">
+                      <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && stampedData && stampedData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px; margin-top:-5px; margin-left:-60px;">
+                        <a-row style="border-top: 1px dash #f0f0f0;" >
+                          <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                            文书盖章
+                          </a-col>
+                        </a-row>
+                      </div>
 
-                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && representationData && representationData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      情况说明
-                    </a-col>
-                   </a-row>
-                </div>
+                      <div v-show="(role == 'view' || role == 'print') && !isNull(id) && stampedData && stampedData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; margin-left:-100px;">
+                        <a-row>
+                          <a-col :span="2" >
+                          </a-col>
+                          <a-col :span="21" >
+                            <a-table :columns="stampedColumns" :data-source="stampedData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                            </a-table>
+                          </a-col>
+                          <a-col :span="1" >
+                          </a-col>
+                        </a-row>
+                      </div>
+                    </a-tab-pane>
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && representationData && representationData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="2" >
-                    </a-col>
-                    <a-col :span="21" >
-                      <a-table :columns="representationColumns" :data-source="representationData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
-                      </a-table>
-                    </a-col>
-                    <a-col :span="1" >
-                    </a-col>
-                  </a-row>
-                </div>
+                    <a-tab-pane key="5" tab="情况说明">
+                      <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && representationData && representationData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px; margin-top:-5px; margin-left:-60px;">
+                        <a-row style="border-top: 1px dash #f0f0f0;" >
+                          <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                            情况说明
+                          </a-col>
+                        </a-row>
+                      </div>
 
-                <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && planData && planData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                      诉讼预案
-                    </a-col>
-                   </a-row>
-                </div>
+                      <div v-show="(role == 'view' || role == 'print') && !isNull(id) && representationData && representationData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; margin-left:-100px;">
+                        <a-row>
+                          <a-col :span="2" >
+                          </a-col>
+                          <a-col :span="21" >
+                            <a-table :columns="representationColumns" :data-source="representationData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                            </a-table>
+                          </a-col>
+                          <a-col :span="1" >
+                          </a-col>
+                        </a-row>
+                      </div>
+                    </a-tab-pane>
 
-                <div v-show="(role == 'view' || role == 'print') && !isNull(id) && planData && planData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="2" >
-                    </a-col>
-                    <a-col :span="21" >
-                      <a-table :columns="planColumns" :data-source="planData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
-                      </a-table>
-                    </a-col>
-                    <a-col :span="1" >
-                    </a-col>
-                  </a-row>
+                    <a-tab-pane key="6" tab="诉讼预案">
+                      <div v-show="(role == 'view' || role == 'print' ) && !isNull(id) && planData && planData.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px; margin-top:-5px; margin-left:-60px;">
+                        <a-row style="border-top: 1px dash #f0f0f0;" >
+                          <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                            诉讼预案
+                          </a-col>
+                        </a-row>
+                      </div>
+
+                      <div v-show="(role == 'view' || role == 'print') && !isNull(id) && planData && planData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; margin-left:-100px;">
+                        <a-row>
+                          <a-col :span="2" >
+                          </a-col>
+                          <a-col :span="21" >
+                            <a-table :columns="planColumns" :data-source="planData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                            </a-table>
+                          </a-col>
+                          <a-col :span="1" >
+                          </a-col>
+                        </a-row>
+                      </div>
+                    </a-tab-pane>
+                  </a-tabs>
                 </div>
 
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
