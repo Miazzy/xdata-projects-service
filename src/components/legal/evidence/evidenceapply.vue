@@ -314,7 +314,8 @@ export default {
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
 
           if(!Betools.tools.isNull(id)){
-            this.element = await this.handleList(this.tablename , id);
+            this.element = await Betools.query.queryTableData(this.tablename , id);
+            this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
           } else {
            
           }

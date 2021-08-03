@@ -2186,7 +2186,8 @@ export default {
 
       // 查看详情信息
       async execViewProcess(record , view = ''){
-        const url = `${window.location.protocol}//${window.location.host}/#/legal/${view}?id=${record.id}&type=1&tname=详情&apply=view&role=view`;
+        const pid = Betools.tools.getUrlParam('id');
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/${view}?id=${record.id}&pid=${pid}&type=1&tname=详情&apply=view&role=view`;
         window.open(url,'_blank');
       },
 
