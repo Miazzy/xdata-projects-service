@@ -402,6 +402,7 @@ export default {
             if(list && list.length > 0){
               elem = list[0];
               url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.id}&type=1&tname=案件详情&apply=view&role=view`;
+              console.log(`window open url:` , url);
             }
           }
           if(!Betools.tools.isNull(url)){
