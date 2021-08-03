@@ -252,6 +252,8 @@ export default {
       release_userlist:[],
       approve_userlist:[],
       approve_executelist:[],
+      legallist:[],
+      legalTitlelist:[],
       role:'',
       file:'',
       selectedSheet: null,
@@ -357,6 +359,8 @@ export default {
             this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
             this.lawyerlist = await Betools.manage.queryTableData('bs_lawyer' , `_where=(status,ne,0)&_fields=id,lawyer_name,mobile&_sort=-id&_p=0&_size=10000`);
             this.lawyerNamelist = this.lawyerlist.map(item => { return item.lawyer_name });
+            this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,0)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
+            this.legalTitlelist = this.legallist.map(item => { return item.title });
           } catch (error) {
             console.error(error);
           }
