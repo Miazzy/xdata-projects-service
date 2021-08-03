@@ -200,6 +200,9 @@ export default {
     this.init();
   },
   methods: {
+    isNull:Betools.tools.isNull,
+    deNull:Betools.tools.deNull,
+
     async init() {
       this.panename = Betools.tools.getUrlParam('panename') || Betools.storage.getStore(`reward_message_panename`) || 'myrewardlist';
       this.userinfo = await this.weworkLogin(); //查询当前登录用户
@@ -225,10 +228,12 @@ export default {
       const userinfo = this.userinfo = await Betools.storage.getStore('system_userinfo');
       this.usertitle = (userinfo && userinfo.parent_company && userinfo.parent_company.name ? userinfo.parent_company.name + ' > ' :'')  + (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
     },
+
     // 执行页面跳转
     async redirectView(path) {
         Betools.tools.isNull(path) ? null: this.$router.push(path);
     },
+
     async queryDataByType(tabname = '', typename = '' , panename){
       this.tabname = tabname;
       if(this.panename == 'myrewardlist' ){
@@ -245,6 +250,7 @@ export default {
         this.queryRewardListByType(this.tabname , typename , panename);
       }
     },
+
     async searchWordChange() {
       this.paneflows.map((item, index) => {
         if (
@@ -258,6 +264,7 @@ export default {
       });
       this.paneflows.sort();
     },
+
     async menuCardClick(id , panename) {
       // 设置panename属性
       this.panename = panename;
@@ -285,6 +292,7 @@ export default {
       Betools.storage.setStore(`reward_message_panename` , this.panename , 3600 );
       Betools.storage.setStore(`reward_message_tabname` , this.tabname , 3600 );
     },
+
     async queryRewardList(tabname = '', typename = ''){
 
         const userinfo = await Betools.storage.getStore('system_userinfo');  //获取当前用户信息
@@ -412,6 +420,7 @@ export default {
 
         }
     },
+
     async queryRewardTodoList(tabname = '', typename = ''){
 
       try {
@@ -445,6 +454,7 @@ export default {
       }
 
     },
+
     async queryRewardTodoListByType(tabname = '', typename = '' , panename){
       const tlist =  await this.queryRewardTodoList(tabname , typename , panename);
       this.paneflows.map( item => { //遍历paneflows
@@ -454,6 +464,7 @@ export default {
         }
       })
     },
+
     async queryRewardDoneList(tabname = '', typename = ''){
 
       try {
@@ -491,6 +502,7 @@ export default {
       }
 
     },
+
     async queryRewardDoneListByType(tabname = '', typename = '' , panename){
       const tlist =  await this.queryRewardDoneList(tabname , typename , panename);
       this.paneflows.map( item => { //遍历paneflows
@@ -500,6 +512,7 @@ export default {
         }
       })
     },
+
     async queryRewardListByType(tabname = 1 , typename = '' , panename){
       this.tabname = tabname;
       const tlist =  await this.queryRewardList(tabname , typename , panename);
@@ -511,6 +524,7 @@ export default {
       });
       Betools.storage.setStore(`reward_message_tabname` , this.tabname , 3600 );
     },
+
     // 跳转到详情页面
     async querylegalview(id = '', panename = '', typename = '', bpm_status = 1 , proponents = '' , pid){
       try {
@@ -519,13 +533,10 @@ export default {
         console.log(error);
       }
     },
+    
     // 企业微信登录处理函数
-    async weworkLogin(){
-      try {
-        return await query.queryWeworkUser();
-      } catch (error) {
-        console.log(error);
-      }
+    async weworkLogin(codeType = 'search', systemType = 'search', version = 'v5'){
+        return await Betools.query.weworkLogin(codeType, systemType, version);
     },
 },
 };

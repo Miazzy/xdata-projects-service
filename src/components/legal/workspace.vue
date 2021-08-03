@@ -237,25 +237,7 @@ export default {
 
     // 企业微信登录处理函数
     async  weworkLogin  (codeType = 'search', systemType = 'search', version = 'v5')  {
-        const userinfo_work = await Betools.query.queryWeworkUser(codeType, systemType, version);
-        const userinfo = await Betools.storage.getStore('system_userinfo');
-        let usertitle = typeof userinfo == 'string' ? '' : (userinfo && userinfo.parent_company && userinfo.parent_company.name ? userinfo.parent_company.name + ' > ' :'')  + (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-        let flag = typeof userinfo == 'string' ? userinfo.replace(/\\/g,'').replace(/\"/g,'') : 'view';
-        if(Betools.tools.isNull(usertitle) || Betools.tools.isNull(flag) || userinfo == '\"\"' || Betools.tools.isNull(userinfo) ){ // 未获取到用户信息，直接根据浏览器记录获取用户信息
-          const finger = await(await FingerprintJS.load()).get();
-          const condition = `_where=(info,in,finger)~and(type,in,info)~and(content,like,~${finger.visitorId}__~)&_sort=-id&_p=0&_size=1`;
-          let list = await Betools.manage.queryTableData('bs_async_log' , condition);
-          let content = '';
-          if(list && list.length > 0){
-            content = window.atob(list[0].content.split('__')[1]);
-            content = window.decodeURIComponent(content);
-            await Betools.storage.setStore('system_userinfo', content, 3600);
-            const userinfo = await Betools.storage.getStore('system_userinfo');
-            usertitle = (userinfo && userinfo.parent_company && userinfo.parent_company.name ? userinfo.parent_company.name + ' > ' :'')  + (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-            return {userinfo, usertitle};
-          }
-        }
-        return {userinfo, usertitle};
+        return await Betools.query.weworkLogin(codeType, systemType, version);
     },
 
     // 执行页面跳转
