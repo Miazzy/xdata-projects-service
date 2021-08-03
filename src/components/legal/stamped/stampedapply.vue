@@ -363,8 +363,21 @@ export default {
       async execView(elem){
           const { $router } = this;
           vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
-          const url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
-          window.open(url,'_blank');
+          let url = null;
+          if(!Betools.tools.isNull(elem.pid)){
+            url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
+          } else {
+            const title = this.element.legal_title; // 先根据关联案件信息，查询案件标题，根据查询结果，返回到相应案件
+            const condition = `_where=(title,like,~${title}~)&_sort=-id&_p=0&_size=1`;
+            let list = await Betools.manage.queryTableData('bs_legal' , condition);
+            if(list && list.length > 0){
+              elem = list[0];
+              url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.id}&type=1&tname=案件详情&apply=view&role=view`;
+            }
+          }
+          if(!Betools.tools.isNull(url)){
+            window.open(url,'_blank');
+          }
           vant.Toast.clear();
       },
       
