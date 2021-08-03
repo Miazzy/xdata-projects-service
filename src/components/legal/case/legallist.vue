@@ -444,7 +444,9 @@ export default {
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
           this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
           this.iswework = Betools.tools.isWework(); //查询是否为企业微信
-          this.userinfo = await this.weworkLogin(); //查询当前登录用户
+          const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+          this.userinfo = weworkinfo.userinfo;
+          this.usertitle = weworkinfo.usertitle;
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
           this.legal.stage = Betools.tools.getUrlParam('stage') || '全部';
           this.execSearch('view');

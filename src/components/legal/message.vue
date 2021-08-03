@@ -205,7 +205,9 @@ export default {
 
     async init() {
       this.panename = Betools.tools.getUrlParam('panename') || Betools.storage.getStore(`reward_message_panename`) || 'myrewardlist';
-      this.userinfo = await this.weworkLogin(); //查询当前登录用户
+      const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+      this.userinfo = weworkinfo.userinfo;
+      this.usertitle = weworkinfo.usertitle;
       this.tabname = Betools.storage.getStore(`reward_message_tabname`) || 0 ;
       this.status = this.statusMap[this.tabname];
       this.constpaneflows = JSON.parse(JSON.stringify(this.paneflows));
@@ -533,7 +535,7 @@ export default {
         console.log(error);
       }
     },
-    
+
     // 企业微信登录处理函数
     async weworkLogin(codeType = 'search', systemType = 'search', version = 'v5'){
         return await Betools.query.weworkLogin(codeType, systemType, version);
