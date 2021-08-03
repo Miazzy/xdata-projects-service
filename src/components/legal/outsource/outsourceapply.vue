@@ -146,7 +146,7 @@
                       <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:auto; float:left; margin-right:10px; " >
                         <a-button> <a-icon type="upload" /> 上传 </a-button>
                       </a-upload>
-                      <div style="position:absolute; display:inline; float:left; margin-top:10px; ">
+                      <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(element)" >
                         <span>{{ element.fileName }}</span>
                       </div>
                     </a-col>
@@ -302,6 +302,12 @@ export default {
         } else if (info.file.status === 'error') {
           this.$message.error(`${info.file.name} file upload failed.`);
         }
+      },
+
+      // 下载附件
+      async downloadFiles(record){
+        const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
+        window.open(url,'_blank');
       },
 
       // 企业微信登录处理函数
