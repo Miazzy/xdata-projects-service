@@ -1564,6 +1564,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="outsourceColumns" :data-source="outsourceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="title" slot-scope="text,record" @click="execViewProcess(record,'outsourceapply')">{{ text }}</a>
                               <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
@@ -1588,6 +1589,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="evidenceColumns" :data-source="evidenceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="title" slot-scope="text,record" @click="execViewProcess(record,'evidenceapply')">{{ text }}</a>
                               <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
@@ -1612,6 +1614,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="stampedColumns" :data-source="stampedData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="title" slot-scope="text,record" @click="execViewProcess(record,'stampedapply')">{{ text }}</a>
                               <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
@@ -1636,6 +1639,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="representationColumns" :data-source="representationData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="title" slot-scope="text,record" @click="execViewProcess(record,'representationapply')">{{ text }}</a>
                               <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
@@ -1660,6 +1664,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="planColumns" :data-source="planData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="title" slot-scope="text,record" @click="execViewProcess(record,'planapply')">{{ text }}</a>
                               <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
