@@ -367,8 +367,7 @@ export default {
           if(!Betools.tools.isNull(elem.pid)){
             url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
           } else {
-            // 先根据关联案件信息，查询案件标题，根据查询结果，返回到相应案件
-            const title = this.element.legal_title;
+            const title = this.element.legal_title; // 先根据关联案件信息，查询案件标题，根据查询结果，返回到相应案件
 
           }
           window.open(url,'_blank');
