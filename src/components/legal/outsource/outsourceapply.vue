@@ -143,9 +143,12 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>上传附件</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:85%;" >
+                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:auto; float:left; margin-right:10px; " >
                         <a-button> <a-icon type="upload" /> 上传 </a-button>
                       </a-upload>
+                      <div style="position:absolute; display:inline; float:left; margin-top:10px; ">
+                        <span>{{ element.fileName }}</span>
+                      </div>
                     </a-col>
                   </a-row>
                 </div>
@@ -336,6 +339,7 @@ export default {
           if(!Betools.tools.isNull(id)){
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
+            this.element.fileName = this.element.files.split('###')[1];
           } else {
           
           }
