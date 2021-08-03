@@ -76,13 +76,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>标题</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.title" :readonly="false" placeholder="请输入标题内容！" @blur="validFieldToast('account_type')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.title" :readonly="false" placeholder="请输入标题内容！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>关联案件</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.legal_title" :readonly="false" placeholder="请输入关联案件信息！"  style="width:80%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-auto-complete :data-source="legalTitlelist" v-model="element.legal_title" placeholder="请输入关联案件信息！" style="width:85%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
                       <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.075rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execView(element)"> 查看 </a-tag>
                     </a-col>
                   </a-row>
@@ -359,7 +359,7 @@ export default {
             this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
             this.lawyerlist = await Betools.manage.queryTableData('bs_lawyer' , `_where=(status,ne,0)&_fields=id,lawyer_name,mobile&_sort=-id&_p=0&_size=10000`);
             this.lawyerNamelist = this.lawyerlist.map(item => { return item.lawyer_name });
-            this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,0)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
+            this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,已删除)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
             this.legalTitlelist = this.legallist.map(item => { return item.title });
           } catch (error) {
             console.error(error);
