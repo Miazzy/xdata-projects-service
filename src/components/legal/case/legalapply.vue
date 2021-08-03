@@ -311,6 +311,9 @@
                       <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:85%;" >
                         <a-button> <a-icon type="upload" /> 上传 </a-button>
                       </a-upload>
+                      <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(legal)" >
+                        <span>{{ legal.fileName }}</span>
+                      </div>
                     </a-col>
                   </a-row>
                 </div>
@@ -2180,8 +2183,10 @@ export default {
 
       // 下载附件
       async downloadFiles(record){
+        vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
         const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
         window.open(url,'_blank');
+        vant.Toast.clear();
       },
 
       // 查看详情信息
@@ -2378,6 +2383,13 @@ export default {
             item.lawRTime = dayjs(item.lawRTime).format('YYYY-MM-DD') == 'Invalid Date' ? nowdate : dayjs(item.lawRTime).format('YYYY-MM-DD');
             item.handledTime = dayjs(item.handledTime).format('YYYY-MM-DD') == 'Invalid Date' ? nowdate : dayjs(item.handledTime).format('YYYY-MM-DD');
             item.legalStatus = Betools.tools.isNull(item.legalStatus) ? '开庭举证' : item.legalStatus;
+            
+            try {
+              item.fileName = item.files.split('###')[1];
+            } catch (error) {
+              console.error(error);
+            }
+
             try{
               if(role == 'view'){
                 item.court = JSON.parse(item.court);
@@ -2391,11 +2403,13 @@ export default {
             } catch(e){
               console.error(`parse court error:`, e);
             }
+
             try {
               item.caseType = JSON.parse(item.caseType); item.zone = JSON.parse(item.zone);
             } catch (error) {
               item.caseType = JSON.parse(cloneItem.caseType); item.zone = JSON.parse(cloneItem.zone);
             }
+
           } catch (error) {
             console.log(`error:`, error);
           }
