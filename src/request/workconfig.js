@@ -190,9 +190,15 @@ export const excelTableLabels = {
             width: 120,
         },
         {
-            title: '申请内容',
-            dataIndex: 'content',
-            key: 'content',
+            title: '外部律所',
+            dataIndex: 'firm',
+            key: 'firm',
+            width: 120,
+        },
+        {
+            title: '外聘律师',
+            dataIndex: 'lawyer',
+            key: 'lawyer',
             width: 120,
         },
         {

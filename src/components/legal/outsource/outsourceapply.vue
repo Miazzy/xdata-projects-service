@@ -94,13 +94,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>外部律所</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.firm" :readonly="false" placeholder="请输入外部律所名称！" @blur="validFieldToast('account_type')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-auto-complete :data-source="firmNamelist" v-model="element.firm" placeholder="请输入外部律所名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>外部律师</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>外聘律师</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.lawyer" :readonly="false" placeholder="请输入外部律所相关律师信息！"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-auto-complete :data-source="lawyerNamelist" v-model="element.lawyer" placeholder="请输入外聘律师！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
                     </a-col>
                   </a-row>
                 </div>
@@ -227,6 +227,8 @@ export default {
       element: {
           id:'',
           title:'',
+          firm:'',
+          lawyer:'',
           legal_title:'',
           create_time: dayjs().format('YYYY-MM-DD'),
           create_by:'',
@@ -242,6 +244,8 @@ export default {
       userList:[],
       firmlist:[],
       firmNamelist:[],
+      lawyerlist:[],
+      lawyerNamelist:[],
       release_userlist:[],
       approve_userlist:[],
       approve_executelist:[],
@@ -349,6 +353,15 @@ export default {
             this.element = await this.handleList(this.tablename , id);
           } else {
           
+          }
+
+          try {
+            this.firmlist = await Betools.manage.queryTableData('bs_law_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
+            this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
+            this.lawyerlist = await Betools.manage.queryTableData('bs_lawyer' , `_where=(status,ne,0)&_fields=id,lawyer_name,mobile&_sort=-id&_p=0&_size=10000`);
+            this.lawyerNamelist = this.lawyerlist.map(item => { return item.lawyer_name });
+          } catch (error) {
+            console.error(error);
           }
 
           this.element.legal_title = this.legal.title;
