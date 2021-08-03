@@ -2174,8 +2174,14 @@ export default {
       },
 
       // 下载附件
-      downloadFiles(record){
+      async downloadFiles(record){
         const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
+        window.open(url,'_blank');
+      },
+
+      // 查看详情信息
+      async execViewProcess(record , view = ''){
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/${view}?id=${record.id}&type=1&tname=详情&apply=view&role=view`;
         window.open(url,'_blank');
       },
 
