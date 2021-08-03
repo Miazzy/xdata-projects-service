@@ -1564,6 +1564,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="outsourceColumns" :data-source="outsourceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
                           <a-col :span="1" >
@@ -1587,6 +1588,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="evidenceColumns" :data-source="evidenceData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
                           <a-col :span="1" >
@@ -1610,6 +1612,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="stampedColumns" :data-source="stampedData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
                           <a-col :span="1" >
@@ -1633,6 +1636,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="representationColumns" :data-source="representationData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
                           <a-col :span="1" >
@@ -1656,6 +1660,7 @@
                           </a-col>
                           <a-col :span="21" >
                             <a-table :columns="planColumns" :data-source="planData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                              <a slot="fileName" slot-scope="text,record" @click="downloadFiles(record)">{{ text }}</a>
                             </a-table>
                           </a-col>
                           <a-col :span="1" >
@@ -2161,6 +2166,12 @@ export default {
         } else if (info.file.status === 'error') {
           this.$message.error(`${info.file.name} file upload failed.`);
         }
+      },
+
+      // 下载附件
+      downloadFiles(record){
+        const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
+        window.open(url,'_blank');
       },
 
       // 企业微信登录处理函数
