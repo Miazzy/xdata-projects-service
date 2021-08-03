@@ -193,13 +193,13 @@ export const excelTableLabels = {
             title: '外部律所',
             dataIndex: 'firm',
             key: 'firm',
-            width: 120,
+            width: 240,
         },
         {
             title: '外聘律师',
             dataIndex: 'lawyer',
             key: 'lawyer',
-            width: 120,
+            width: 180,
         },
         {
             title: '备注信息',
@@ -213,7 +213,7 @@ export const excelTableLabels = {
             dataIndex: 'fileName',
             key: 'fileName',
             ellipsis: true,
-            width: 180,
+            width: 120,
         },
     ],
     planColumns:[{
