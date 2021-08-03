@@ -83,7 +83,24 @@
                     </a-col>
                     <a-col :span="8">
                       <a-input v-model="element.legal_title" :readonly="false" placeholder="请输入关联案件信息！"  style="width:80%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                      <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.75rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execView(element)"> 查看 </a-tag>
+                      <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.075rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execView(element)"> 查看 </a-tag>
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>外部律所</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.firm" :readonly="false" placeholder="请输入外部律所名称！" @blur="validFieldToast('account_type')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>外部律师</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.lawyer" :readonly="false" placeholder="请输入外部律所相关律师信息！"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
