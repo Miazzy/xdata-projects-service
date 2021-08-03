@@ -285,7 +285,7 @@ export default {
 
       // 下载附件
       async downloadFiles(record){
-        vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
+        vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
         const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
         window.open(url,'_blank');
         vant.Toast.clear();
@@ -363,7 +363,14 @@ export default {
       async execView(elem){
           const { $router } = this;
           vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
-          const url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
+          let url = null;
+          if(!Betools.tools.isNull(elem.pid)){
+            url = `${window.location.protocol}//${window.location.host}/#/legal/case/legalapply?id=${elem.pid}&type=1&tname=案件详情&apply=view&role=view`;
+          } else {
+            // 先根据关联案件信息，查询案件标题，根据查询结果，返回到相应案件
+            const title = this.element.legal_title;
+
+          }
           window.open(url,'_blank');
           vant.Toast.clear();
       },
