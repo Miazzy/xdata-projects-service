@@ -285,8 +285,10 @@ export default {
 
       // 下载附件
       async downloadFiles(record){
+        vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
         const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
         window.open(url,'_blank');
+        vant.Toast.clear();
       },
 
       // 企业微信登录处理函数
