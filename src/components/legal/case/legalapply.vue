@@ -308,7 +308,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>起诉状/授权文书</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:85%;" >
+                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:auto; float:left; margin-right: 10px;" >
                         <a-button> <a-icon type="upload" /> 上传 </a-button>
                       </a-upload>
                       <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(legal)" >
