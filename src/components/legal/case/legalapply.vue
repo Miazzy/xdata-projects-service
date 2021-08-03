@@ -2095,7 +2095,6 @@ export default {
       remark:'',
       file:'',
       operate:'',
-      uploadURL:'https://upload.yunwisdom.club:30443/sys/common/upload',
       message: workconfig.compValidation.legalapply.message,
       valid: workconfig.compValidation.legalapply.valid,
       goodsborrowtype: workconfig.goodsborrowtype,
