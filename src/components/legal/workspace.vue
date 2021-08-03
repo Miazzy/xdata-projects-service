@@ -159,7 +159,7 @@ export default {
     async queryInfo() {
       try {
         const { $router } = this;
-        vant.Toast.loading({ duration: 0,  forbidClick: false,  message: '加载中...', });
+        vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '加载中...', });
         this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
         const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
         this.userinfo = weworkinfo.userinfo;
