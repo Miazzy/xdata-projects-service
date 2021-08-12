@@ -503,7 +503,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '发起委外申请',
             click: () => {
-                $router.push(`/legal/outsourceapply?type=1&tname=律所录入&apply=new`, '_blank');
+                $router.push(`/legal/outsourceapply?type=1&tname=发起委外申请&apply=new&role=add`, '_blank');
             }
         }, {
             name: "发起文书盖章",
@@ -511,7 +511,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '发起文书盖章',
             click: () => {
-                $router.push(`/legal/stampedapply?type=1&tname=律所管理&apply=管理`, '_blank');
+                $router.push(`/legal/stampedapply?type=1&tname=发起文书盖章&apply=new&role=add`, '_blank');
             }
         }, {
             name: "发起证据收集",
@@ -519,7 +519,7 @@ export const reward = ($router) => {
             href: "/account/donelist",
             description: '发起证据收集',
             click: () => {
-                $router.push(`/legal/evidenceapply?type=1&tname=律师录入&apply=new`, '_blank');
+                $router.push(`/legal/evidenceapply?type=1&tname=发起证据收集&apply=new&role=add`, '_blank');
             }
         }, {
             name: "发起情况说明",
@@ -527,7 +527,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '发起情况说明',
             click: () => {
-                $router.push(`/legal/representationapply?type=1&tname=律师管理&apply=管理`, '_blank');
+                $router.push(`/legal/representationapply?type=1&tname=发起情况说明&apply=new&role=add`, '_blank');
             }
         }, {
             name: "发起诉讼预案",
@@ -535,7 +535,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '发起诉讼预案',
             click: () => {
-                $router.push(`/legal/planapply?type=1&tname=律师管理&apply=管理`, '_blank');
+                $router.push(`/legal/planapply?type=1&tname=发起诉讼预案&apply=new&role=add`, '_blank');
             }
         }],
     }, {
