@@ -263,6 +263,9 @@ export default {
           create_username:'',
           content:'',
           files:'',
+          evd_name:'',
+          evd_time:'',
+          evd_by:'',
           remark: '暂无备注', //备注信息
           xid:'',
           pid:'',
