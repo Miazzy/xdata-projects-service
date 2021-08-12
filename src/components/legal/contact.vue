@@ -133,37 +133,17 @@ export default {
     };
   },
   activated() {
-    this.init();
+
   },
   mounted() {
-    this.init();
+
   },
   methods: {
-    async init() {
-      this.activeTabKey = 2;
-      this.constpaneflows = JSON.parse(JSON.stringify(this.paneflows));
-    },
     async searchWordChange() {
-      this.paneflows.map((item, index) => {
-        if (
-          item.name.includes(this.searchwords) ||
-          item.description.includes(this.searchwords)
-        ) {
-          item.show = true;
-        } else {
-          item.show = false;
-        }
-      });
-      this.paneflows.sort();
+      
     },
     async menuCardClick(id) {
-      this.paneflows.map((item) => {
-        if (item.id === id) {
-          item.css = "background:#f9f9f9;";
-        } else {
-          item.css = "";
-        }
-      });
+      
     },
   },
 };
