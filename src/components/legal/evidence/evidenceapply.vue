@@ -150,7 +150,7 @@
                 <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:25px;margin-bottom:5px; margin-right:10px; display:block; ">
                   <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>证据名称</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据名称</span>
                     </a-col>
                     <a-col :span="20">
                       <a-textarea
@@ -396,6 +396,10 @@ export default {
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
+
+            this.evdData = await Betools.manage.queryTableDataDB('bs_legal_evd_subitem' , `_where=(pid,eq,${id})&_fields=id,evd_name,evd_time,evd_by&_sort=-id&_p=0&_size=10000`);
+            this.evdData.map(elem=>{elem.evd_time = dayjs(elem.evd_time).format('YYYY-MM-DD HH:mm:ss');}); 
+
           } else {
            
           }

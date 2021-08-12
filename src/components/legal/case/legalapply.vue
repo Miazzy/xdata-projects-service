@@ -2997,7 +2997,7 @@ export default {
       async execOutFirmApply(){
         const { $router } = this;
         const id = this.id = Betools.tools.getUrlParam('id');
-        const url = `${window.location.protocol}//${window.location.host}/#/legal/outsourceapply?type=1&tname=发起委外申请&apply=new&pid=${id}`;
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/outsourceapply?type=1&tname=发起委外申请&apply=new&role=add&pid=${id}`;
         window.open(url,'_blank');
       },
 
@@ -3005,7 +3005,7 @@ export default {
       async execCollectApply(){
         const { $router } = this;
         const id = this.id = Betools.tools.getUrlParam('id');
-        const url = `${window.location.protocol}//${window.location.host}/#/legal/evidenceapply?type=1&tname=发起证据收集&apply=new&pid=${id}`;
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/evidenceapply?type=1&tname=发起证据收集&apply=new&role=add&pid=${id}`;
         window.open(url,'_blank');
       },
 
@@ -3013,7 +3013,7 @@ export default {
       async execPaperApply(){
         const { $router } = this;
         const id = this.id = Betools.tools.getUrlParam('id');
-        const url = `${window.location.protocol}//${window.location.host}/#/legal/stampedapply?type=1&tname=发起文书盖章&apply=new&pid=${id}`;
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/stampedapply?type=1&tname=发起文书盖章&apply=new&role=add&pid=${id}`;
         window.open(url,'_blank');
       },
 
@@ -3021,7 +3021,7 @@ export default {
       async execConditionApply(){
         const { $router } = this;
         const id = this.id = Betools.tools.getUrlParam('id');
-        const url = `${window.location.protocol}//${window.location.host}/#/legal/representationapply?type=1&tname=发起情况说明&apply=new&pid=${id}`;
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/representationapply?type=1&tname=发起情况说明&apply=new&role=add&pid=${id}`;
         window.open(url,'_blank');
       },
 
@@ -3029,7 +3029,7 @@ export default {
       async execPlanApply(){
         const { $router } = this;
         const id = this.id = Betools.tools.getUrlParam('id');
-        const url = `${window.location.protocol}//${window.location.host}/#/legal/planapply?type=1&tname=发起诉讼预案&apply=new&pid=${id}`;
+        const url = `${window.location.protocol}//${window.location.host}/#/legal/planapply?type=1&tname=发起诉讼预案&apply=new&role=add&pid=${id}`;
         window.open(url,'_blank');
       },
 
