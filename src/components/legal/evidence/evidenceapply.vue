@@ -505,6 +505,7 @@ export default {
                     this.evdData.map(item=>{
                       item.pid = id;
                       item.status = 'valid';
+                      item.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
                       Betools.manage.postTableData('bs_legal_evd_subitem',item);
                     });
                   } catch (error) {
@@ -542,6 +543,7 @@ export default {
                     this.evdData.map(item=>{
                       item.pid = id;
                       item.status = 'valid';
+                      item.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
                       Betools.manage.postTableData('bs_legal_evd_subitem',item);
                     });
                   } catch (error) {
