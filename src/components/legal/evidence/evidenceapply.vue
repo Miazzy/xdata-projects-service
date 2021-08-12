@@ -88,7 +88,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:none; ">
                   <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>申请内容</span>
@@ -134,6 +134,17 @@
                       </div>
                     </a-col>
                   </a-row>
+                </div>
+
+                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                  <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      证据信息
+                    </a-col>
+                  </a-row>
+                  <div v-if=" (role == 'view') " style="position:absolute; width:1000px; left: -26.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
+                    <a-tag color="#87d068" style="position: relative; float:right; right:0.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execAddEvd(legal)"> 新增证据明细 </a-tag>
+                  </div>
                 </div>
 
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
@@ -311,6 +322,10 @@ export default {
           const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
           this.userinfo = weworkinfo.userinfo;
           this.usertitle = weworkinfo.usertitle;
+
+          this.role = Betools.tools.getUrlParam('role');
+          this.stage = Betools.tools.getUrlParam('stage');
+          this.apply = Betools.tools.getUrlParam('apply') || 'view';
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
