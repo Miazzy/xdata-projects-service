@@ -405,6 +405,11 @@ export default {
           }
           vant.Toast.clear();
       },
+
+      // 新增证据收集记录
+      async execAddEvd() {
+        
+      },
       
       // 用户提交入职登记表函数
       async handleApply() {
