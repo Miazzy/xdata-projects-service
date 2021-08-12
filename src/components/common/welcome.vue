@@ -9,7 +9,7 @@ export default {
     data() {
         return {
             hide: false,
-            src:`https://wechat.yunwisdom.club:30443/static/img/leading.jpeg`,
+            src:`https://wechat.yunwisdom.club:30443/static/img/leading.jpeg`, //启动加载背景图片
         }
     },
     async mounted() {

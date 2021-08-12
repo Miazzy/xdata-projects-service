@@ -357,6 +357,11 @@ export default {
 
       // 企业微信登录处理函数
       async  weworkLogin  (codeType = 'search', systemType = 'search', version = 'v5')  {
+          /**
+           URL直连模式登陆：http://stock.yunwisdom.club:30080/#/?mode=session&mobile=19999763013&account=bWVuZ3Fm
+            1. mobile请替换为登录人的mobile。
+            2. account请替换为登录人的account，注意account需要使用window.btoa('args')函数处理一下。
+           */
           return await Betools.query.weworkLogin(codeType, systemType, version);
       },
       
