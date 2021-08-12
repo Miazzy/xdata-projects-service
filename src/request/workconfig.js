@@ -308,6 +308,25 @@ export const excelTableLabels = {
             width: 180,
         },
     ],
+    evdColumns:[{
+        title: '证据日期',
+        dataIndex: 'evd_time',
+        key: 'evd_time',
+        scopedSlots: { customRender: 'evd_time' },
+        width: 120,
+    },{
+        title: '负责人员',
+        dataIndex: 'evd_by',
+        key: 'evd_by',
+        scopedSlots: { customRender: 'evd_by' },
+        width: 120,
+    },{
+        title: '证据名称',
+        dataIndex: 'evd_name',
+        key: 'evd_name',
+        scopedSlots: { customRender: 'evd_name' },
+        width: 480,
+    }],
     stampedColumns:[{
             title: '填报时间',
             dataIndex: 'create_time',

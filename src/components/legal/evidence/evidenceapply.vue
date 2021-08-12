@@ -142,12 +142,12 @@
                       证据信息
                     </a-col>
                   </a-row>
-                  <div v-if=" ( role == 'view' || role == 'add' || role == 'edit' ) " style="position:absolute; width:1000px; left: -26.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
+                  <div v-if=" ( role == 'add' || role == 'edit' ) " style="position:absolute; width:1000px; left: -26.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
                     <a-tag color="#87d068" style="position: relative; float:right; right:0.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execAddEvd(legal)"> 新增证据明细 </a-tag>
                   </div>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:25px;margin-bottom:5px; margin-right:10px; display:block; ">
+                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:25px;margin-bottom:5px; margin-right:10px; display:block; ">
                   <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>证据名称</span>
@@ -163,7 +163,7 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据日期</span>
@@ -175,7 +175,20 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>负责人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.evt_by" readonly placeholder="请输入此证据先行相关负责人员！" @blur="validFieldToast('evt_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.evd_by" readonly placeholder="请输入此证据先行相关负责人员！" @blur="validFieldToast('evt_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'add' || role == 'edit') && evdData && evdData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px; margin-left:-30px;">
+                  <a-row>
+                    <a-col :span="2" >
+                    </a-col>
+                    <a-col :span="21" >
+                      <a-table :columns="evdColumns" :data-source="evdData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                      </a-table>
+                    </a-col>
+                    <a-col :span="1" >
                     </a-col>
                   </a-row>
                 </div>
@@ -287,6 +300,8 @@ export default {
       collection: [{ }],
       userinfo: '',
       usertitle:'',
+      evdColumns: workconfig.subColumns.evdColumns,
+      evdData:[],
       columns: workconfig.columns.reward.items,
       wfcolumns: workconfig.columns.reward.wfcolumns,
       message: workconfig.compValidation.legalapply.message,
@@ -444,7 +459,14 @@ export default {
 
       // 新增证据收集记录
       async execAddEvd() {
-        
+        const id = Betools.tools.queryUniqueID(); // 表单ID
+        if(!(this.element.evd_name && this.element.evd_time && this.element.evd_by)){
+          return vant.Dialog.alert({  title: '温馨提示',  message: `请填写完成的证据信息，再进行保存！`, });
+        }
+        const evd_name = this.element.evd_name;
+        const evd_time = dayjs(this.element.evd_time).format('YYYY-MM-DD');
+        const evd_by = this.element.evd_by;
+        this.evdData.push({id, evd_name , evd_time , evd_by});
       },
       
       // 用户提交入职登记表函数
@@ -460,6 +482,7 @@ export default {
         const id = Betools.tools.queryUniqueID(); // 表单ID
 
         try {
+          this.element.id = id;
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
         } catch (error) {
@@ -469,13 +492,25 @@ export default {
         // 是否确认提交此自由流程?
         this.$confirm({
             title: "确认操作",
-            content: "是否确认提交此账户信息?",
+            content: "是否确认提交此发起证据收集信息?",
             onOk: async() => {
                   const element  = JSON.parse(JSON.stringify(this.element));
                   const result = await Betools.manage.postTableData(this.tablename , element); // 向表单提交form对象数据
+                  
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
+
+                  try {
+                    this.evdData.map(item=>{
+                      item.pid = id;
+                      item.status = 'valid';
+                      Betools.manage.postTableData('bs_legal_evd_subitem',item);
+                    });
+                  } catch (error) {
+                    console.error(error);
+                  }
+                  
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';
@@ -495,13 +530,24 @@ export default {
         //是否确认提交此自由流程?
         this.$confirm({
             title: "确认操作",
-            content: "是否确认修改此账户信息?",
+            content: "是否确认修改此信息?",
             onOk: async() => {
                   const element  = JSON.parse(JSON.stringify(this.element));
                   const result = await Betools.manage.patchTableData(this.tablename, id, element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
+
+                  try {
+                    this.evdData.map(item=>{
+                      item.pid = id;
+                      item.status = 'valid';
+                      Betools.manage.postTableData('bs_legal_evd_subitem',item);
+                    });
+                  } catch (error) {
+                    console.error(error);
+                  }
+
                   this.loading = false;
                   this.readonly = true;
                   this.role = 'view';
@@ -517,4 +563,5 @@ export default {
 <style scoped >
     @import "../../../assets/css/reward.home.css";
     @import "../../../assets/css/reward.apply.css";
+    @import "../../../assets/css/progress.apply.css";
 </style>
