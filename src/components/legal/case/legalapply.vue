@@ -1702,18 +1702,27 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:220px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                       <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="validApprove()"  >
                         添加
                       </a-button>
                     </a-col>
+                    
+                  </a-row>
+                </div>  
+
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
                     <a-col :span="12">
-                      <div style="margin-left:50px;margin-top:-15px;">
+                      <div style="margin-left:50px;margin-top:5px;">
+                        <span style="margin-left:25px;">审批人员：</span>
                         <template v-for="(item , index) in approve_userlist ">
-                          <div :key="index" style="position: relative;">
-                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar"  style="margin:2px 4px 2px 2px;" />
-                            <a-icon :key="index" type="arrow-right" style="margin-top:5px;" />
-                          </div>
+                          <span :key="index" style="position: relative; width:75px; height:150px;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar"  style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 60px; left:25px; " >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 60px; left:20px; text-align:center; " >{{ item.loginid }}</span>
+                            <a-icon v-show=" ( index + 1 )< approve_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
+                          </span>
                         </template>
                       </div>
                     </a-col>
@@ -2479,6 +2488,7 @@ export default {
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         userlist = this.approve_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        debugger;
         this.approve_userlist = userlist; 
       },
 
