@@ -2481,6 +2481,7 @@ export default {
         userlist = this.release_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         this.release_userlist = userlist; 
+        this.release_userlist.map(item=>{ item.index = index;});
       },
 
       // 检测审批人员，并加入审批列表
@@ -2491,6 +2492,7 @@ export default {
         userlist = this.approve_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         this.approve_userlist = userlist; 
+        this.approve_userlist.map(item=>{ item.index = index;});
       },
 
       // 移除第Index个审批人员
@@ -2500,6 +2502,7 @@ export default {
               content: `您好，您确认删除审批人员${item.name}(${item.loginid})吗?`,
               onOk: async(result) => {
                 this.approve_userlist.splice(index, 1);
+                this.approve_userlist.map(item=>{ item.index = index;});
               }
         });
       },
