@@ -1702,15 +1702,18 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="approve_userid"  placeholder="请添加审批人员！" @blur="validApprove()" style="width:240px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
-                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="handleSave();"  >
+                      <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:220px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="validApprove()"  >
                         添加
                       </a-button>
                     </a-col>
                     <a-col :span="12">
                       <div style="margin-left:50px;margin-top:-15px;">
                         <template v-for="(item , index) in approve_userlist ">
-                          <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar"  style="margin:2px 4px 2px 2px;" />
+                          <div :key="index" style="position: relative;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar"  style="margin:2px 4px 2px 2px;" />
+                            <a-icon :key="index" type="arrow-right" style="margin-top:5px;" />
+                          </div>
                         </template>
                       </div>
                     </a-col>
