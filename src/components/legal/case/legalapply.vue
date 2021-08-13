@@ -2615,8 +2615,8 @@ export default {
         const approve_userlist = data.approve_userlist; //获取审批人员列表
 
         try {
-          //自由流程节点
-           var node = {
+           // 自由流程节点
+           let node = {
                id: Betools.tools.queryUniqueID(),
                create_by: userinfo["username"],
                create_time: ctime,
@@ -2624,12 +2624,14 @@ export default {
                main_key: curItemID,
                audit_node: Betools.tools.deNull(wfUsers),
                approve_node: Betools.tools.deNull(approver),
-               notify_node: Betools.tools.deNull(nfUsers)
+               notify_node: Betools.tools.deNull(nfUsers),
+               data: data,
+               all_node: approve_userlist,
            };
 
            const freeWFNode = JSON.parse(JSON.stringify(node));
 
-           //提交发起人审批相关处理信息
+           // 提交发起人审批相关处理信息
            node = {
                id: Betools.tools.queryUniqueID(), //获取随机数
                table_name: curTableName, //业务表名
@@ -2651,13 +2653,13 @@ export default {
                relate_data: JSON.stringify(approve_userlist),
            };
 
-           //发起节点，审批信息，写入审批历史表中
+           // 发起节点，审批信息，写入审批历史表中
            const startFreeNode = JSON.parse(JSON.stringify(node));
 
-           //获取审核节点中，第一个待审批用户，如果没有选择审核用户，则直接选择审批用户
-           var firstWflowUser = Betools.tools.deNull(wfUsers) == "" ?  Betools.tools.deNull(approver) : Betools.tools.deNull(wfUsers).split(",")[0];
+           // 获取审核节点中，第一个待审批用户，如果没有选择审核用户，则直接选择审批用户
+           let firstWflowUser = Betools.tools.deNull(wfUsers) == "" ?  Betools.tools.deNull(approver) : Betools.tools.deNull(wfUsers).split(",")[0];
 
-           //提交审批相关处理信息
+           // 提交审批相关处理信息
            node = {
                id: Betools.tools.queryUniqueID(), //获取随机数
                table_name: curTableName, //业务表名
@@ -2670,9 +2672,10 @@ export default {
                process_audit: "000000000",
                proponents: userinfo["username"],
                content: data["content"],
+               action: "审批",
                operate_time: ctime,
                create_time: ctime,
-               business_data: JSON.stringify(node),
+               business_data: JSON.stringify(freeWFNode),
                relate_data: JSON.stringify(approve_userlist),
            };
 
@@ -2848,9 +2851,16 @@ export default {
                     console.error(error);
                   }
 
-                  // 提交审批记录, 记录审批日志
-
-                  // 向第一个审批人发送一条审批待办
+                  // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
+                  const users = this.approve_userlist.map(item=>item.loginid);
+                  debugger;
+                  const wfUsers = users.slice(0,-1).toString(); // 审批人员
+                  const nfUsers = ''; // 知会人员
+                  const approver = users.slice(-1).toString(); // 最后一个终审人员
+                  const data = legal;
+                  const ctime = dayjs().format('YYYY-MM-DD');
+                  data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
+                  await handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , id , data , ctime);
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
