@@ -2635,14 +2635,14 @@ export default {
                main_value: curItemID, //表主键值
                business_data_id: curItemID, //业务具体数据主键值
                business_code: "000000000", //业务编号
-               process_name: "自由流程审批", //流程名称
+               process_name: "流程审批", //流程名称
                employee: userinfo["username"],
-               process_station: "自由流程审批",
+               process_station: "流程审批",
                process_audit: "000000000",
                proponents: userinfo["username"],
                approve_user: userinfo["username"],
                action: "发起",
-               action_opinion: "发起自由流程",
+               action_opinion: "发起流程",
                content: data["content"],
                operate_time: ctime,
                create_time: ctime,
@@ -2662,9 +2662,9 @@ export default {
                main_value: curItemID, //表主键值
                business_data_id: curItemID, //业务具体数据主键值
                business_code: "000000000", //业务编号
-               process_name: "自由流程审批", //流程名称
+               process_name: "流程审批", //流程名称
                employee: firstWflowUser,
-               process_station: "自由流程审批",
+               process_station: "流程审批",
                process_audit: "000000000",
                proponents: userinfo["username"],
                content: data["content"],
@@ -2684,14 +2684,14 @@ export default {
            //处理自由流程发起提交审批操作
            await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, "2");
            //弹出审批完成提示框
-           vant.Toast.success("提交自由流程审批成功！");
+           vant.Toast.success("提交流程审批成功！");
            //记录当前流程已经提交，短时间内无法再次提交
            Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );
 
            // 此处推送消息至第一个审批处
            try {
               const receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${curItemID}&pid=${node.id}&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=2&proponents=${firstWflowUser}`);
-              await superagent.get(`${window.requestAPIConfig.restapi}/api/v1/weappms/${firstWflowUser}/亲爱的同事，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，内容：${data['content']}，请您及时进行审批处理！?type=reward&rurl=${receiveURL}`)
+              await superagent.get(`${window.requestAPIConfig.restapi}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，内容：${data['content']}，请您及时进行审批处理！?type=reward&rurl=${receiveURL}`)
                           .set('accept', 'json');
            } catch (error) {
              console.log(error);
