@@ -1526,7 +1526,7 @@
                       </a-tabs>
                 </div>
 
-                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;padding-left:70px;">
+                <div v-show=" role !== 'add' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;padding-left:70px;">
                   <a-tabs default-active-key="1" >
 
                     <a-tab-pane key="1" tab="案件进展">
@@ -1683,6 +1683,35 @@
                     </a-tab-pane>
                   </a-tabs>
                 </div>
+
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      审批流程
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="approve_userid"  placeholder="请添加审批人员！" @blur="validApprove()" style="width:240px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="handleSave();"  >
+                        添加
+                      </a-button>
+                    </a-col>
+                    <a-col :span="12">
+                      <div style="margin-left:50px;margin-top:-15px;">
+                        <template v-for="(item , index) in approve_userlist ">
+                          <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar"  style="margin:2px 4px 2px 2px;" />
+                        </template>
+                      </div>
+                    </a-col>
+                  </a-row>
+                </div>  
 
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -2434,6 +2463,16 @@ export default {
         userlist = this.release_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         this.release_userlist = userlist; 
+      },
+
+      // 检测知会人员，并加入审批列表
+      async validApprove(){
+        const username = this.approve_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.approve_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.approve_userlist = userlist; 
       },
 
       // 案件记录修改申请
