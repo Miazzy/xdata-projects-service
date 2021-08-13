@@ -2646,7 +2646,8 @@ export default {
                content: data["content"],
                operate_time: ctime,
                create_time: ctime,
-               business_data: JSON.stringify(freeWFNode)
+               business_data: JSON.stringify(freeWFNode),
+               relate_data: JSON.stringify(approve_userlist),
            };
 
            //发起节点，审批信息，写入审批历史表中
@@ -2670,7 +2671,8 @@ export default {
                content: data["content"],
                operate_time: ctime,
                create_time: ctime,
-               business_data: JSON.stringify(node)
+               business_data: JSON.stringify(node),
+               relate_data: JSON.stringify(approve_userlist),
            };
 
            //保存审批相关处理信息
