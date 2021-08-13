@@ -1717,9 +1717,9 @@
                         <span style="margin-left:32.5px;">审批：</span>
                         <template v-for="(item , index) in approve_userlist ">
                           <span :key="index" style="position: relative; width:75px; height:180px;">
-                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveApprove(item)" style="margin:2px 10px 2px 30px; width:auto;" />
-                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " >{{ item.name }}</span>
-                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " >{{ item.loginid }}</span>
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveApprove(item, index)" style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveApprove(item, index)" >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveApprove(item, index)" >{{ item.loginid }}</span>
                             <a-icon v-show=" ( index + 1 )< approve_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
                           </span>
                         </template>
@@ -1868,7 +1868,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>知会人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="release_userid"  placeholder="请输入知会人员！" @blur="validNotify()" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="release_userid"  placeholder="请输入知会人员！" @blur="execValidNotify()" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="12">
                       <div style="margin-left:50px;margin-top:-15px;">
@@ -2471,7 +2471,7 @@ export default {
       },
 
       // 检测知会人员，并加入知会列表
-      async validNotify(){
+      async execValidNotify(){
         const username = this.release_userid;
         let userlist = await Betools.manage.queryUserByNameVHRM(username);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
@@ -2480,15 +2480,20 @@ export default {
         this.release_userlist = userlist; 
       },
 
-      // 检测知会人员，并加入审批列表
+      // 检测审批人员，并加入审批列表
       async execValidApprove(){
         const username = this.approve_userid;
         let userlist = await Betools.manage.queryUserByNameVHRM(username);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         userlist = this.approve_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
-        debugger;
         this.approve_userlist = userlist; 
+      },
+
+      // 移除第Index个审批人员
+      async execRemoveApprove(item,index){
+        this.approve_userlist = this.approve_userlist.splice(index, 1)
+        debugger;
       },
 
       // 案件记录修改申请
