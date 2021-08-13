@@ -2613,6 +2613,7 @@ export default {
       // 启动自由流程
       async handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime){
 
+        const approve_userlist = this.approve_userlist;
         try {
           //自由流程节点
            var node = {
