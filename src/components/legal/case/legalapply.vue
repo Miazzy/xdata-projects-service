@@ -2588,13 +2588,12 @@ export default {
       async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime) {
 
         try {
-          //校验提交信息是否准确
-          var checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, );
+          
+          var checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
           let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
           let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
-
-          //如果校验标识有误，则直接返回
-          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") {
+          
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
               return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
           }
 
@@ -2613,7 +2612,8 @@ export default {
       // 启动自由流程
       async handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime){
 
-        const approve_userlist = this.approve_userlist;
+        const approve_userlist = data.approve_userlist; //获取审批人员列表
+
         try {
           //自由流程节点
            var node = {
@@ -2705,6 +2705,7 @@ export default {
         } catch (error) {
             console.log(error);
         }
+        
       },
 
       // 处理流程日志
