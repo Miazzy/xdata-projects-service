@@ -1708,7 +1708,7 @@
                       </a-button>
                     </a-col>
                     <a-col :span="24" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：点击下列审批人员头像或名字可以进行删除审批人员！</span>
+                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：请添加区域/总部负责人，点击下列审批人员头像或名字可以进行删除审批人员！</span>
                     </a-col>
                   </a-row>
                 </div>  
