@@ -2705,7 +2705,7 @@ export default {
         } catch (error) {
             console.log(error);
         }
-        
+
       },
 
       // 处理流程日志
@@ -2846,9 +2846,7 @@ export default {
                     console.error(error);
                   }
 
-                  // 提交审批记录
-
-                  // 记录审批日志
+                  // 提交审批记录, 记录审批日志
 
                   // 向第一个审批人发送一条审批待办
                   
