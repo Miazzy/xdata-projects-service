@@ -1697,15 +1697,18 @@
                 </div>
 
                 <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
+                  <a-row style="position: relative;">
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
                     </a-col>
-                    <a-col :span="8">
+                    <a-col :span="20">
                       <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                       <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidApprove()"  >
                         添加
                       </a-button>
+                    </a-col>
+                    <a-col :span="24" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：点击下列审批人员头像或名字可以进行删除审批人员！</span>
                     </a-col>
                   </a-row>
                 </div>  
