@@ -2838,6 +2838,12 @@ export default {
                     result = await Betools.manage.postTableData(this.tablename , legal); // 向表单提交form对象数据
                     console.error(error);
                   }
+
+                  // 提交审批记录
+
+                  // 记录审批日志
+
+                  // 向第一个审批人发送一条审批待办
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
