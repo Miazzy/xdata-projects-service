@@ -2492,8 +2492,13 @@ export default {
 
       // 移除第Index个审批人员
       async execRemoveApprove(item,index){
-        this.approve_userlist = this.approve_userlist.splice(index, 1)
-        debugger;
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除审批人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.approve_userlist.splice(index, 1);
+              }
+        });
       },
 
       // 案件记录修改申请
