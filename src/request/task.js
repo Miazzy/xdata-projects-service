@@ -14,7 +14,7 @@ export async function queryProcessLogDone(
     }
 
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/v_handled_events_unq?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handled_events_unq?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
     var result = {};
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -82,7 +82,7 @@ export async function queryProcessLogWait(
     }
 
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/v_handling_events?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handling_events?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
     var result = {};
 
     try {
@@ -159,7 +159,7 @@ export async function queryProcessLogWaitSeal(
     }
 
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/v_handling_events?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handling_events?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
     var result = {};
 
     try {

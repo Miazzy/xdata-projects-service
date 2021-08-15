@@ -47,7 +47,7 @@ try {
     var queryQuestionById = async(id, page = 0, size = 99) => {
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_questions?_where=(id,eq,${id})&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_questions?_where=(id,eq,${id})&_p=${page}&_size=${size}`;
 
 
 
@@ -82,7 +82,7 @@ try {
     var queryQuestionList = async(username, page = 0, size = 99) => {
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_questions?_where=(create_by,eq,${username})&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_questions?_where=(create_by,eq,${username})&_p=${page}&_size=${size}`;
 
         try {
             //发送请求
@@ -111,7 +111,7 @@ try {
      */
     var queryBusinessTotal = async() => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/onl_cgform_head/count`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/onl_cgform_head/count`;
 
         try {
             //发送请求
@@ -147,7 +147,7 @@ try {
             var cmonth = moment().month(moment().month() - 1).format('YYYY-MM');
 
             //提交URL
-            var queryURL = `${window.requestAPIConfig.restapi}/api/v_user_monthly?_where=(month,eq,${cmonth})`;
+            var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user_monthly?_where=(month,eq,${cmonth})`;
 
             //发送请求
             var res = await window.superagent.get(queryURL);
@@ -184,7 +184,7 @@ try {
             var cmonth = moment().format('YYYY-MM')
 
             //提交URL
-            var queryURL = `${window.requestAPIConfig.restapi}/api/v_user_monthly?_where=(month,eq,${cmonth})`;
+            var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user_monthly?_where=(month,eq,${cmonth})`;
 
             //发送请求
             var res = await window.superagent.get(queryURL);
@@ -215,7 +215,7 @@ try {
      */
     var queryWflowMonthlyRatio = async() => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_monthly`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_monthly`;
 
         try {
             //打印
@@ -250,7 +250,7 @@ try {
      */
     var queryWflowDailyRatio = async() => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_daily`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_daily`;
 
         try {
             //打印
@@ -292,7 +292,7 @@ try {
         var ctime = window.Betools.tools.formatDate(new Date(), 'yyyy-MM-dd');
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_total?_where=(ctime,eq,${ctime})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_total?_where=(ctime,eq,${ctime})`;
 
         try {
             var res = await window.superagent.get(queryURL);
@@ -316,7 +316,7 @@ try {
      */
     var queryWflowMonthCount = async() => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_monthly`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_monthly`;
 
         try {
             //打印
@@ -347,7 +347,7 @@ try {
      */
     var queryWflowCount = async() => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_total/count`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_total/count`;
 
         try {
             var res = await window.superagent.get(queryURL);
@@ -480,7 +480,7 @@ try {
      */
     var queryUserCount = async() => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_user/count`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user/count`;
 
         try {
             var res = await window.superagent.get(queryURL);
@@ -1075,7 +1075,7 @@ try {
         }
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_user_info?_where=(id,ne,'')${whereSQL}&_p=${page}&_size=${size}&_sort=-join_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_user_info?_where=(id,ne,'')${whereSQL}&_p=${page}&_size=${size}&_sort=-join_time`;
 
         try {
             //发送HTTP请求，获取博文数量
@@ -1128,7 +1128,7 @@ try {
         tools = window.tools
     ) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_user_info?_where=(name,eq,${realname})~or(username,eq,${username})&_p=${page}&_size=${size}&_sort=-join_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_user_info?_where=(name,eq,${realname})~or(username,eq,${username})&_p=${page}&_size=${size}&_sort=-join_time`;
 
         try {
             //发送HTTP请求，获取博文数量
@@ -1181,7 +1181,7 @@ try {
     ) => {
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_salary?_where=(name,eq,${realname})~or(username,eq,${username})&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_salary?_where=(name,eq,${realname})~or(username,eq,${username})&_p=${page}&_size=${size}`;
 
         try {
             //发送HTTP请求，获取博文数量
@@ -1284,7 +1284,7 @@ try {
         }
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_salary?_where=(id,ne,'')${whereSQL}&_p=${page}&_size=${size}&_sort=-wages_date`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_salary?_where=(id,ne,'')${whereSQL}&_p=${page}&_size=${size}&_sort=-wages_date`;
 
         try {
             //发送HTTP请求，获取博文数量
@@ -1391,7 +1391,7 @@ try {
         }
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_salary?_where=(id,ne,'')${whereSQL}&_p=${page}&_size=${size}&_sort=-wages_date`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_salary?_where=(id,ne,'')${whereSQL}&_p=${page}&_size=${size}&_sort=-wages_date`;
 
         try {
             //发送HTTP请求，获取博文数量
@@ -1437,7 +1437,7 @@ try {
      */
     var queryBloggerInfo = async(username, result) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_blog/groupby?_fields=create_by,page_type`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_blog/groupby?_fields=create_by,page_type`;
 
         try {
             //发送HTTP请求，获取博文数量
@@ -2308,7 +2308,7 @@ try {
         window.tools = window.tools == null ? tools : window.tools;
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/sys_depart?_where=(org_code,eq,${code})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/sys_depart?_where=(org_code,eq,${code})`;
         //根据部门编号，查询部门信息
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -2538,7 +2538,7 @@ try {
         window.tools = window.tools == null ? tools : window.tools;
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_comments?_where=(main_key,eq,${id})&_sort=create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_comments?_where=(main_key,eq,${id})&_sort=create_time`;
 
         //根据业务编号，查询业务数据
         var wflow = await storage.getStoreDB(`cache_bs_comments_id:${id}`);
@@ -2625,7 +2625,7 @@ try {
         window.tools = window.tools == null ? tools : window.tools;
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
 
         //根据业务编号，查询业务数据
         var wflow = [];
@@ -2664,7 +2664,7 @@ try {
      */
     var queryHisFreeWorkflow = async(id) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
         //根据业务编号，查询业务数据
         var wflist = [];
 
@@ -3076,7 +3076,7 @@ try {
      */
     var queryNoticeList = async(page = 0, size = 50, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_notice?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_notice?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -3113,7 +3113,7 @@ try {
      */
     var queryViewsList = async(page = 0, size = 50, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_market_info?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_market_info?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -3262,7 +3262,7 @@ try {
      */
     var queryPRLogByDataID = async(business_data_id, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -3285,7 +3285,7 @@ try {
      */
     var queryPRLogInfByDataID = async(business_data_id, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -3311,8 +3311,8 @@ try {
         var ctime = window.Betools.tools.formatDate(new Date(), 'yyyy-MM-dd');
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed/count?_where=(business_data_id,eq,${business_data_id})`;
-        var queryTodayURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed/count?_where=(business_data_id,eq,${business_data_id})~and(operate_time,like,~${ctime}~)`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed/count?_where=(business_data_id,eq,${business_data_id})`;
+        var queryTodayURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed/count?_where=(business_data_id,eq,${business_data_id})~and(operate_time,like,~${ctime}~)`;
         var result = {};
         var count = 0;
         var today = 0;
@@ -3478,7 +3478,7 @@ try {
         //获取主键ID
         var tableID = queryURLTableParam();
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/onl_cgform_head/${tableID}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/onl_cgform_head/${tableID}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -3516,7 +3516,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //查询URL GET	/api/tableName/:id/exists	True or false whether a row exists or not  /api/tableName/findOne
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
 
         //查询标识
         var vflag = false;
@@ -3549,7 +3549,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //查询URL GET	/api/tableName/:id/exists	True or false whether a row exists or not  /api/tableName/findOne
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
 
         //查询标识
         var vflag = false;
@@ -3583,7 +3583,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //Post数据的URL地址
-        var insertURL = `${window.requestAPIConfig.restapi}/api/${tableName}`;
+        var insertURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}`;
 
         //如果传入数据为数组，则URL添加bulk路径
         if (typeof node != 'undefined' && node != null && node instanceof Array) {
@@ -3617,7 +3617,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //Post数据的URL地址
-        var insertURL = `${window.requestAPIConfig.restapi}/api/${tableName}`;
+        var insertURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}`;
 
         //如果传入数据为数组，则URL添加bulk路径
         if (typeof node != 'undefined' && node != null && node instanceof Array) {
@@ -3651,7 +3651,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //Post数据的URL地址
-        var deleteURL = `${window.requestAPIConfig.restapi}/api/${tableName}/${id}`;
+        var deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/${id}`;
 
         try {
             var res = await superagent.delete(deleteURL).set('accept', 'json');
@@ -3679,7 +3679,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-        var patchURL = `${window.requestAPIConfig.restapi}/api/${tableName}/${id}`;
+        var patchURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/${id}`;
 
         //如果传入数据为空，则直接返回错误
         if (typeof node == 'undefined' || node == null || node == '') {
@@ -3738,7 +3738,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-        var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}/${id}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/${id}`;
 
         try {
             //获取缓存中的数据
@@ -3793,7 +3793,7 @@ try {
 
         if (size <= page_size) {
             //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-            queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}?_where=(create_by,like,~${username}~)~or(create_by,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
+            queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}?_where=(create_by,like,~${username}~)~or(create_by,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
 
             try {
                 res = await superagent.get(queryURL).set('accept', 'json');
@@ -3809,7 +3809,7 @@ try {
             //进行遍历查询
             while (i <= times) {
                 //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-                queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}?_where=(create_by,like,~${username}~)~or(create_by,like,~${realname}~)&_p=${page + i++}&_size=${page_size}&_sort=-create_time`;
+                queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}?_where=(create_by,like,~${username}~)~or(create_by,like,~${realname}~)&_p=${page + i++}&_size=${page_size}&_sort=-create_time`;
                 res = null;
                 try {
                     res = await superagent.get(queryURL).set('accept', 'json');
@@ -3848,7 +3848,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //查询URL Get	/api/tableName	query all rows by tableName
-        var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}`;
         //定义查询结果
         var result = null;
 
@@ -3899,7 +3899,7 @@ try {
      */
     var queryDepartName = async(id) => {
         //设置查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_depart_name?_where=(id,eq,${id})&_p=0&_size=10`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_depart_name?_where=(id,eq,${id})&_p=0&_size=10`;
         //定义查询结果
         var result = null;
 
@@ -3937,7 +3937,7 @@ try {
      */
     var queryDynamic = async() => {
         //设置查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_dynamic?_size=10&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_dynamic?_size=10&_sort=-create_time`;
         //定义查询结果
         var result = null;
 
@@ -3986,7 +3986,7 @@ try {
 try {
     var queryDynamicByUser = async(username, storage = window.storage) => {
         //设置查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_dynamic?_where=(relate_users,like,~${username}~)&_size=10&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_dynamic?_where=(relate_users,like,~${username}~)&_size=10&_sort=-create_time`;
         //定义查询结果
         var result = null;
 
@@ -4046,7 +4046,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-        var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}?_where=(${field},eq,${value})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}?_where=(${field},eq,${value})`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4068,7 +4068,7 @@ try {
      */
     var queryAdminUserByView = async(username) => {
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key http://api.shengtai.club/api/v_admin?_where=(username,eq,zhaoziyun)
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_admin?_where=(username,eq,${username})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_admin?_where=(username,eq,${username})`;
 
         //定义查询结果
         var result = null;
@@ -4106,7 +4106,7 @@ try {
 try {
     var queryUserInfoByView = async(username) => {
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key http://api.shengtai.club/api/v_admin?_where=(username,eq,zhaoziyun)
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_user?_where=(username,eq,${username})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user?_where=(username,eq,${username})`;
 
         //定义查询结果
         var result = null;
@@ -4153,7 +4153,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-        var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4180,7 +4180,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-        var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}?_where=(name,eq,${field})~and(field,eq,${value})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}?_where=(name,eq,${field})~and(field,eq,${value})`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4204,7 +4204,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_rights?_where=(business,like,~${tableName}~)`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_rights?_where=(business,like,~${tableName}~)`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4237,7 +4237,7 @@ try {
      */
     var queryProcessNodeEmployee = async(node, callback) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_approve_node?_where=(name,eq,${node})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_approve_node?_where=(name,eq,${node})`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4270,7 +4270,7 @@ try {
      */
     var queryProcessNodeProcName = async(node, callback) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/sys_dict_item?_where=(dict_id,eq,${window.requestAPIConfig.PROCESS_NODE_DICT_ID})~and(item_value,eq,${node})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/sys_dict_item?_where=(dict_id,eq,${window.requestAPIConfig.PROCESS_NODE_DICT_ID})~and(item_value,eq,${node})`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4315,8 +4315,8 @@ try {
         var ascFlag = params.order == 'asc' ? '' : '-';
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_user?${whereFlag}_p=${params.pageNo}&_size=${params.pageSize}&_sort=${ascFlag}${params.column}`;
-        var queryCountURL = `${window.requestAPIConfig.restapi}/api/v_user/count?${whereFlag}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user?${whereFlag}_p=${params.pageNo}&_size=${params.pageSize}&_sort=${ascFlag}${params.column}`;
+        var queryCountURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user/count?${whereFlag}`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4368,8 +4368,8 @@ try {
         params.pageNo = params.pageNo - 1;
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(employee,like,~${username}~)~or(employee,like,~${realname}~)&_p=${params.pageNo}&_size=${params.pageSize}`;
-        var queryCountURL = `${window.requestAPIConfig.restapi}/api/pr_log/count?_where=(employee,like,~${username}~)~or(employee,like,~${realname}~)`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(employee,like,~${username}~)~or(employee,like,~${realname}~)&_p=${params.pageNo}&_size=${params.pageSize}`;
+        var queryCountURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log/count?_where=(employee,like,~${username}~)~or(employee,like,~${realname}~)`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4402,8 +4402,8 @@ try {
         params.pageNo = params.pageNo - 1;
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_history?_where=(approve_user,like,~${username}~)~or(approve_user,like,~${realname}~)~or(proponents,like,~${username}~)~or(proponents,like,~${realname}~)&_p=${params.pageNo}&_size=${params.pageSize}&_sort=-operate_time`;
-        var queryCountURL = `${window.requestAPIConfig.restapi}/api/pr_log_history/count?_where=(approve_user,like,~${username}~)~or(approve_user,like,~${realname}~)~or(proponents,like,~${username}~)~or(proponents,like,~${realname}~)`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_history?_where=(approve_user,like,~${username}~)~or(approve_user,like,~${realname}~)~or(proponents,like,~${username}~)~or(proponents,like,~${realname}~)&_p=${params.pageNo}&_size=${params.pageSize}&_sort=-operate_time`;
+        var queryCountURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_history/count?_where=(approve_user,like,~${username}~)~or(approve_user,like,~${realname}~)~or(proponents,like,~${username}~)~or(proponents,like,~${realname}~)`;
         var result = {};
 
         try {
@@ -4451,7 +4451,7 @@ try {
         tools = window.tools
     ) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_handling_events?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handling_events?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
 
         try {
@@ -4516,7 +4516,7 @@ try {
                 userlist.length == 0
             ) {
                 while (index < 10000) {
-                    queryURL = `${window.requestAPIConfig.restapi}/api/v_uname?_p=${index++}&_size=95`;
+                    queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_uname?_p=${index++}&_size=95`;
                     var res = await superagent.get(queryURL).set('accept', 'json');
                     result = result.concat(res.body);
                     //如果返回结果数据小于size，则表示查询到末页，不在查询
@@ -4566,7 +4566,7 @@ try {
                 userlist.length == 0
             ) {
                 while (index < 10000) {
-                    queryURL = `${window.requestAPIConfig.restapi}/api/v_uname?_p=${index++}&_size=50`;
+                    queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_uname?_p=${index++}&_size=50`;
                     var res = await superagent.get(queryURL).set('accept', 'json');
                     result = result.concat(res.body);
                     //如果返回结果数据小于size，则表示查询到末页，不在查询
@@ -4636,7 +4636,7 @@ try {
      */
     var queryExistWorkflow = async(id) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_handling_events?_where=(id,eq,${id})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handling_events?_where=(id,eq,${id})`;
         //返回结果对象
         var result = {};
 
@@ -4669,7 +4669,7 @@ try {
      */
     var queryWorkflowNode = async(id, storage = window.storage, tools = window.tools) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_node?_where=(id,eq,${id})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_node?_where=(id,eq,${id})`;
         //返回结果对象
         var result = {};
 
@@ -4714,7 +4714,7 @@ try {
      */
     var queryWorkflowNodeByUser = async(tableName, username) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_workflow_type_node?_where=(tname,eq,${tableName})~and(cname,eq,${username})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_workflow_type_node?_where=(tname,eq,${tableName})~and(cname,eq,${username})`;
         //返回结果对象
         var result = {};
 
@@ -4791,7 +4791,7 @@ try {
         }
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_handling_events?_where=(username,like,~${username}~)${whereSQL}&_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handling_events?_where=(username,like,~${username}~)${whereSQL}&_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
 
         try {
@@ -4848,7 +4848,7 @@ try {
         tools = window.tools
     ) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_handled_events_unq?_where=(username,like,~${username}~)~and(create_time,gte,${time})&_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handled_events_unq?_where=(username,like,~${username}~)~and(create_time,gte,${time})&_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4903,7 +4903,7 @@ try {
     var queryBlogInfoNew = async(page = 0, size = 10, tools = window.tools) => {
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_blog?_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_blog?_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -4958,7 +4958,7 @@ try {
 
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_blog?_where=(create_by,eq,${username})&_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_blog?_where=(create_by,eq,${username})&_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5018,7 +5018,7 @@ try {
         tools = window.tools
     ) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_blog?_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_blog?_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5077,7 +5077,7 @@ try {
         tools = window.tools
     ) => {
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_handled_events_unq?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handled_events_unq?_where=(username,like,~${username}~)~or(username,like,~${realname}~)&_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5445,7 +5445,7 @@ try {
         }
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/v_handled_events_unq?_where=(username,like,~${username}~)${whereSQL}&_p=${page}&_size=${size}&_sort=-create_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_handled_events_unq?_where=(username,like,~${username}~)${whereSQL}&_p=${page}&_size=${size}&_sort=-create_time`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5498,8 +5498,8 @@ try {
         params.pageNo = params.pageNo - 1;
 
         //查询URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed?_where=((employee,like,~${username}~)~or(employee,like,~${realname}~))&_p=${params.pageNo}&_size=${params.pageSize}&_sort=-operate_time`;
-        var queryCountURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed/count?_where=((employee,like,~${username}~)~or(employee,like,~${realname}~))`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed?_where=((employee,like,~${username}~)~or(employee,like,~${realname}~))&_p=${params.pageNo}&_size=${params.pageSize}&_sort=-operate_time`;
+        var queryCountURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed/count?_where=((employee,like,~${username}~)~or(employee,like,~${realname}~))`;
         var result = {};
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5535,7 +5535,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5561,7 +5561,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${business_data_id})&_sort=operate_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${business_data_id})&_sort=operate_time`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5586,7 +5586,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})&_sort=operate_time`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})&_sort=operate_time`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5613,7 +5613,7 @@ try {
         //大写转小写
         tableName = tableName.toLowerCase();
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -5660,7 +5660,7 @@ try {
         }
 
         try {
-            deleteURL = `${window.requestAPIConfig.restapi}/api/${tableName}/bulk?_ids=${ids}`;
+            deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/bulk?_ids=${ids}`;
         } catch (error) {
             console.log(error);
         }
@@ -5710,7 +5710,7 @@ try {
         }
 
         try {
-            deleteURL = `${window.requestAPIConfig.restapi}/api/pr_log/bulk?_ids=${ids}`;
+            deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log/bulk?_ids=${ids}`;
         } catch (error) {
             console.log(error);
         }
@@ -5761,7 +5761,7 @@ try {
         }
 
         try {
-            deleteURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed/bulk?_ids=${ids}`;
+            deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed/bulk?_ids=${ids}`;
         } catch (error) {
             console.log(error);
         }
@@ -5807,7 +5807,7 @@ try {
 
         //构建表单提交数据的URL
         try {
-            postURL = `${window.requestAPIConfig.restapi}/api/${tableName}${bflag}`;
+            postURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}${bflag}`;
         } catch (error) {
             console.log(error);
         }
@@ -5838,7 +5838,7 @@ try {
      */
     var postProcessLog = async(node) => {
         //提交URL
-        var postURL = `${window.requestAPIConfig.restapi}/api/pr_log`;
+        var postURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log`;
 
         try {
             var res = await superagent
@@ -5867,7 +5867,7 @@ try {
      */
     var postProcessFreeNode = async(node) => {
         //提交URL
-        var postURL = `${window.requestAPIConfig.restapi}/api/bs_free_process`;
+        var postURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_free_process`;
 
         try {
             var res = await superagent
@@ -5910,7 +5910,7 @@ try {
 
         //构建流程历史表提交数据的URL
         try {
-            postURL = `${window.requestAPIConfig.restapi}/api/pr_log_history${bflag}`;
+            postURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_history${bflag}`;
         } catch (error) {
             console.log(error);
         }
@@ -5956,7 +5956,7 @@ try {
 
         //构建知会表提交数据的URL
         try {
-            postURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed${bflag}`;
+            postURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed${bflag}`;
         } catch (error) {
             console.log(error);
         }
@@ -5988,7 +5988,7 @@ try {
      */
     var queryPRLogHistoryByDataID = async(business_data_id, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_history?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time&_p=0&_size=1000`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_history?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time&_p=0&_size=1000`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -6012,7 +6012,7 @@ try {
     var queryAnnounceList = async(page = 0, size = 50, tools = window.tools) => {
 
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_announce?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_announce?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -6051,7 +6051,7 @@ try {
      */
     var queryHeadList = async(page = 0, size = 50, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_redhead?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_redhead?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');
@@ -6090,7 +6090,7 @@ try {
      */
     var queryNewsList = async(page = 0, size = 50, tools = window.tools) => {
         //提交URL
-        var queryURL = `${window.requestAPIConfig.restapi}/api/bs_news?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
+        var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_news?_where=(bpm_status,in,4,5)&_sort=-create_time&_p=${page}&_size=${size}`;
 
         try {
             var res = await superagent.get(queryURL).set('accept', 'json');

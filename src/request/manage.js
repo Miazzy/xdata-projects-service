@@ -6,7 +6,7 @@
 export async function queryCurFreeWorkflow(id) {
 
     //提交URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
 
     //根据业务编号，查询业务数据
     var wflow = [];
@@ -53,7 +53,7 @@ export async function queryUserName() {
             userlist.length == 0
         ) {
             while (index < 10000) {
-                queryURL = `${window.requestAPIConfig.restapi}/api/v_uname?_p=${index++}&_size=1000`;
+                queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_uname?_p=${index++}&_size=1000`;
                 var res = await superagent.get(queryURL).set('accept', 'json');
                 result = result.concat(res.body);
                 //如果返回结果数据小于size，则表示查询到末页，不在查询
@@ -151,7 +151,7 @@ export async function queryProcessLogByID(tableName, id) {
     tableName = tableName.toLowerCase();
 
     //提交URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -179,7 +179,7 @@ export function setTimeouts(callback, ...times) {
 // export async function queryCurFreeWorkflow(id) {
 
 //     //提交URL
-//     var queryURL = `${window.requestAPIConfig.restapi}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
+//     var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_free_process?_where=(main_key,eq,${id})&_sort=-create_time`;
 
 //     //根据业务编号，查询业务数据
 //     var wflow = [];
@@ -210,7 +210,7 @@ export function setTimeouts(callback, ...times) {
  */
 export async function queryProcessNodeEmployee(node, callback) {
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/bs_approve_node?_where=(name,eq,${node})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_approve_node?_where=(name,eq,${node})`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -236,7 +236,7 @@ export async function queryProcessNodeEmployee(node, callback) {
  */
 export async function queryProcessNodeProcName(node, callback) {
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/sys_dict_item?_where=(dict_id,eq,${window.requestAPIConfig.PROCESS_NODE_DICT_ID})~and(item_value,eq,${node})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/sys_dict_item?_where=(dict_id,eq,${window.requestAPIConfig.PROCESS_NODE_DICT_ID})~and(item_value,eq,${node})`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -296,7 +296,7 @@ export async function postProcessLogInformed(node) {
 
     //构建知会表提交数据的URL
     try {
-        postURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed${bflag}`;
+        postURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed${bflag}`;
     } catch (error) {
         console.log(error);
     }
@@ -324,7 +324,7 @@ export async function postTableData(tableName, node) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //Post数据的URL地址
-    var insertURL = `${window.requestAPIConfig.restapi}/api/${tableName}`;
+    var insertURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}`;
     //设置node为value
     const value = node;
 
@@ -358,7 +358,7 @@ export async function queryUsernameByID(id) {
 
     try {
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var maxinfo = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=(loginid,eq,~${id}~)~and(status,ne,5)&_fields=id,lastname,loginid`).set('accept', 'json');
+        var maxinfo = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=(loginid,eq,~${id}~)~and(status,ne,5)&_fields=id,lastname,loginid`).set('accept', 'json');
 
         //返回用户信息
         return maxinfo.body[0]['lastname'];
@@ -372,7 +372,7 @@ export async function queryUsernameByIDs(ids) {
 
     try {
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var maxinfo = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=(loginid,in,${ids})~and(status,ne,5)`).set('accept', 'json');
+        var maxinfo = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=(loginid,in,${ids})~and(status,ne,5)`).set('accept', 'json');
 
         //返回用户信息
         return maxinfo.body;
@@ -396,7 +396,7 @@ export async function queryUserByNameHRM(name, seclevel = 50) {
     try {
 
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var temp_ = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=((lastname,like,~${name}~)~or(loginid,like,~${name}~))~and(status,ne,5)~and(seclevel,lt,${seclevel})`).set('accept', 'json');
+        var temp_ = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=((lastname,like,~${name}~)~or(loginid,like,~${name}~))~and(status,ne,5)~and(seclevel,lt,${seclevel})`).set('accept', 'json');
 
         result = [...temp_.body];
 
@@ -428,7 +428,7 @@ export async function queryUserByNameReward(name, seclevel = 101) {
     try {
 
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var temp_ = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=((lastname,like,~${name}~)~or(loginid,like,~${name}~))~and(seclevel,lt,${seclevel})`).set('accept', 'json');
+        var temp_ = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=((lastname,like,~${name}~)~or(loginid,like,~${name}~))~and(seclevel,lt,${seclevel})`).set('accept', 'json');
 
         result = [...temp_.body];
 
@@ -460,7 +460,7 @@ export async function queryUserByLoginID(name, seclevel = 101) {
     try {
 
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var temp_ = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=((loginid,in,${name}))~and(seclevel,lt,${seclevel})&_fields=loginid`).set('accept', 'json');
+        var temp_ = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=((loginid,in,${name}))~and(seclevel,lt,${seclevel})&_fields=loginid`).set('accept', 'json');
 
         result = [...temp_.body];
 
@@ -492,7 +492,7 @@ export async function queryUserByID(name, cname = '融量', seclevel = 101) {
     try {
 
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var temp_ = await superagent.get(`${window.requestAPIConfig.restapi}/api/v_hrmresource?_where=((loginid,in,${name}))~and(seclevel,lt,${seclevel})~and(cname,eq,${cname})&_sort=id`).set('accept', 'json');
+        var temp_ = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/v_hrmresource?_where=((loginid,in,${name}))~and(seclevel,lt,${seclevel})~and(cname,eq,${cname})&_sort=id`).set('accept', 'json');
 
         result = [...temp_.body];
 
@@ -520,7 +520,7 @@ export async function queryAddressByName(name) {
         return [];
     }
     try {
-        var temp_ = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_admin_group?_where=(groupname,eq,COMMON_RECEIVE_BORROW)~and(address,like,~${name}~)`).set('accept', 'json');
+        var temp_ = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_admin_group?_where=(groupname,eq,COMMON_RECEIVE_BORROW)~and(address,like,~${name}~)`).set('accept', 'json');
         result = [...temp_.body];
         return result;
     } catch (error) {
@@ -538,7 +538,7 @@ export async function queryUserByNameFindOne(realname, username) {
         return [];
     }
 
-    const queryURL = realname.includes('(') || realname.includes('（') || !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(realname) ? `${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=((loginid,like,~${username}~))~and(status,ne,5)` : `${window.requestAPIConfig.restapi}/api/bs_hrmresource?_where=((lastname,like,~${realname}~)~and(loginid,like,~${username}~))~and(status,ne,5)`;
+    const queryURL = realname.includes('(') || realname.includes('（') || !/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(realname) ? `${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=((loginid,like,~${username}~))~and(status,ne,5)` : `${window.BECONFIG['xmysqlAPI']}/api/bs_hrmresource?_where=((lastname,like,~${realname}~)~and(loginid,like,~${username}~))~and(status,ne,5)`;
 
     try {
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
@@ -571,7 +571,7 @@ export async function queryTableData(tableName, whereSQL) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-    var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}?${whereSQL}`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}?${whereSQL}`;
 
     try {
 
@@ -592,7 +592,7 @@ export async function queryTableDataCount(tableName, whereSQL) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-    var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}/count?${whereSQL}`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/count?${whereSQL}`;
 
     try {
 
@@ -612,7 +612,7 @@ export async function queryContractInfoByPrefix(prefix) {
 
     try {
         //构建查询SQL
-        const sql = `${window.requestAPIConfig.restapi}/api/bs_seal_regist?_where=(contract_id,like,${prefix}~)~and(seal_type,eq,合同类)~and(status,in,已用印,已领取,移交前台,已完成,财务归档,档案归档,已归档)&_p=0&_size=8&_sort=-contract_id`;
+        const sql = `${window.BECONFIG['xmysqlAPI']}/api/bs_seal_regist?_where=(contract_id,like,${prefix}~)~and(seal_type,eq,合同类)~and(status,in,已用印,已领取,移交前台,已完成,财务归档,档案归档,已归档)&_p=0&_size=8&_sort=-contract_id`;
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
         var maxinfo = await superagent.get(sql).set('accept', 'json');
 
@@ -636,7 +636,7 @@ export async function queryContractInfoByPrefixAll(prefix) {
 
     try {
         //构建查询SQL
-        const sql = `${window.requestAPIConfig.restapi}/api/bs_seal_regist?_where=(contract_id,like,${prefix}~)~and(seal_type,eq,合同类)~and(status,in,待用印,已退回,已废弃,已用印,已领取,移交前台,已完成,财务归档,档案归档,已归档)&_p=0&_size=3&_sort=-contract_id`;
+        const sql = `${window.BECONFIG['xmysqlAPI']}/api/bs_seal_regist?_where=(contract_id,like,${prefix}~)~and(seal_type,eq,合同类)~and(status,in,待用印,已退回,已废弃,已用印,已领取,移交前台,已完成,财务归档,档案归档,已归档)&_p=0&_size=3&_sort=-contract_id`;
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
         var maxinfo = await superagent.get(sql).set('accept', 'json');
 
@@ -659,7 +659,7 @@ export async function queryUserBySealData(name) {
 
     try {
         //如果用印登记类型为合同类，则查询最大印章编号，然后按序使用更大的印章编号
-        var maxinfo = await superagent.get(`${window.requestAPIConfig.restapi}/api/bs_seal_regist?_where=(deal_manager,like,~${name}~)~and(deal_mail,like,~@~)&_size=1&_p=0`).set('accept', 'json');
+        var maxinfo = await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/bs_seal_regist?_where=(deal_manager,like,~${name}~)~and(deal_mail,like,~@~)&_size=1&_p=0`).set('accept', 'json');
         //返回用户信息
         return maxinfo.body[0];
     } catch (error) {
@@ -713,7 +713,7 @@ export async function queryProcessLogInfByID(tableName, id) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //提交URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed?_where=(table_name,eq,${tableName})~and(id,eq,${id})`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -731,7 +731,7 @@ export async function queryProcessLog(tableName, businessID) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //提交URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})&_sort=operate_time`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})&_sort=operate_time`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -750,7 +750,7 @@ export async function queryBusinessInfo(tableName, callback) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/pr_rights?_where=(business,like,~${tableName}~)`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_rights?_where=(business,like,~${tableName}~)`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -781,7 +781,7 @@ export async function queryApprovalLength(tableName, businessID) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //查询URL GET	/api/tableName/:id/exists	True or false whether a row exists or not  /api/tableName/findOne
-    var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
 
     //查询标识
     var vflag = false;
@@ -840,7 +840,7 @@ export async function patchTableData(tableName, id, node) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-    var patchURL = `${window.requestAPIConfig.restapi}/api/${tableName}/${id}`;
+    var patchURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/${id}`;
 
     //如果传入数据为空，则直接返回错误
     if (typeof node == 'undefined' || node == null || node == '') {
@@ -864,7 +864,7 @@ export async function patchTableData(tableName, id, node) {
  */
 export async function postProcessLog(node) {
     //提交URL
-    var postURL = `${window.requestAPIConfig.restapi}/api/pr_log`;
+    var postURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log`;
 
     try {
         var res = await superagent
@@ -900,7 +900,7 @@ export async function postProcessLogHistory(node) {
 
     //构建流程历史表提交数据的URL
     try {
-        postURL = `${window.requestAPIConfig.restapi}/api/pr_log_history${bflag}`;
+        postURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_history${bflag}`;
     } catch (error) {
         console.log(error);
     }
@@ -947,7 +947,7 @@ export async function deleteProcessLog(tableName, node) {
     }
 
     try {
-        deleteURL = `${window.requestAPIConfig.restapi}/api/pr_log/bulk?_ids=${ids}`;
+        deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log/bulk?_ids=${ids}`;
     } catch (error) {
         console.log(error);
     }
@@ -991,7 +991,7 @@ export async function deleteProcessLogInf(tableName, node) {
     }
 
     try {
-        deleteURL = `${window.requestAPIConfig.restapi}/api/pr_log_informed/bulk?_ids=${ids}`;
+        deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed/bulk?_ids=${ids}`;
     } catch (error) {
         console.log(error);
     }
@@ -1011,7 +1011,7 @@ export async function queryApprovalExist(tableName, businessID) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //查询URL GET
-    var queryURL = `${window.requestAPIConfig.restapi}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(table_name,eq,${tableName})~and(business_data_id,eq,${businessID})`;
     //查询标识
     var vflag = false;
 
@@ -1030,7 +1030,7 @@ export async function queryApprovalExist(tableName, businessID) {
  */
 export async function postProcessFreeNode(node) {
     //提交URL
-    var postURL = `${window.requestAPIConfig.restapi}/api/bs_free_process`;
+    var postURL = `${window.BECONFIG['xmysqlAPI']}/api/bs_free_process`;
     try {
         var res = await superagent
             .post(postURL)
@@ -1057,7 +1057,7 @@ export async function queryTableDataByField(tableName, field, value) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //更新URL PATCH	/api/tableName/:id	Updates row element by primary key
-    var queryURL = `${window.requestAPIConfig.restapi}/api/${tableName}?_where=(${field},eq,${value})`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}?_where=(${field},eq,${value})`;
 
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
@@ -1076,7 +1076,7 @@ export async function deleteTableData(tableName, id) {
     //大写转小写
     tableName = tableName.toLowerCase();
     //Post数据的URL地址
-    var deleteURL = `${window.requestAPIConfig.restapi}/api/${tableName}/${id}`;
+    var deleteURL = `${window.BECONFIG['xmysqlAPI']}/api/${tableName}/${id}`;
 
     try {
         var res = await superagent.delete(deleteURL).set('accept', 'json');
