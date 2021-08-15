@@ -1,5 +1,3 @@
-import * as query from '@/request/query';
-
 //计时待办任务常量数组
 export const TIME_TASK_NAME = ['请假申请表', '外出申请表', '加班申请表', '出差申请表', '车补申请表'];
 
@@ -51,7 +49,7 @@ export async function queryProcessLogDone(
             for (let item of result) {
                 try {
                     if (Betools.tools.isNull(item['sponsor']) && !Betools.tools.isNull(item.proponents)) {
-                        const temp = await query.queryUserInfoByAccount(item.proponents);
+                        const temp = []; //await query.queryUserInfoByAccount(item.proponents);
                         item['sponsor'] = temp.realname || temp.lastname;
                     }
                 } catch (error) {
@@ -130,7 +128,7 @@ export async function queryProcessLogWait(
                 try {
                     if (Betools.tools.isNull(item['sponsor']) && !Betools.tools.isNull(item.proponents)) {
                         if (!item.proponents.includes(',')) {
-                            const temp = await query.queryUserInfoByAccount(item.proponents);
+                            const temp = []; //await query.queryUserInfoByAccount(item.proponents);
                             item['sponsor'] = temp.realname || temp.lastname;
                         }
                     }
@@ -202,7 +200,7 @@ export async function queryProcessLogWaitSeal(
                 try {
                     if (Betools.tools.isNull(item['sponsor']) && !Betools.tools.isNull(item.proponents)) {
                         if (!item.proponents.includes(',')) {
-                            const temp = await query.queryUserInfoByAccount(item.proponents);
+                            const temp = []; //await query.queryUserInfoByAccount(item.proponents);
                             item['sponsor'] = temp.realname || temp.lastname;
                         }
                     }

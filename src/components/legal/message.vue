@@ -160,7 +160,7 @@
 import * as workconfig from "@/request/workconfig";
 import * as task from '@/request/task';
 import * as manageAPI from '@/request/manage';
-import * as query from '@/request/query';
+//import * as query from '@/request/query';
 import * as contact from '@/vuex/contacts';
 
 export default {
@@ -426,7 +426,7 @@ export default {
     async queryRewardTodoList(tabname = '', typename = ''){
 
       try {
-        let logList = await query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
+        let logList = [];//await query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
           item.pid = item.id;
@@ -470,7 +470,7 @@ export default {
     async queryRewardDoneList(tabname = '', typename = ''){
 
       try {
-        let logList = await query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
+        let logList = []; //await query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
           item.pid = item.id;

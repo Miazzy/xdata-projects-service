@@ -1,6 +1,5 @@
 import * as constant from '@/request/constant';
 import * as manage from '@/request/manage';
-import * as query from '@/request/query';
 
 /**
  * 获取某业务记录对应的审批日志信息(历史)
@@ -468,7 +467,7 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
         var id = Betools.tools.queryUniqueID();
 
         //表单数据库数据
-        var mainData = await query.queryTableData(tableName, curRow.id);
+        var mainData = await Betools.query.queryTableData(tableName, curRow.id);
 
         //获取表单的中文名称
         var tname = await manage.queryTableDataByField('v_table_name', 'id', tableName);

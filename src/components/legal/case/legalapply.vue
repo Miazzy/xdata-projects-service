@@ -2613,6 +2613,7 @@ export default {
       async handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime){
 
         const approve_userlist = data.approve_userlist; //获取审批人员列表
+        debugger;
 
         try {
            // 自由流程节点
@@ -2686,6 +2687,8 @@ export default {
            if (await Betools.manage.queryApprovalExist(curTableName,  curItemID)) {
              return vant.Toast.fail("已提交过申请，无法再次提交审批！");
            }
+
+           debugger;
 
            //处理自由流程发起提交审批操作
            await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, "2");
@@ -2860,7 +2863,7 @@ export default {
                   const data = legal;
                   const ctime = dayjs().format('YYYY-MM-DD');
                   data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
-                  await handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , id , data , ctime);
+                  await this.handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , id , data , ctime);
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
