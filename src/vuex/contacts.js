@@ -41,7 +41,7 @@ export const queryDepartUserList = async() => {
     });
 
     //查询URL
-    const queryURL = `${window.requestAPIConfig.restapi}/api/${system_type}/wework_depart_user/${department.parentid}/1`
+    const queryURL = `${window.BECONFIG['xmysqlAPI']}/api/${system_type}/wework_depart_user/${department.parentid}/1`
 
     var result = {};
 
@@ -126,7 +126,7 @@ export const queryDepartUserList = async() => {
 export const queryWorkUserList = async() => {
 
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/v3/employee`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v3/employee`;
     var result = {};
 
     const cache = await Betools.storage.getStoreDB(ALL_USER_CACHE_WORK_KEY);
@@ -228,8 +228,8 @@ export const queryUserList = async(params) => {
     var ascFlag = params.order == 'asc' ? '' : '-';
 
     //查询URL
-    var queryURL = `${window.requestAPIConfig.restapi}/api/v_user?${whereFlag}_p=${params.pageNo}&_size=${params.pageSize}&_sort=${ascFlag}${params.column}`;
-    var queryCountURL = `${window.requestAPIConfig.restapi}/api/v_user/count?${whereFlag}`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user?${whereFlag}_p=${params.pageNo}&_size=${params.pageSize}&_sort=${ascFlag}${params.column}`;
+    var queryCountURL = `${window.BECONFIG['xmysqlAPI']}/api/v_user/count?${whereFlag}`;
     var result = {};
 
     try {
@@ -372,7 +372,7 @@ export async function getUserInfoByWxid(wxid) {
     }
 
     //如果没有查询到，则直接查询远程服务器
-    var queryURL = `${window.requestAPIConfig.restapi}/api/v2/wework_user/${wxid}`;
+    var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v2/wework_user/${wxid}`;
 
     try {
         //获取缓存中的数据
