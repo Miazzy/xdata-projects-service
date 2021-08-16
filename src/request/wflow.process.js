@@ -9,55 +9,27 @@ import * as workflow from '@/request/workflow';
  */
 export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], tasktype = 'wait') {
 
-    var wflowAddUsers = ''; //加签用户，暂时设置为空
-    var wflowNotifyUsers = ''; //会签用户，暂时设置为空
+    let result = ''; //返回结果
+    let wflowAddUsers = ''; //加签用户，暂时设置为空
+    let wflowNotifyUsers = ''; //会签用户，暂时设置为空
+    let bussinessCodeID = Betools.tools.queryUrlString("id"); //查询业务编号
+    let tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname')); // 获取表单名称
+    let wflowSpecUser = wflowAddUsers + "," + wflowNotifyUsers; // 会签、加签用户
+    let wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID); // 查询自由流程节点
+    let bussinessNode = JSON.parse(JSON.stringify(curRow));  // 流程的创建人员
+    curRow = await Betools.query.queryTableData(tableName, bussinessCodeID); // 查询当前数据
 
-    //查询业务编号
-    var bussinessCodeID = Betools.tools.queryUrlString("id");
-
-    //获取表单名称
-    var tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname'));
-
-    //会签、加签用户
-    var wflowSpecUser = wflowAddUsers + "," + wflowNotifyUsers;
-
-    //查询自由流程节点
-    var wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID);
-
-    //查询当前数据
-    curRow = await Betools.query.queryTableData(tableName, bussinessCodeID);
-
-    //流程的创建人员
-    const bussinessNode = JSON.parse(JSON.stringify(curRow));
-
-    //如果加签、会签同时选择，则无法提交
-    if (
-        Betools.tools.deNull(wflowAddUsers) != "" &&
-        Betools.tools.deNull(wflowNotifyUsers) != ""
-    ) {
-        vant.Dialog.alert({
-            message: "无法同时进行加签及会签操作，请单独选择加签用户或会签用户！"
-        });
-        return false;
+    const signFlag = Betools.tools.deNull(wflowAddUsers) != "" && Betools.tools.deNull(wflowNotifyUsers) != ""; // 如果加签、会签同时选择，则无法提交
+    if ( signFlag ) {
+        return vant.Dialog.alert({ message: "无法同时进行加签及会签操作，请单独选择加签用户或会签用户！" });
     }
 
-    //如果会签、加签用户以逗号开头，则去掉开头的逗号
-    wflowSpecUser = wflowSpecUser.startsWith(",") ?
-        wflowSpecUser.substring(1) :
-        wflowSpecUser;
+    wflowSpecUser = wflowSpecUser.startsWith(",") ? wflowSpecUser.substring(1) : wflowSpecUser; // 如果会签、加签用户以逗号开头，则去掉开头的逗号
+    wflowSpecUser = wflowSpecUser.endsWith(",") ? wflowSpecUser.substring(0, wflowSpecUser.length - 1) : wflowSpecUser; // 如果会签、加签用户以逗号结尾，则去掉结尾的逗号
 
-    //如果会签、加签用户以逗号结尾，则去掉结尾的逗号
-    wflowSpecUser = wflowSpecUser.endsWith(",") ?
-        wflowSpecUser.substring(0, wflowSpecUser.length - 1) :
-        wflowSpecUser;
+    console.info("会签/加签用户 : " + wflowSpecUser);
 
-    console.log("会签/加签用户 : " + wflowSpecUser);
-
-    //加签会签选中的用户，不能是流程中已经存在的用户
-    var readyUser = Betools.tools.contain(
-        wfreeNode.audit_node + "," + wfreeNode.approve_node,
-        wflowSpecUser
-    );
+    let readyUser = Betools.tools.contain( wfreeNode.audit_node + "," + wfreeNode.approve_node, wflowSpecUser); //加签会签选中的用户，不能是流程中已经存在的用户
 
     //如果用户流程中已经存在，则提示无法选择
     if (!Betools.tools.isNull(readyUser)) {
@@ -70,19 +42,10 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
         return false;
     }
 
-    await vant.Dialog.confirm({
-        title: '确认操作',
-        message: '是否确认提交此自由流程?',
-    });
-
-    //返回结果
-    var result = '';
-
-    //获取当前用户
-    var userInfo = Betools.storage.getStore("system_userinfo");
-
-    //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
-    await manage.handleUserInfo(userInfo);
+    const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
+    
+    await vant.Dialog.confirm({ title: '确认操作', message: '是否确认提交此自由流程?', });
+    await manage.handleUserInfo(userInfo); //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
 
     //获取当前时间
     var date = Betools.tools.formatDate(new Date().getTime(), "yyyy-MM-dd hh:mm:ss");
@@ -161,250 +124,413 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
         item["create_time"] = Betools.tools.formatDate(ctime, "yyyy-MM-dd hh:mm:ss");
     });
 
-    //转历史日志节点
-    prLogHisNode = JSON.parse(JSON.stringify(node));
-    //第一步，获取此表单，关联的流程业务模块；查询SQL , 获取流程权责中关联业务含有tableName的流程权责
-    rights = await manage.queryBusinessInfo(tableName);
-    //选定流程权责
-    fixedWFlow = rights[0];
+    prLogHisNode = JSON.parse(JSON.stringify(node)); // 转历史日志节点
+    rights = await Betools.manage.queryBusinessInfo(tableName); // 第一步，获取此表单，关联的流程业务模块；查询SQL , 获取流程权责中关联业务含有tableName的流程权责
+    fixedWFlow = rights[0]; // 选定流程权责
+    
+    let allAudit = ""; // 所有待审核节点
+    let allNotify = ""; // 所有待知会节点
+    let curAuditor = processAudit; // 当前审核节点
+    let notifyArray = Betools.tools.deNull(allNotify) == "" ? "" : allNotify.split(","); // 知会节点数组
 
-    //如果流程权责有多个，那么弹出选择框，让用户自己选择一个流程
-    if (rights.length > 1 && curRow.business_code != "000000000") {
-        vant.Dialog.alert({
-            message: "获取到此业务含有多个流程权责，请联系管理员进行配置！"
-        });
-        return false;
-    } else if (
-        rights.length <= 0 &&
-        curRow.business_code != "000000000"
-    ) {
-        vant.Dialog.alert({
-            message: "未获取到此业务的流程权责，无法同意审批！"
-        });
-        return false;
+    //如果不是自由流程，则从权责配置中获取待审核人列表，否则，使用自由流程配置的审核人员列表
+    if (curRow.business_code != "000000000") {
+        try {
+            //根据权责配置，获取所有待审核人员列表
+            allAudit =
+                "," +
+                fixedWFlow["audit"] +
+                "," +
+                fixedWFlow["approve"] +
+                ",";
+            //根据权责配置，获取所有待知会人员列表
+            allNotify = fixedWFlow["notify"];
+            //设置审批节点
+            approveNode = fixedWFlow["approve"];
+        } catch (error) {
+            vant.Dialog.alert({
+                message: "固化流程设置节点失败，无法进行审批操作！"
+            });
+            console.log("固化流程设置节点失败 :" + error);
+            return false;
+        }
     } else {
-        //所有待审核节点
-        var allAudit = "";
-        //所有待知会节点
-        var allNotify = "";
-        //当前审核节点
-        var curAuditor = processAudit;
-        //知会节点数组
-        var notifyArray =
-            Betools.tools.deNull(allNotify) == "" ? "" : allNotify.split(",");
+        try {
+            //获取自由流程配置，当前审核节点
+            curAuditor = curRow["employee"];
 
-        //如果不是自由流程，则从权责配置中获取待审核人列表，否则，使用自由流程配置的审核人员列表
-        if (curRow.business_code != "000000000") {
             try {
-                //根据权责配置，获取所有待审核人员列表
-                allAudit =
-                    "," +
-                    fixedWFlow["audit"] +
-                    "," +
-                    fixedWFlow["approve"] +
-                    ",";
-                //根据权责配置，获取所有待知会人员列表
-                allNotify = fixedWFlow["notify"];
-                //设置审批节点
-                approveNode = fixedWFlow["approve"];
+                //自由流程配置消息
+                freeNode = JSON.parse(curRow.business_data);
             } catch (error) {
-                vant.Dialog.alert({
-                    message: "固化流程设置节点失败，无法进行审批操作！"
-                });
-                console.log("固化流程设置节点失败 :" + error);
-                return false;
+                console.log(error);
             }
-        } else {
-            try {
-                //获取自由流程配置，当前审核节点
-                curAuditor = curRow["employee"];
 
+            //检查是否存在自由流程节点audit_node & approve_node & notify_node , 如果不存在，在下级节点中寻找
+            if (!("audit_node" in freeNode) &&
+                !("approve_node" in freeNode) &&
+                !("notify_node" in freeNode)
+            ) {
                 try {
-                    //自由流程配置消息
-                    freeNode = JSON.parse(curRow.business_data);
+                    freeNode = JSON.parse(freeNode.business_data);
                 } catch (error) {
                     console.log(error);
                 }
-
-                //检查是否存在自由流程节点audit_node & approve_node & notify_node , 如果不存在，在下级节点中寻找
-                if (!("audit_node" in freeNode) &&
-                    !("approve_node" in freeNode) &&
-                    !("notify_node" in freeNode)
-                ) {
-                    try {
-                        freeNode = JSON.parse(freeNode.business_data);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-
-                //如果仍然未获取到自由流程节点，则从自由流程表中找
-                var freeNodeBack = await manage.queryCurFreeWorkflow(
-                    bussinessCodeID
-                );
-
-                //如果从数据库中查询出，自由流程数据，则替换数据
-                if (Betools.tools.deNull(freeNodeBack) != "") {
-                    freeNode = freeNodeBack;
-                }
-
-                console.log("free node back data : " + freeNodeBack);
-
-                //将加签、会签数据、添加到自由流程数据中
-                freeNode.audit_node = `,${freeNode.audit_node},`;
-                if (
-                    freeNode.audit_node.indexOf("," + curAuditor + ",") !=
-                    freeNode.audit_node.lastIndexOf("," + curAuditor + ",")
-                ) {
-                    //判断是否存在重复人员，如果存在重复人员，则去掉一个重复人员
-                    freeNode.audit_node = freeNode.audit_node.replace(
-                        "," + curAuditor + ",",
-                        ","
-                    );
-                }
-
-                //添加加签用户数据
-                if (Betools.tools.deNull(wflowAddUsers) != "") {
-                    freeNode.audit_node = freeNode.audit_node.replace(
-                        `,${curAuditor},`,
-                        `,${curAuditor},${wflowAddUsers},`
-                    );
-                }
-
-                //添加会签用户数据
-                if (Betools.tools.deNull(wflowNotifyUsers) != "") {
-                    freeNode.audit_node = freeNode.audit_node.replace(
-                        `,${curAuditor},`,
-                        `,${curAuditor},${wflowNotifyUsers},${curAuditor},`
-                    );
-                }
-
-                //去掉开头、结尾的逗号
-                if (freeNode.audit_node.startsWith(",")) {
-                    freeNode.audit_node = freeNode.audit_node.substring(1);
-                }
-
-                //去掉开头、结尾的逗号
-                if (freeNode.audit_node.endsWith(",")) {
-                    freeNode.audit_node = freeNode.audit_node.substring(
-                        0,
-                        freeNode.audit_node.length - 1
-                    );
-                }
-
-                //根据自由流程配置，获取所有待审核人员列表
-                allAudit =
-                    "," +
-                    Betools.tools.deNull(freeNode.audit_node) +
-                    "," +
-                    Betools.tools.deNull(freeNode.approve_node) +
-                    ",";
-
-                //根据自由流程配置，获取所有待知会人员列表
-                notifyArray =
-                    Betools.tools.deNull(freeNode.notify_node) == "" ? [] : [freeNode.notify_node];
-
-                //设置审批节点
-                approveNode = freeNode.approve_node;
-            } catch (error) {
-                vant.Dialog.alert({
-                    message: "自由流程设置节点失败，无法进行审批操作！"
-                });
-                console.log("自由流程设置节点失败 :" + error);
-                return false;
             }
-        }
 
-        //当不存在加签、会签操作时，则进行重复用户消除操作
-        if (!(
-                Betools.tools.deNull(wflowAddUsers) != "" ||
-                Betools.tools.deNull(wflowNotifyUsers) != ""
-            )) {
-            //判断是否存在重复人员，如果存在重复人员，则去掉一个重复人员
+            //如果仍然未获取到自由流程节点，则从自由流程表中找
+            var freeNodeBack = await manage.queryCurFreeWorkflow(
+                bussinessCodeID
+            );
+
+            //如果从数据库中查询出，自由流程数据，则替换数据
+            if (Betools.tools.deNull(freeNodeBack) != "") {
+                freeNode = freeNodeBack;
+            }
+
+            console.log("free node back data : " + freeNodeBack);
+
+            //将加签、会签数据、添加到自由流程数据中
+            freeNode.audit_node = `,${freeNode.audit_node},`;
             if (
-                allAudit.indexOf("," + curAuditor + ",") !=
-                allAudit.lastIndexOf("," + curAuditor + ",")
+                freeNode.audit_node.indexOf("," + curAuditor + ",") !=
+                freeNode.audit_node.lastIndexOf("," + curAuditor + ",")
             ) {
-                allAudit = allAudit.replace("," + curAuditor + ",", ",");
+                //判断是否存在重复人员，如果存在重复人员，则去掉一个重复人员
+                freeNode.audit_node = freeNode.audit_node.replace(
+                    "," + curAuditor + ",",
+                    ","
+                );
             }
+
+            //添加加签用户数据
+            if (Betools.tools.deNull(wflowAddUsers) != "") {
+                freeNode.audit_node = freeNode.audit_node.replace(
+                    `,${curAuditor},`,
+                    `,${curAuditor},${wflowAddUsers},`
+                );
+            }
+
+            //添加会签用户数据
+            if (Betools.tools.deNull(wflowNotifyUsers) != "") {
+                freeNode.audit_node = freeNode.audit_node.replace(
+                    `,${curAuditor},`,
+                    `,${curAuditor},${wflowNotifyUsers},${curAuditor},`
+                );
+            }
+
+            //去掉开头、结尾的逗号
+            if (freeNode.audit_node.startsWith(",")) {
+                freeNode.audit_node = freeNode.audit_node.substring(1);
+            }
+
+            //去掉开头、结尾的逗号
+            if (freeNode.audit_node.endsWith(",")) {
+                freeNode.audit_node = freeNode.audit_node.substring(
+                    0,
+                    freeNode.audit_node.length - 1
+                );
+            }
+
+            //根据自由流程配置，获取所有待审核人员列表
+            allAudit =
+                "," +
+                Betools.tools.deNull(freeNode.audit_node) +
+                "," +
+                Betools.tools.deNull(freeNode.approve_node) +
+                ",";
+
+            //根据自由流程配置，获取所有待知会人员列表
+            notifyArray =
+                Betools.tools.deNull(freeNode.notify_node) == "" ? [] : [freeNode.notify_node];
+
+            //设置审批节点
+            approveNode = freeNode.approve_node;
+        } catch (error) {
+            vant.Dialog.alert({
+                message: "自由流程设置节点失败，无法进行审批操作！"
+            });
+            console.log("自由流程设置节点失败 :" + error);
+            return false;
         }
+    }
 
-        //当前审核分割组，第一组是已经审核通过的，第二组是待审核的
-        var auditArray = allAudit.split("," + curAuditor + ",");
-        //如果存在审核人
-        var firstAuditor = auditArray[1];
-        //流程状态
-        var bpmStatus = {};
+    //当不存在加签、会签操作时，则进行重复用户消除操作
+    if (!(
+            Betools.tools.deNull(wflowAddUsers) != "" ||
+            Betools.tools.deNull(wflowNotifyUsers) != ""
+        )) {
+        //判断是否存在重复人员，如果存在重复人员，则去掉一个重复人员
+        if (
+            allAudit.indexOf("," + curAuditor + ",") !=
+            allAudit.lastIndexOf("," + curAuditor + ",")
+        ) {
+            allAudit = allAudit.replace("," + curAuditor + ",", ",");
+        }
+    }
 
-        //如果待审核节点为空，则表示已经审批通过 //流程状态 1：待提交  2：审核中  3：审批中  4：已完成  5：已完成  10：已作废
-        if (firstAuditor == "") {
-            //设置流程状态 审批节点已经走完，流程状态为4：已完成
-            bpmStatus = { bpm_status: "4" };
+    //当前审核分割组，第一组是已经审核通过的，第二组是待审核的
+    var auditArray = allAudit.split("," + curAuditor + ",");
+    //如果存在审核人
+    var firstAuditor = auditArray[1];
+    //流程状态
+    var bpmStatus = {};
 
-            //执行知会流程，添加多条知会记录。将知会节点的所有待知会节点，拆分成为数组，遍历数组，数组中每个元素，推送一条知会记录，注意forEach不能使用await
-            for (let item of notifyArray) {
-                //第二步，根据流程业务模块，获取流程审批节点；操作职员，可能有多个，则每个员工推送消息,需要从流程配置节点中获取
-                var employee = null;
-                //流程岗位
-                var process_station = null;
-                //审批相关流程节点
-                var pnode = {};
+    //如果待审核节点为空，则表示已经审批通过 //流程状态 1：待提交  2：审核中  3：审批中  4：已完成  5：已完成  10：已作废
+    if (firstAuditor == "") {
+        //设置流程状态 审批节点已经走完，流程状态为4：已完成
+        bpmStatus = { bpm_status: "4" };
 
-                if (curRow.business_code != "000000000") {
+        //执行知会流程，添加多条知会记录。将知会节点的所有待知会节点，拆分成为数组，遍历数组，数组中每个元素，推送一条知会记录，注意forEach不能使用await
+        for (let item of notifyArray) {
+            //第二步，根据流程业务模块，获取流程审批节点；操作职员，可能有多个，则每个员工推送消息,需要从流程配置节点中获取
+            var employee = null;
+            //流程岗位
+            var process_station = null;
+            //审批相关流程节点
+            var pnode = {};
 
-                    try {
-                        employee = await manage.queryProcessNodeEmployee(item);
-                        process_station = await manage.queryProcessNodeProcName(item);
-                    } catch (error) {
-                        console.error(error);
-                    }
+            if (curRow.business_code != "000000000") {
 
-                    //提交审批相关处理信息
-                    pnode = {
-                        id: manage.queryRandomStr(32), //获取随机数
-                        table_name: tableName, //业务表名
-                        main_value: curRow["main_value"], //表主键值
-                        business_data_id: curRow["business_data_id"], //业务具体数据主键值
-                        business_code: fixedWFlow["id"], //业务编号
-                        process_name: fixedWFlow["items"], //流程名称
-                        employee: employee[0]["employee"],
-                        process_station: process_station[0]["item_text"],
-                        process_audit: item,
-                        operate_time: date,
-                        create_time: date,
-                        proponents: curRow["proponents"],
-                        content: curRow["content"],
-                        business_data: JSON.stringify(curRow)
-                    };
-                } else {
-
-                    //提交审批相关处理信息
-                    pnode = {
-                        id: manage.queryRandomStr(32), //获取随机数
-                        table_name: tableName, //业务表名
-                        main_value: curRow["business_data_id"], //表主键值
-                        business_data_id: curRow["business_data_id"], //业务具体数据主键值
-                        business_code: "000000001", //业务编号
-                        process_name: "自由流程知会", //流程名称
-                        employee: item,
-                        process_station: "自由流程知会",
-                        process_audit: "000000001",
-                        proponents: curRow["proponents"],
-                        content: curRow["content"],
-                        operate_time: date,
-                        create_time: date,
-                        business_data: curRow.business_data
-                    };
+                try {
+                    employee = await manage.queryProcessNodeEmployee(item);
+                    process_station = await manage.queryProcessNodeProcName(item);
+                } catch (error) {
+                    console.error(error);
                 }
 
-                //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
-                result = await manage.postProcessLogInformed(pnode);
+                //提交审批相关处理信息
+                pnode = {
+                    id: manage.queryRandomStr(32), //获取随机数
+                    table_name: tableName, //业务表名
+                    main_value: curRow["main_value"], //表主键值
+                    business_data_id: curRow["business_data_id"], //业务具体数据主键值
+                    business_code: fixedWFlow["id"], //业务编号
+                    process_name: fixedWFlow["items"], //流程名称
+                    employee: employee[0]["employee"],
+                    process_station: process_station[0]["item_text"],
+                    process_audit: item,
+                    operate_time: date,
+                    create_time: date,
+                    proponents: curRow["proponents"],
+                    content: curRow["content"],
+                    business_data: JSON.stringify(curRow)
+                };
+            } else {
+
+                //提交审批相关处理信息
+                pnode = {
+                    id: manage.queryRandomStr(32), //获取随机数
+                    table_name: tableName, //业务表名
+                    main_value: curRow["business_data_id"], //表主键值
+                    business_data_id: curRow["business_data_id"], //业务具体数据主键值
+                    business_code: "000000001", //业务编号
+                    process_name: "自由流程知会", //流程名称
+                    employee: item,
+                    process_station: "自由流程知会",
+                    process_audit: "000000001",
+                    proponents: curRow["proponents"],
+                    content: curRow["content"],
+                    operate_time: date,
+                    create_time: date,
+                    business_data: curRow.business_data
+                };
             }
 
+            //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
+            result = await manage.postProcessLogInformed(pnode);
+        }
+
+        //执行事务处理
+        var operationData = {
+            id: manage.queryRandomStr(32),
+            type: "approve",
+            create_by: userInfo["username"],
+            create_time: date,
+            table_name: tableName,
+            table_id: curRow["business_data_id"],
+            table_data: JSON.stringify(curRow),
+            status: "wait",
+            current_data: JSON.stringify({
+                opeartion: "add",
+                tableName: "PR_LOG",
+                data: ""
+            }),
+            history_data: JSON.stringify({
+                operation: "add",
+                tableName: "PR_LOG_HISTORY",
+                data: prLogHisNode
+            }),
+            inform_data: JSON.stringify({
+                operation: "add",
+                tableName: "PR_LOG_INFORMED",
+                data: pnode
+            }),
+            delete_data: JSON.stringify({
+                operation: "delete",
+                tableName: "PR_LOG",
+                data: prLogHisNode
+            }),
+            origin_data: JSON.stringify({
+                operation: "patch",
+                tableName: tableName,
+                id: curRow["business_data_id"],
+                data: bpmStatus
+            }),
+            trends_data: JSON.stringify({
+                opeartion: "add",
+                tableName: "",
+                data: ""
+            }),
+            task_data: JSON.stringify({
+                opeartion: "add",
+                tableName: "",
+                data: ""
+            }),
+            other_data: JSON.stringify({})
+        };
+
+        //执行审批业务
+        await workflow.postWorkflowApprove(
+            tableName,
+            curRow,
+            operationData,
+            null,
+            prLogHisNode,
+            bpmStatus,
+            freeNode,
+            wflowAddUsers,
+            wflowNotifyUsers,
+            curAuditor
+        );
+
+        //如果是计划任务，则需要生成分配任务数据，并写入数据库中
+        await handleTaskItem(data, curRow);
+
+        //当前已经是最后一个审批节点，流程已经处理完毕
+        vant.Dialog.alert({
+            message: "同意审批成功，审批流程处理完毕！"
+        });
+
+        let receiveURL = null;
+        //发送企业微信通知，知会人力/财务人员，进行知会确认操作！
+        try {
+            receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessNode.id}&pid=&tname=bs_reward_apply&panename=myrewardlist&typename=hr_admin_ids&bpm_status=4&proponents=${bussinessNode.hr_admin_ids}&role=hr`);
+            await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.hr_admin_ids}/亲爱的同事，${bussinessNode.create_by}提交的案件发起申请已处理完毕：${bussinessNode["title"]}，内容：${bussinessNode['content']}，请及时进行知会确认操作！?type=reward&rurl=${receiveURL}`)
+                .set('accept', 'json');
+        } catch (error) {
+            console.log(error);
+        }
+        //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
+        try {
+            receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
+            await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/亲爱的同事，您提交的案件发起申请已处理完毕：${bussinessNode["title"]}，内容：${bussinessNode['content']}！?type=reward&rurl=${receiveURL}`)
+                .set('accept', 'json');
+        } catch (error) {
+            console.log(error);
+        }
+
+        //再次检查此奖惩申请的流程状态，是否为已完成，如果不是已完成，则设置为已完成
+        try {
+            //修改审批状态为审批中
+            result = await manage.patchTableData(tableName, bussinessCodeID, { id: bussinessCodeID, status: '已完成', bpm_status: bpmStatus.bpm_status });
+        } catch (error) {
+            console.log(error);
+        }
+
+        //将此审批流程中所涉及的所有奖惩明细数据的状态设置为已完成
+        try {
+            //查询奖惩明细数据
+            const list = await Betools.query.queryTableDataByPid('bs_reward_items', bussinessCodeID); //查询诉讼案件明细数据
+
+            //遍历奖惩明细数据，并设置状态为已完成
+            for (const elem of list) {
+                manage.patchTableData(tableName.replace('apply', 'items'), elem.id, { pid: bussinessCodeID, status: '已完成', bpm_status: bpmStatus.bpm_status });
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    } else {
+        //如果firstAuditor是逗号开头，则去掉开头的逗号
+        firstAuditor =
+            firstAuditor.indexOf(",") == 0 ?
+            firstAuditor.substring(1) :
+            firstAuditor;
+
+        //获取下一审核节点
+        firstAuditor = firstAuditor.split(",")[0];
+
+        //设置流程 检查当前审核节点是否为审批节点，如果是，则bpm_status_code设置为3：审批中，否则，状态为 状态为2：审核中
+        approveNode == firstAuditor ?
+            (bpmStatus = { bpm_status: "3" }) :
+            (bpmStatus = { bpm_status: "2" });
+
+        //审批相关处理信息
+        pnode = {};
+
+        if (curRow.business_code != "000000000") {
+            //第二步，根据流程业务模块，获取流程审批节点；操作职员，可能有多个，则每个员工推送消息,需要从流程配置节点中获取
+            employee = await manage.queryProcessNodeEmployee(
+                firstAuditor
+            );
+            //流程岗位
+            process_station = await manage.queryProcessNodeProcName(
+                firstAuditor
+            );
+            //提交审批相关处理信息
+            pnode = {
+                id: manage.queryRandomStr(32), //获取随机数
+                table_name: tableName, //业务表名
+                main_value: curRow["main_value"], //表主键值
+                business_data_id: curRow["business_data_id"], //业务具体数据主键值
+                business_code: fixedWFlow["id"], //业务编号
+                process_name: fixedWFlow["items"], //流程名称
+                employee: employee[0]["employee"],
+                process_station: process_station[0]["item_text"],
+                process_audit: firstAuditor,
+                proponents: curRow["proponents"],
+                content: curRow["content"],
+                create_time: date,
+                business_data: curRow.business_data
+            };
+        } else {
+            //提交审批相关处理信息
+            pnode = {
+                id: manage.queryRandomStr(32), //获取随机数
+                table_name: tableName, //业务表名
+                main_value: curRow["business_data_id"], //表主键值
+                business_data_id: curRow["business_data_id"], //业务具体数据主键值
+                business_code: "000000000", //业务编号
+                process_name: "自由流程审批", //流程名称
+                employee: firstAuditor,
+                process_station: "自由流程审批",
+                process_audit: "000000000",
+                proponents: curRow["proponents"],
+                content: curRow["content"],
+                operate_time: date,
+                create_time: date,
+                business_data: curRow.business_data
+            };
+        }
+
+        //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+        var vflag = await manage.queryApprovalLength(
+            tableName,
+            curRow["business_data_id"]
+        );
+
+        if (vflag == 0) {
+            //数据库中已经存在此记录，提示用户无法提交审批
+            vant.Dialog.alert({
+                message: `处理异常，请稍后重试；如果多次处理异常，可能需要撤销当前审批，重新发起审批流程！异常流程数据[status:${vflag}]`,
+            });
+        } else {
             //执行事务处理
-            var operationData = {
+            let operationData = {
                 id: manage.queryRandomStr(32),
-                type: "approve",
+                type: "next",
                 create_by: userInfo["username"],
                 create_time: date,
                 table_name: tableName,
@@ -414,7 +540,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                 current_data: JSON.stringify({
                     opeartion: "add",
                     tableName: "PR_LOG",
-                    data: ""
+                    data: pnode
                 }),
                 history_data: JSON.stringify({
                     operation: "add",
@@ -424,7 +550,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                 inform_data: JSON.stringify({
                     operation: "add",
                     tableName: "PR_LOG_INFORMED",
-                    data: pnode
+                    data: ""
                 }),
                 delete_data: JSON.stringify({
                     operation: "delete",
@@ -447,7 +573,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                     tableName: "",
                     data: ""
                 }),
-                other_data: JSON.stringify({})
+                other_data: ""
             };
 
             //执行审批业务
@@ -455,7 +581,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                 tableName,
                 curRow,
                 operationData,
-                null,
+                pnode,
                 prLogHisNode,
                 bpmStatus,
                 freeNode,
@@ -464,214 +590,27 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                 curAuditor
             );
 
-            //如果是计划任务，则需要生成分配任务数据，并写入数据库中
-            await handleTaskItem(data, curRow);
+            //此处获取到待审核人员firstAuditor,可以向此用户推送审批消息，打开消息即可审批。
+            await handleNotifyHR(firstAuditor, curRow["proponents"], '', encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${curRow.business_data_id}&pid=${pnode.id}&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=${bpmStatus.bpm_status}&proponents=${curRow["proponents"]}`));
 
-            //当前已经是最后一个审批节点，流程已经处理完毕
+            //提示信息 //console.log(" 修改当前记录审批状态为处理中返回结果:" + JSON.stringify(result) );
             vant.Dialog.alert({
-                message: "同意审批成功，审批流程处理完毕！"
-            });
+                message: "同意审批成功，审批流程已推向后续处理人！",
+            })
 
-            let receiveURL = null;
-            //发送企业微信通知，知会人力/财务人员，进行知会确认操作！
+            console.log("operationData : " + operationData);
+
+            //发送审批流程通知，通知流程下一位审批人，点击审批详情，处理用户提交的诉讼案件流程审批通知。
             try {
-                receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessNode.id}&pid=&tname=bs_reward_apply&panename=myrewardlist&typename=hr_admin_ids&bpm_status=4&proponents=${bussinessNode.hr_admin_ids}&role=hr`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.hr_admin_ids}/亲爱的同事，${bussinessNode.create_by}提交的案件发起申请已处理完毕：${bussinessNode["title"]}，内容：${bussinessNode['content']}，请及时进行知会确认操作！?type=reward&rurl=${receiveURL}`)
+                const receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=2&proponents=${firstAuditor}`);
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstAuditor}/亲爱的同事，您收到案件发起申请审批处理请求：${curRow["title"]}，内容：${curRow['content']}，请您及时进行审批处理！?type=reward&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {
                 console.log(error);
-            }
-            //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
-            try {
-                receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/亲爱的同事，您提交的案件发起申请已处理完毕：${bussinessNode["title"]}，内容：${bussinessNode['content']}！?type=reward&rurl=${receiveURL}`)
-                    .set('accept', 'json');
-            } catch (error) {
-                console.log(error);
-            }
-
-            //再次检查此奖惩申请的流程状态，是否为已完成，如果不是已完成，则设置为已完成
-            try {
-                //修改审批状态为审批中
-                result = await manage.patchTableData(tableName, bussinessCodeID, { id: bussinessCodeID, status: '已完成', bpm_status: bpmStatus.bpm_status });
-            } catch (error) {
-                console.log(error);
-            }
-
-            //将此审批流程中所涉及的所有奖惩明细数据的状态设置为已完成
-            try {
-                //查询奖惩明细数据
-                const list = await Betools.query.queryTableDataByPid('bs_reward_items', bussinessCodeID); //查询诉讼案件明细数据
-
-                //遍历奖惩明细数据，并设置状态为已完成
-                for (const elem of list) {
-                    manage.patchTableData(tableName.replace('apply', 'items'), elem.id, { pid: bussinessCodeID, status: '已完成', bpm_status: bpmStatus.bpm_status });
-                }
-
-            } catch (error) {
-                console.log(error);
-            }
-
-        } else {
-            //如果firstAuditor是逗号开头，则去掉开头的逗号
-            firstAuditor =
-                firstAuditor.indexOf(",") == 0 ?
-                firstAuditor.substring(1) :
-                firstAuditor;
-
-            //获取下一审核节点
-            firstAuditor = firstAuditor.split(",")[0];
-
-            //设置流程 检查当前审核节点是否为审批节点，如果是，则bpm_status_code设置为3：审批中，否则，状态为 状态为2：审核中
-            approveNode == firstAuditor ?
-                (bpmStatus = { bpm_status: "3" }) :
-                (bpmStatus = { bpm_status: "2" });
-
-            //审批相关处理信息
-            pnode = {};
-
-            if (curRow.business_code != "000000000") {
-                //第二步，根据流程业务模块，获取流程审批节点；操作职员，可能有多个，则每个员工推送消息,需要从流程配置节点中获取
-                employee = await manage.queryProcessNodeEmployee(
-                    firstAuditor
-                );
-                //流程岗位
-                process_station = await manage.queryProcessNodeProcName(
-                    firstAuditor
-                );
-                //提交审批相关处理信息
-                pnode = {
-                    id: manage.queryRandomStr(32), //获取随机数
-                    table_name: tableName, //业务表名
-                    main_value: curRow["main_value"], //表主键值
-                    business_data_id: curRow["business_data_id"], //业务具体数据主键值
-                    business_code: fixedWFlow["id"], //业务编号
-                    process_name: fixedWFlow["items"], //流程名称
-                    employee: employee[0]["employee"],
-                    process_station: process_station[0]["item_text"],
-                    process_audit: firstAuditor,
-                    proponents: curRow["proponents"],
-                    content: curRow["content"],
-                    create_time: date,
-                    business_data: curRow.business_data
-                };
-            } else {
-                //提交审批相关处理信息
-                pnode = {
-                    id: manage.queryRandomStr(32), //获取随机数
-                    table_name: tableName, //业务表名
-                    main_value: curRow["business_data_id"], //表主键值
-                    business_data_id: curRow["business_data_id"], //业务具体数据主键值
-                    business_code: "000000000", //业务编号
-                    process_name: "自由流程审批", //流程名称
-                    employee: firstAuditor,
-                    process_station: "自由流程审批",
-                    process_audit: "000000000",
-                    proponents: curRow["proponents"],
-                    content: curRow["content"],
-                    operate_time: date,
-                    create_time: date,
-                    business_data: curRow.business_data
-                };
-            }
-
-            //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
-            var vflag = await manage.queryApprovalLength(
-                tableName,
-                curRow["business_data_id"]
-            );
-
-            if (vflag == 0) {
-                //数据库中已经存在此记录，提示用户无法提交审批
-                vant.Dialog.alert({
-                    message: `处理异常，请稍后重试；如果多次处理异常，可能需要撤销当前审批，重新发起审批流程！异常流程数据[status:${vflag}]`,
-                });
-            } else {
-                //执行事务处理
-                let operationData = {
-                    id: manage.queryRandomStr(32),
-                    type: "next",
-                    create_by: userInfo["username"],
-                    create_time: date,
-                    table_name: tableName,
-                    table_id: curRow["business_data_id"],
-                    table_data: JSON.stringify(curRow),
-                    status: "wait",
-                    current_data: JSON.stringify({
-                        opeartion: "add",
-                        tableName: "PR_LOG",
-                        data: pnode
-                    }),
-                    history_data: JSON.stringify({
-                        operation: "add",
-                        tableName: "PR_LOG_HISTORY",
-                        data: prLogHisNode
-                    }),
-                    inform_data: JSON.stringify({
-                        operation: "add",
-                        tableName: "PR_LOG_INFORMED",
-                        data: ""
-                    }),
-                    delete_data: JSON.stringify({
-                        operation: "delete",
-                        tableName: "PR_LOG",
-                        data: prLogHisNode
-                    }),
-                    origin_data: JSON.stringify({
-                        operation: "patch",
-                        tableName: tableName,
-                        id: curRow["business_data_id"],
-                        data: bpmStatus
-                    }),
-                    trends_data: JSON.stringify({
-                        opeartion: "add",
-                        tableName: "",
-                        data: ""
-                    }),
-                    task_data: JSON.stringify({
-                        opeartion: "add",
-                        tableName: "",
-                        data: ""
-                    }),
-                    other_data: ""
-                };
-
-                //执行审批业务
-                await workflow.postWorkflowApprove(
-                    tableName,
-                    curRow,
-                    operationData,
-                    pnode,
-                    prLogHisNode,
-                    bpmStatus,
-                    freeNode,
-                    wflowAddUsers,
-                    wflowNotifyUsers,
-                    curAuditor
-                );
-
-                //此处获取到待审核人员firstAuditor,可以向此用户推送审批消息，打开消息即可审批。
-                await handleNotifyHR(firstAuditor, curRow["proponents"], '', encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${curRow.business_data_id}&pid=${pnode.id}&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=${bpmStatus.bpm_status}&proponents=${curRow["proponents"]}`));
-
-                //提示信息 //console.log(" 修改当前记录审批状态为处理中返回结果:" + JSON.stringify(result) );
-                vant.Dialog.alert({
-                    message: "同意审批成功，审批流程已推向后续处理人！",
-                })
-
-                console.log("operationData : " + operationData);
-
-                //发送审批流程通知，通知流程下一位审批人，点击审批详情，处理用户提交的诉讼案件流程审批通知。
-                try {
-                    const receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=2&proponents=${firstAuditor}`);
-                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstAuditor}/亲爱的同事，您收到案件发起申请审批处理请求：${curRow["title"]}，内容：${curRow['content']}，请您及时进行审批处理！?type=reward&rurl=${receiveURL}`)
-                        .set('accept', 'json');
-                } catch (error) {
-                    console.log(error);
-                }
             }
         }
     }
-
+    
     //同意审批成功
     return 'success';
 
