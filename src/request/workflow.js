@@ -187,7 +187,7 @@ export async function queryUserByName(username) {
 export async function postWorkflowApprove(tableName, curRow, operationData, pnode, prLogHisNode, bpmStatus, freeNode, wflowAddUser, wflowNotifyUser, curAuditor) {
 
     //执行处理的结果
-    var result = null;
+    let result = null;
 
     //流程事务处理框架，保证流程处理操作的事务最终一致性
     try {
