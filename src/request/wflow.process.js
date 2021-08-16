@@ -17,6 +17,12 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     let wflowSpecUser = wflowAddUsers + "," + wflowNotifyUsers; // 会签、加签用户
     let wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID); // 查询自由流程节点
     let bussinessNode = JSON.parse(JSON.stringify(curRow));  // 流程的创建人员
+
+    const date = dayjs().format("YYYY-MM-DD HH:mm:ss"); // 获取当前时间
+    const operation = operation || "同意"; // 审批动作
+    const message = message || "同意"; // 审批意见
+    const processLogID = Betools.tools.queryUrlString("processID");  // 流程日志编号
+
     curRow = await Betools.query.queryTableData(tableName, bussinessCodeID); // 查询当前数据
 
     const signFlag = Betools.tools.deNull(wflowAddUsers) != "" && Betools.tools.deNull(wflowNotifyUsers) != ""; // 如果加签、会签同时选择，则无法提交
@@ -33,28 +39,15 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
 
     //如果用户流程中已经存在，则提示无法选择
     if (!Betools.tools.isNull(readyUser)) {
-        //将英文名转化为中文名
-        readyUser = await manage.patchEnameCname(readyUser);
-        //提示错误信息
-        vant.Dialog.alert({
-            message: `加签/会签用户，不能选择审批流程中已经存在的用户(${readyUser})!`
-        });
-        return false;
-    }
+        readyUser = await manage.patchEnameCname(readyUser); // 将英文名转化为中文名
+        return vant.Dialog.alert({ message: `加签/会签用户，不能选择审批流程中已经存在的用户(${readyUser})!` }); // 提示错误信息
+    } 
 
     const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
     
     await vant.Dialog.confirm({ title: '确认操作', message: '是否确认提交此自由流程?', });
     await manage.handleUserInfo(userInfo); //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
 
-    //获取当前时间
-    var date = Betools.tools.formatDate(new Date().getTime(), "yyyy-MM-dd hh:mm:ss");
-    //审批动作
-    var operation = operation || "同意";
-    //审批意见
-    var message = message || curRow.idea_content || "同意";
-    //流程日志编号
-    var processLogID = Betools.tools.queryUrlString("pid");
     //审批节点信息
     var approveNode = null;
     //定义当前审批日志信息
