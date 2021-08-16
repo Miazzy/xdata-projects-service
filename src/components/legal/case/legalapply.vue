@@ -2702,9 +2702,10 @@ export default {
 
            // 此处推送消息至第一个审批处
            try {
-              const receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${curItemID}&pid=${node.id}&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=2&proponents=${firstWflowUser}`);
-              await superagent.get(`${window.BECONFIG['xmysqlAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，内容：${data['content']}，请您及时进行审批处理！?type=reward&rurl=${receiveURL}`)
+              const receiveURL = encodeURIComponent(`${window.location.protocol}//${window.location.host}/#/legal/case/legalview?id=${curItemID}&bpm_status=2&proponents=${firstWflowUser}`);
+              await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                           .set('accept', 'json');
+              debugger;
            } catch (error) {
              console.log(error);
            }
@@ -2859,7 +2860,6 @@ export default {
 
                   // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
                   const users = this.approve_userlist.map(item=>item.loginid);
-                  debugger;
                   const wfUsers = users.slice(0,-1).toString(); // 审批人员
                   const nfUsers = ''; // 知会人员
                   const approver = users.slice(-1).toString(); // 最后一个终审人员
