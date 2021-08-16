@@ -560,9 +560,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             const date = dayjs().format('YYYY-MM-DD'); //获取当前时间
             const bpmStatus = { bpm_status: "1" }; //流程状态
 
-            //获取当前审批节点的所有数据
-            curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
-
+            curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
             const flag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
 
             //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
