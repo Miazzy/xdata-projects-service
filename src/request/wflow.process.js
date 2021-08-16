@@ -745,7 +745,7 @@ export async function handleRejectWF() {
             var tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname'));
 
             //查询当前数据
-            var curRow = await query.queryTableData(tableName, bussinessCodeID);
+            var curRow = await Betools.query.queryTableData(tableName, bussinessCodeID);
 
             //克隆当前业务数据
             const bussinessNode = JSON.parse(JSON.stringify(curRow));
@@ -775,7 +775,7 @@ export async function handleRejectWF() {
             var bpmStatus = { bpm_status: "1" };
 
             //获取当前审批节点的所有数据
-            curRow = await manage.queryProcessLogByID(tableName, processLogID);
+            curRow = await Betools.manage.queryProcessLogByID(tableName, processLogID);
 
             //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
             if (!(
