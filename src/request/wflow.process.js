@@ -21,7 +21,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     const date = dayjs().format("YYYY-MM-DD HH:mm:ss"); // 获取当前时间
     const operation = operation || "同意"; // 审批动作
     const message = message || "同意"; // 审批意见
-    const processLogID = Betools.tools.queryUrlString("processID");  // 流程日志编号
+    const processID = Betools.tools.queryUrlString("processID");  // 流程日志编号
 
     curRow = await Betools.query.queryTableData(tableName, bussinessCodeID); // 查询当前数据
 
@@ -65,28 +65,22 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
 
     try {
         //获取当前审批节点的所有数据
-        curRow = await manage.queryProcessLogByID(tableName, processLogID);
+        curRow = await manage.queryProcessLogByID(tableName, processID);
     } catch (error) {
         console.log(error);
     }
 
     //未获取当前审批流程
     if (Betools.tools.deNull(curRow) == "") {
-        vant.Dialog.alert({
-            message: "未找到下一节点的流程信息，请刷新页面，查看是否已经审批完成！"
-        });
-        return false;
+        return vant.Dialog.alert({ message: "未找到流程节点信息，请刷新页面，查看是否已经审批完成！" });
     }
 
-    //业务代码ID
-    bussinessCodeID = curRow["business_data_id"];
-    //获取流程审批信息
-    processAudit = curRow["process_audit"];
+    bussinessCodeID = curRow["business_data_id"]; // 业务代码ID
+    processAudit = curRow["process_audit"]; // 获取流程审批信息
 
     //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
     if (!(
-            Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) ||
-            Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
+            Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
         )) {
         vant.Dialog.alert({
             message: "您不在此审批流程记录的操作职员列中，无法进行审批操作！"
@@ -103,18 +97,12 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
 
     //遍历node,设置approve_user，action
     node.map((item) => {
-        //记录创建时间
-        let ctime = item["create_time"];
-        //设置审批人员
-        item["approve_user"] = userInfo["username"];
-        //设置操作类型
-        item["action"] = operation;
-        //设置操作时间
-        item["operate_time"] = date;
-        //设置操作意见
-        item["action_opinion"] = message;
-        //设置创建时间
-        item["create_time"] = Betools.tools.formatDate(ctime, "yyyy-MM-dd hh:mm:ss");
+        item["approve_user"] = userInfo["username"]; // 设置审批人员
+        item["action"] = operation; // 设置操作类型
+        item["operate_time"] = date; // 设置操作时间
+        item["action_opinion"] = message; // 设置操作意见
+        item["create_time"] = date; // 设置创建时间
+        item["content"] = ''; 
     });
 
     prLogHisNode = JSON.parse(JSON.stringify(node)); // 转历史日志节点
@@ -128,25 +116,9 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
 
     //如果不是自由流程，则从权责配置中获取待审核人列表，否则，使用自由流程配置的审核人员列表
     if (curRow.business_code != "000000000") {
-        try {
-            //根据权责配置，获取所有待审核人员列表
-            allAudit =
-                "," +
-                fixedWFlow["audit"] +
-                "," +
-                fixedWFlow["approve"] +
-                ",";
-            //根据权责配置，获取所有待知会人员列表
-            allNotify = fixedWFlow["notify"];
-            //设置审批节点
-            approveNode = fixedWFlow["approve"];
-        } catch (error) {
-            vant.Dialog.alert({
-                message: "固化流程设置节点失败，无法进行审批操作！"
-            });
-            console.log("固化流程设置节点失败 :" + error);
-            return false;
-        }
+        //根据权责配置，获取所有待审核人员列表
+        //根据权责配置，获取所有待知会人员列表
+        //设置审批节点
     } else {
         try {
             //获取自由流程配置，当前审核节点
