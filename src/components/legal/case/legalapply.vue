@@ -2502,7 +2502,7 @@ export default {
               content: `您好，您确认删除审批人员${item.name}(${item.loginid})吗?`,
               onOk: async(result) => {
                 this.approve_userlist.splice(index, 1);
-                this.approve_userlist.map(item=>{ item.index = index;});
+                this.approve_userlist.map((item,index) => { item.index = index;});
               }
         });
       },
