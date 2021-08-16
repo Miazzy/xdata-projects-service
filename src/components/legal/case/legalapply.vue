@@ -2693,7 +2693,7 @@ export default {
                business_data_id: data.id, //业务具体数据主键值
                business_code: "000000000", //业务编号
                process_name: "流程审批", //流程名称
-               employee: userinfo["username"],
+               employee: userinfo['name'] || userinfo["realname"] || userinfo["username"],
                process_station: "流程审批",
                process_audit: "000000000",
                proponents: userinfo["username"],
@@ -2726,6 +2726,7 @@ export default {
                process_station: "流程审批",
                process_audit: "000000000",
                proponents: userinfo["username"],
+               approve_user: userinfo["username"],
                content: data["content"],
                action: "审批",
                operate_time: ctime,
