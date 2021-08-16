@@ -216,6 +216,7 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
 
             await Betools.manage.postProcessLogHistory(prLogHisNode); //将当前审批日志转为历史日志，并删除当前审批日志中相关信息
             prLogHisNode.map(async(element) => { await Betools.manage.deleteTableData('pr_log', element.id)}); //删除当前审批节点中的所有记录
+            debugger;
 
             //修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中
             result = await Betools.manage.patchTableData( tableName, curRow["business_data_id"], bpmStatus );
@@ -234,10 +235,18 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             }, 1000);
 
         }
+
+        
     } catch (error) {
         console.log("审批处理当前节点的审批信息", error);
     }
-
+    
+    try {
+        prLogHisNode.map(async(element) => { await Betools.manage.deleteTableData('pr_log', element.id)}); //删除当前审批节点中的所有记录
+    } catch (error) {
+        console.error(error);
+    }
+    
     //如果加签、会签用户不为空，则需要将加签、会签用户，追加至自由流程审批表中
     try {
 
@@ -295,11 +304,11 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
 
         //如果流程状态为1，则提交驳回动态到数据库，如果流程状态为4或者5，则提交审批通过动态到数据库
         if (bpmStatus.bpm_status == "1") {
-            await postDynamicReject(tableName, curRow);
+            //await postDynamicReject(tableName, curRow);
         } else if (bpmStatus.bpm_status == "4") {
-            await postDynamicAgree(tableName, curRow);
+            //await postDynamicAgree(tableName, curRow);
         } else if (bpmStatus.bpm_status == "5") {
-            await postDynamicNotify(tableName, curRow);
+            //await postDynamicNotify(tableName, curRow);
         }
 
     } catch (error) {
