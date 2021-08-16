@@ -1688,7 +1688,7 @@
                   <a-divider></a-divider>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-show=" role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       审批流程
@@ -1696,7 +1696,7 @@
                    </a-row>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-show=" role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row style="position: relative;">
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
@@ -2707,7 +2707,7 @@ export default {
            // 此处推送消息至第一个审批处
            try {
               const curHost = window.location.protocol + '//' + window.location.host;
-              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? `https://legal.yunwisdom.club:30443` : curHost }/#/legal/case/legalview?id=${data.id}&role=view&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
+              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? `https://legal.yunwisdom.club:30443` : curHost }/#/legal/case/legalview?id=${data.id}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
               await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                           .set('accept', 'json');
            } catch (error) {
