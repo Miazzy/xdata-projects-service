@@ -7,7 +7,7 @@ import * as workflow from '@/request/workflow';
  * @param fixedWFlow
  * @param data
  */
-export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], tasktype = 'wait') {
+export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
 
     let result = ''; //返回结果
     let wflowAddUsers = ''; //加签用户，暂时设置为空
@@ -48,24 +48,16 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     await vant.Dialog.confirm({ title: '确认操作', message: '是否确认提交此自由流程?', });
     await manage.handleUserInfo(userInfo); //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
 
-    //审批节点信息
-    var approveNode = null;
-    //定义当前审批日志信息
-    var node = [];
-    //业务代码ID
-    var bussinessCodeID = null;
-    //获取流程审批信息
-    var processAudit = null;
-    //转历史日志节点
-    var prLogHisNode = null;
-    //流程权责
-    var rights = null;
-    //自由流程节点
-    var freeNode = null;
+    let approveNode = null; // 审批节点信息
+    let node = []; // 定义当前审批日志信息
+    let bussinessCodeID = null; // 业务代码ID
+    let processAudit = null; // 获取流程审批信息
+    let prLogHisNode = null; // 转历史日志节点
+    let rights = null; // 流程权责
+    let freeNode = null;  //自由流程节点
 
     try {
-        //获取当前审批节点的所有数据
-        curRow = await manage.queryProcessLogByID(tableName, processID);
+        curRow = await manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
     } catch (error) {
         console.log(error);
     }
@@ -78,19 +70,15 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     bussinessCodeID = curRow["business_data_id"]; // 业务代码ID
     processAudit = curRow["process_audit"]; // 获取流程审批信息
 
+    const auditFlag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"]);
+
     //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
-    if (!(
-            Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
-        )) {
-        vant.Dialog.alert({
-            message: "您不在此审批流程记录的操作职员列中，无法进行审批操作！"
-        });
-        return false;
+    if ( !auditFlag ) {
+        return vant.Dialog.alert({ message: "您不在此审批流程记录的操作职员列中，无法进行审批操作！" });
     }
 
     try {
-        //获取关于此表单的所有当前审批日志信息
-        node = await manage.queryProcessLog(tableName, bussinessCodeID);
+        node = await manage.queryProcessLog(tableName, bussinessCodeID);  // 获取关于此表单的所有当前审批日志信息
     } catch (error) {
         console.log(error);
     }
@@ -106,8 +94,6 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     });
 
     prLogHisNode = JSON.parse(JSON.stringify(node)); // 转历史日志节点
-    rights = await Betools.manage.queryBusinessInfo(tableName); // 第一步，获取此表单，关联的流程业务模块；查询SQL , 获取流程权责中关联业务含有tableName的流程权责
-    fixedWFlow = rights[0]; // 选定流程权责
     
     let allAudit = ""; // 所有待审核节点
     let allNotify = ""; // 所有待知会节点
@@ -116,26 +102,24 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
 
     //如果不是自由流程，则从权责配置中获取待审核人列表，否则，使用自由流程配置的审核人员列表
     if (curRow.business_code != "000000000") {
-        //根据权责配置，获取所有待审核人员列表
-        //根据权责配置，获取所有待知会人员列表
-        //设置审批节点
+        // 第一步，获取此表单，关联的流程业务模块；查询SQL , 获取流程权责中关联业务含有tableName的流程权责
+        // 选定流程权责
+        // 根据权责配置，获取所有待审核人员列表
+        // 根据权责配置，获取所有待知会人员列表
+        // 设置审批节点
     } else {
+
         try {
-            //获取自由流程配置，当前审核节点
-            curAuditor = curRow["employee"];
+            curAuditor = curRow["employee"]; //获取自由流程配置，当前审核节点
 
             try {
-                //自由流程配置消息
-                freeNode = JSON.parse(curRow.business_data);
+                freeNode = JSON.parse(curRow.business_data); //自由流程配置消息
             } catch (error) {
                 console.log(error);
             }
 
             //检查是否存在自由流程节点audit_node & approve_node & notify_node , 如果不存在，在下级节点中寻找
-            if (!("audit_node" in freeNode) &&
-                !("approve_node" in freeNode) &&
-                !("notify_node" in freeNode)
-            ) {
+            if (!("audit_node" in freeNode) && !("approve_node" in freeNode) && !("notify_node" in freeNode)) {
                 try {
                     freeNode = JSON.parse(freeNode.business_data);
                 } catch (error) {
@@ -144,9 +128,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
             }
 
             //如果仍然未获取到自由流程节点，则从自由流程表中找
-            var freeNodeBack = await manage.queryCurFreeWorkflow(
-                bussinessCodeID
-            );
+            let freeNodeBack = await Betools.manage.queryCurFreeWorkflow(bussinessCodeID);
 
             //如果从数据库中查询出，自由流程数据，则替换数据
             if (Betools.tools.deNull(freeNodeBack) != "") {
@@ -162,48 +144,31 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                 freeNode.audit_node.lastIndexOf("," + curAuditor + ",")
             ) {
                 //判断是否存在重复人员，如果存在重复人员，则去掉一个重复人员
-                freeNode.audit_node = freeNode.audit_node.replace(
-                    "," + curAuditor + ",",
-                    ","
-                );
+                freeNode.audit_node = freeNode.audit_node.replace("," + curAuditor + ",",  ",");
             }
 
             //添加加签用户数据
             if (Betools.tools.deNull(wflowAddUsers) != "") {
-                freeNode.audit_node = freeNode.audit_node.replace(
-                    `,${curAuditor},`,
-                    `,${curAuditor},${wflowAddUsers},`
-                );
+                freeNode.audit_node = freeNode.audit_node.replace(`,${curAuditor},`, `,${curAuditor},${wflowAddUsers},`);
             }
 
-            //添加会签用户数据
+            // 添加会签用户数据
             if (Betools.tools.deNull(wflowNotifyUsers) != "") {
-                freeNode.audit_node = freeNode.audit_node.replace(
-                    `,${curAuditor},`,
-                    `,${curAuditor},${wflowNotifyUsers},${curAuditor},`
-                );
+                freeNode.audit_node = freeNode.audit_node.replace(`,${curAuditor},`, `,${curAuditor},${wflowNotifyUsers},${curAuditor},`);
             }
 
-            //去掉开头、结尾的逗号
+            // 去掉开头、结尾的逗号
             if (freeNode.audit_node.startsWith(",")) {
                 freeNode.audit_node = freeNode.audit_node.substring(1);
             }
 
-            //去掉开头、结尾的逗号
+            // 去掉开头、结尾的逗号
             if (freeNode.audit_node.endsWith(",")) {
-                freeNode.audit_node = freeNode.audit_node.substring(
-                    0,
-                    freeNode.audit_node.length - 1
-                );
+                freeNode.audit_node = freeNode.audit_node.substring( 0, freeNode.audit_node.length - 1 );
             }
 
             //根据自由流程配置，获取所有待审核人员列表
-            allAudit =
-                "," +
-                Betools.tools.deNull(freeNode.audit_node) +
-                "," +
-                Betools.tools.deNull(freeNode.approve_node) +
-                ",";
+            allAudit = "," + Betools.tools.deNull(freeNode.audit_node) + "," + Betools.tools.deNull(freeNode.approve_node) + ",";
 
             //根据自由流程配置，获取所有待知会人员列表
             notifyArray =
@@ -212,25 +177,9 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
             //设置审批节点
             approveNode = freeNode.approve_node;
         } catch (error) {
-            vant.Dialog.alert({
-                message: "自由流程设置节点失败，无法进行审批操作！"
-            });
+            vant.Dialog.alert({  message: "自由流程设置节点失败，无法进行审批操作！" });
             console.log("自由流程设置节点失败 :" + error);
             return false;
-        }
-    }
-
-    //当不存在加签、会签操作时，则进行重复用户消除操作
-    if (!(
-            Betools.tools.deNull(wflowAddUsers) != "" ||
-            Betools.tools.deNull(wflowNotifyUsers) != ""
-        )) {
-        //判断是否存在重复人员，如果存在重复人员，则去掉一个重复人员
-        if (
-            allAudit.indexOf("," + curAuditor + ",") !=
-            allAudit.lastIndexOf("," + curAuditor + ",")
-        ) {
-            allAudit = allAudit.replace("," + curAuditor + ",", ",");
         }
     }
 
@@ -342,17 +291,6 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
                 id: curRow["business_data_id"],
                 data: bpmStatus
             }),
-            trends_data: JSON.stringify({
-                opeartion: "add",
-                tableName: "",
-                data: ""
-            }),
-            task_data: JSON.stringify({
-                opeartion: "add",
-                tableName: "",
-                data: ""
-            }),
-            other_data: JSON.stringify({})
         };
 
         //执行审批业务
@@ -369,23 +307,10 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
             curAuditor
         );
 
-        //如果是计划任务，则需要生成分配任务数据，并写入数据库中
-        await handleTaskItem(data, curRow);
-
-        //当前已经是最后一个审批节点，流程已经处理完毕
-        vant.Dialog.alert({
-            message: "同意审批成功，审批流程处理完毕！"
-        });
+        vant.Dialog.alert({ message: "同意审批成功，审批流程处理完毕！" });  //当前已经是最后一个审批节点，流程已经处理完毕
 
         let receiveURL = null;
-        //发送企业微信通知，知会人力/财务人员，进行知会确认操作！
-        try {
-            receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessNode.id}&pid=&tname=bs_reward_apply&panename=myrewardlist&typename=hr_admin_ids&bpm_status=4&proponents=${bussinessNode.hr_admin_ids}&role=hr`);
-            await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.hr_admin_ids}/亲爱的同事，${bussinessNode.create_by}提交的案件发起申请已处理完毕：${bussinessNode["title"]}，内容：${bussinessNode['content']}，请及时进行知会确认操作！?type=reward&rurl=${receiveURL}`)
-                .set('accept', 'json');
-        } catch (error) {
-            console.log(error);
-        }
+
         //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
         try {
             receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
@@ -418,79 +343,33 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
         }
 
     } else {
-        //如果firstAuditor是逗号开头，则去掉开头的逗号
-        firstAuditor =
-            firstAuditor.indexOf(",") == 0 ?
-            firstAuditor.substring(1) :
-            firstAuditor;
+        firstAuditor = firstAuditor.indexOf(",") == 0 ? firstAuditor.substring(1) : firstAuditor;  // 如果firstAuditor是逗号开头，则去掉开头的逗号
+        firstAuditor = firstAuditor.split(",")[0]; // 获取下一审核节点
+        approveNode == firstAuditor ? (bpmStatus = { bpm_status: "3" }) : (bpmStatus = { bpm_status: "2" }); // 设置流程 检查当前审核节点是否为审批节点，如果是，则bpm_status_code设置为3：审批中，否则，状态为 状态为2：审核中
+        pnode = {}; // 审批相关处理信息
 
-        //获取下一审核节点
-        firstAuditor = firstAuditor.split(",")[0];
+        //提交审批相关处理信息
+        pnode = {
+            id: manage.queryRandomStr(32), //获取随机数
+            table_name: tableName, //业务表名
+            main_value: curRow["business_data_id"], //表主键值
+            business_data_id: curRow["business_data_id"], //业务具体数据主键值
+            business_code: "000000000", //业务编号
+            process_name: "自由流程审批", //流程名称
+            employee: firstAuditor,
+            process_station: "自由流程审批",
+            process_audit: "000000000",
+            proponents: curRow["proponents"],
+            content: curRow["content"],
+            operate_time: date,
+            create_time: date,
+            business_data: curRow.business_data
+        };
 
-        //设置流程 检查当前审核节点是否为审批节点，如果是，则bpm_status_code设置为3：审批中，否则，状态为 状态为2：审核中
-        approveNode == firstAuditor ?
-            (bpmStatus = { bpm_status: "3" }) :
-            (bpmStatus = { bpm_status: "2" });
-
-        //审批相关处理信息
-        pnode = {};
-
-        if (curRow.business_code != "000000000") {
-            //第二步，根据流程业务模块，获取流程审批节点；操作职员，可能有多个，则每个员工推送消息,需要从流程配置节点中获取
-            employee = await manage.queryProcessNodeEmployee(
-                firstAuditor
-            );
-            //流程岗位
-            process_station = await manage.queryProcessNodeProcName(
-                firstAuditor
-            );
-            //提交审批相关处理信息
-            pnode = {
-                id: manage.queryRandomStr(32), //获取随机数
-                table_name: tableName, //业务表名
-                main_value: curRow["main_value"], //表主键值
-                business_data_id: curRow["business_data_id"], //业务具体数据主键值
-                business_code: fixedWFlow["id"], //业务编号
-                process_name: fixedWFlow["items"], //流程名称
-                employee: employee[0]["employee"],
-                process_station: process_station[0]["item_text"],
-                process_audit: firstAuditor,
-                proponents: curRow["proponents"],
-                content: curRow["content"],
-                create_time: date,
-                business_data: curRow.business_data
-            };
-        } else {
-            //提交审批相关处理信息
-            pnode = {
-                id: manage.queryRandomStr(32), //获取随机数
-                table_name: tableName, //业务表名
-                main_value: curRow["business_data_id"], //表主键值
-                business_data_id: curRow["business_data_id"], //业务具体数据主键值
-                business_code: "000000000", //业务编号
-                process_name: "自由流程审批", //流程名称
-                employee: firstAuditor,
-                process_station: "自由流程审批",
-                process_audit: "000000000",
-                proponents: curRow["proponents"],
-                content: curRow["content"],
-                operate_time: date,
-                create_time: date,
-                business_data: curRow.business_data
-            };
-        }
-
-        //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
-        var vflag = await manage.queryApprovalLength(
-            tableName,
-            curRow["business_data_id"]
-        );
+        let vflag = await manage.queryApprovalLength(tableName, curRow["business_data_id"]); // 提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
 
         if (vflag == 0) {
-            //数据库中已经存在此记录，提示用户无法提交审批
-            vant.Dialog.alert({
-                message: `处理异常，请稍后重试；如果多次处理异常，可能需要撤销当前审批，重新发起审批流程！异常流程数据[status:${vflag}]`,
-            });
+            vant.Dialog.alert({ message: `处理异常，请稍后重试；如果多次处理异常，可能需要撤销当前审批，重新发起审批流程！异常流程数据[status:${vflag}]`, }); // 数据库中已经存在此记录，提示用户无法提交审批
         } else {
             //执行事务处理
             let operationData = {
