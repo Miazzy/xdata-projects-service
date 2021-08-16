@@ -2631,7 +2631,7 @@ export default {
       },
 
       // 提交自由流程
-      async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime) {
+      async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
 
         try {
           
@@ -2644,7 +2644,7 @@ export default {
           }
 
           try {
-            await this.handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime);
+            await this.handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
           } catch (error) {
             console.log(error);
           }
@@ -2656,7 +2656,7 @@ export default {
       },
 
       // 启动自由流程
-      async handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime){
+      async handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL = `https://legal.yunwisdom.club:30443`){
 
         let accounts = '';
         const approve_userlist = data.approve_userlist; //获取审批人员列表
@@ -2754,7 +2754,7 @@ export default {
            // 此处推送消息至第一个审批处
            try {
               const curHost = window.location.protocol + '//' + window.location.host;
-              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? `https://legal.yunwisdom.club:30443` : curHost }/#/legal/case/legalview?id=${data.id}&processID=${nextWflowNode.id}&tname=${this.tablename}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
+              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${data.id}&processID=${nextWflowNode.id}&tname=${this.tablename}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
               await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                           .set('accept', 'json');
            } catch (error) {
