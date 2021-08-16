@@ -2929,7 +2929,7 @@ export default {
                   const nfUsers = ''; // 知会人员
                   const approver = users.slice(-1).toString(); // 最后一个终审人员
                   const data = legal;
-                  const ctime = dayjs().format('YYYY-MM-DD');
+                  const ctime = dayjs().format('YYYY-MM-DD HH:mm:ss');
                   data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
                   await this.handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , data.id , data , ctime);
                   
