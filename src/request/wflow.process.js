@@ -523,19 +523,81 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             const bussinessNode = JSON.parse(JSON.stringify(curRow)); //克隆当前业务数据
             const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
             const operation = "同意"; //审批动作
-            const date = dayjs().format('YYYY-MM-DD'); //获取当前时间
+            const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
 
             // 获取当前审批节点的所有数据
             curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
 
             // 获取后续节点
-            const data = curRow.relate_data; // 所有审批流程节点
+            const data = JSON.parse(curRow.relate_data); // 所有审批流程节点
             const curUserNode = data.find(item => { return item.loginid == username }); // 当前审批流程节点
-            const nextUserNodes = data.filter(item => item.index >= curUserNode.index);
+            const nextUserNodes = data.filter(item => item.index >= curUserNode.index); 
+            const accounts = data.map(item=>item.loginid).toString();
 
             // 判断是否还有后续节点，如果存在后续节点，则bpm_status状态为4
             const bpmStatus = (Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0) ? { bpm_status: "4" } : { bpm_status: "2" }; //流程状态
 
+            //获取关于此表单的所有当前审批日志信息
+            let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"]);
+
+            //遍历node,设置approve_user，action
+            node.map((item) => {
+                item["approve_user"] = userInfo["username"]; // 设置审批人员
+                item["action"] = operation; // 设置操作动作
+                item["operate_time"] = date; // 设置操作时间
+                item["action_opinion"] = item['content'] = message; // 设置操作意见
+                item["create_time"] = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 设置创建时间
+            });
+
+            let nextProcessNode = null;
+            if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
+                nextProcessNode = {
+                    id: Betools.tools.queryUniqueID(), //获取随机数
+                    table_name: curTableName, //业务表名
+                    main_value: bussinessNode.id, //表主键值
+                    business_data_id: bussinessNode.id, //业务具体数据主键值
+                    business_code: "000000000", //业务编号
+                    process_name: "流程审批", //流程名称
+                    employee: nextUserNodes[0].loginid,
+                    process_station: "流程审批",
+                    process_audit: "000000000",
+                    proponents: nextUserNodes[0].loginid,
+                    approve_user: nextUserNodes[0].loginid,
+                    content: '',
+                    action: "审批",
+                    operate_time: ctime,
+                    create_time: ctime,
+                    business_data: JSON.stringify(bussinessNode),
+                    relate_data: JSON.stringify(data),
+                    origin_data: accounts,
+                };
+            }
+
+            //执行审批业务
+            try {
+                await workflow.postWorkflowApprove( tableName, curRow, null, nextProcessNode , node, bpmStatus );
+            } catch (error) {
+                console.error(error);
+            }
+
+            //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
+            try {
+                const curHost = window.location.protocol + '//' + window.location.host;
+
+                if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
+                    const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=${nextProcessNode.id}&tname=bs_legal&&bpm_status=${bpmStatus.bpm_status}&proponents=${nextUserNodes[0].loginid}`);
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${nextUserNodes[0].loginid}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`).set('accept', 'json');
+                } else { //流程已经完毕，向发起人推送通知消息
+                    
+
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+
+            vant.Dialog.alert({ message: "同意审批成功！" }); //提示用户撤销审批操作成功
+            return 'success';
     });
     return result; //返回操作结果
 }
@@ -543,7 +605,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
 /**
  * @function 驳回审批
  */
-export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID , domainURL = 'https://legal.yunwisdom.club:30443') {
+export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
 
     let result = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行驳回审批操作?', }).then(async() => {
@@ -553,6 +615,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             curRow = !Betools.tools.isNull(curRow) ? curRow : (await Betools.query.queryTableData(tableName, bussinessCodeID)); //查询当前数据
             message = message || "驳回";//审批意见
             processID = !Betools.tools.isNull(processID) ? processID : Betools.tools.queryUrlString("processID"); //流程日志编号
+            username = !Betools.tools.isNull(username) ? username : Betools.tools.queryUrlString("origin_username");
             
             const bussinessNode = JSON.parse(JSON.stringify(curRow)); //克隆当前业务数据
             const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
@@ -561,12 +624,13 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             const bpmStatus = { bpm_status: "1" }; //流程状态
 
             curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
-            const flag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
 
-            //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
-            if (!flag) {
-                return vant.Dialog.alert({ message: "您不在此审批流程记录的操作职员列中，无法进行驳回操作！" });
-            }
+            /** 
+             const flag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
+             if (!flag) {
+                 return vant.Dialog.alert({ message: "您不在此审批流程记录的操作职员列中，无法进行驳回操作！" });  //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
+             }
+             */
 
             //获取关于此表单的所有当前审批日志信息
             let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"]);
@@ -591,7 +655,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
                 const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {
                 console.error(error);

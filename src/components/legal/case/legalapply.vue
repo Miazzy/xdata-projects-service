@@ -2652,7 +2652,7 @@ export default {
         } catch (error) {
           console.log(error);
         }
-        
+
       },
 
       // 启动自由流程
@@ -2744,17 +2744,14 @@ export default {
              return vant.Toast.fail("已提交过申请，无法再次提交审批！");
            }
 
-           // 处理自由流程发起提交审批操作
-           await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, "2");
-           // 弹出审批完成提示框
-           vant.Toast.success("提交流程审批成功！");
-           // 记录当前流程已经提交，短时间内无法再次提交
-           Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );
+           await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, "2");  // 处理自由流程发起提交审批操作
+           vant.Toast.success("提交流程审批成功！");  // 弹出审批完成提示框
+           Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );  // 记录当前流程已经提交，短时间内无法再次提交
 
-           // 此处推送消息至第一个审批处
+           // 此处推送消息至第一个审批处 
            try {
               const curHost = window.location.protocol + '//' + window.location.host;
-              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${data.id}&processID=${nextWflowNode.id}&tname=${this.tablename}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
+              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${data.id}&processID=${nextWflowNode.id}&tname=${this.tablename}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
               await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                           .set('accept', 'json');
            } catch (error) {
@@ -2815,7 +2812,7 @@ export default {
       async handleDisagree(){ // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
           const processID = Betools.tools.getUrlParam('processID');
           const domainURL = 'https://legal.yunwisdom.club:30443';
-          return await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, domainURL);
+          return await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
       },
 
       // 执行知会批注操作
