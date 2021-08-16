@@ -2800,6 +2800,16 @@ export default {
 
       },
 
+      // 工作流程审批同意
+      async handleAgree(){
+
+      },
+
+      // 工作流程审批驳回
+      async handleDisagree(){
+
+      },
+
       // 执行知会批注操作
       async handleRemark(){
         const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
