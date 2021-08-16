@@ -9,21 +9,21 @@ import * as workflow from '@/request/workflow';
  */
 export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
 
-    let result = ''; // 返回结果
-    let wflowAddUsers = ''; // 加签用户，暂时设置为空
-    let wflowNotifyUsers = ''; // 会签用户，暂时设置为空
-    let bussinessCodeID = Betools.tools.queryUrlString("id"); // 查询业务编号
-    let tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname')); // 获取表单名称
-    let wflowSpecUser = wflowAddUsers + "," + wflowNotifyUsers; // 会签、加签用户
-    let wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID); // 查询自由流程节点
-    let bussinessNode = JSON.parse(JSON.stringify(curRow));  // 流程的创建人员
+    let result = ''; // 返回结果 
+    let wflowAddUsers = ''; // 加签用户，暂时设置为空 
+    let wflowNotifyUsers = ''; // 会签用户，暂时设置为空 
+    let bussinessCodeID = Betools.tools.queryUrlString("id"); // 查询业务编号 
+    let tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname')); // 获取表单名称 
+    let wflowSpecUser = wflowAddUsers + "," + wflowNotifyUsers; // 会签、加签用户 
+    let wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID); // 查询自由流程节点 
+    let bussinessNode = JSON.parse(JSON.stringify(curRow));  // 流程的创建人员 
 
-    const date = dayjs().format("YYYY-MM-DD HH:mm:ss"); // 获取当前时间
-    const operation = operation || "同意"; // 审批动作
-    const message = message || "同意"; // 审批意见
-    const processID = Betools.tools.queryUrlString("processID");  // 流程日志编号
+    const date = dayjs().format("YYYY-MM-DD HH:mm:ss"); // 获取当前时间 
+    const operation = operation || "同意"; // 审批动作 
+    const message = message || "同意"; // 审批意见 
+    const processID = Betools.tools.queryUrlString("processID"); // 流程日志编号 
 
-    curRow = await Betools.query.queryTableData(tableName, bussinessCodeID); // 查询当前数据
+    curRow = await Betools.query.queryTableData(tableName, bussinessCodeID); // 查询当前数据 
 
     const signFlag = Betools.tools.deNull(wflowAddUsers) != "" && Betools.tools.deNull(wflowNotifyUsers) != ""; // 如果加签、会签同时选择，则无法提交
     if ( signFlag ) {
@@ -116,7 +116,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
             } catch (error) {
                 console.log(error);
             }
-
+            
             //检查是否存在自由流程节点audit_node & approve_node & notify_node , 如果不存在，在下级节点中寻找
             if (!("audit_node" in freeNode) && !("approve_node" in freeNode) && !("notify_node" in freeNode)) {
                 try {
@@ -125,7 +125,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
                     console.log(error);
                 }
             }
-
+            
             //如果仍然未获取到自由流程节点，则从自由流程表中找
             let freeNodeBack = await Betools.manage.queryCurFreeWorkflow(bussinessCodeID);
 
@@ -505,19 +505,48 @@ async function handleTaskItem(data, curRow, result = "") {
     return result;
 }
 
+/**
+ * @function 同意审批
+ */
+export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message, processID , username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
+
+    let result = '';
+    await vant.Dialog.confirm({ title: '确认操作', message: '是否进行同意审批操作?', }).then(async() => {
+
+            tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
+            bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
+            curRow = !Betools.tools.isNull(curRow) ? curRow : (await Betools.query.queryTableData(tableName, bussinessCodeID)); //查询当前数据
+            message = message || "同意";//审批意见
+            processID = !Betools.tools.isNull(processID) ? processID : Betools.tools.queryUrlString("processID"); //流程日志编号
+            username = !Betools.tools.isNull(username) ? username : Betools.tools.queryUrlString("proponents");
+
+            const bussinessNode = JSON.parse(JSON.stringify(curRow)); //克隆当前业务数据
+            const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
+            const operation = "同意"; //审批动作
+            const date = dayjs().format('YYYY-MM-DD'); //获取当前时间
+
+            // 获取当前审批节点的所有数据
+            curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
+
+            // 获取后续节点
+            const data = curRow.relate_data; // 所有审批流程节点
+            const curUserNode = data.find(item => { return item.loginid == username }); // 当前审批流程节点
+            const nextUserNodes = data.filter(item => item.index >= curUserNode.index);
+
+            // 判断是否还有后续节点，如果存在后续节点，则bpm_status状态为4
+            const bpmStatus = (Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0) ? { bpm_status: "4" } : { bpm_status: "2" }; //流程状态
+
+    });
+    return result; //返回操作结果
+}
 
 /**
  * @function 驳回审批
  */
-export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID , domain = 'https://legal.yunwisdom.club:30443') {
+export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID , domainURL = 'https://legal.yunwisdom.club:30443') {
 
     let result = '';
-
-    await vant.Dialog.confirm({
-            title: '确认操作',
-            message: '是否进行驳回审批操作?',
-        })
-        .then(async() => {
+    await vant.Dialog.confirm({ title: '确认操作', message: '是否进行驳回审批操作?', }).then(async() => {
 
             tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
             bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
@@ -563,7 +592,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
-                const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domain : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
+                const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
                 await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {
@@ -573,10 +602,9 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             vant.Dialog.alert({ message: "驳回审批成功！" }); //提示用户撤销审批操作成功
 
             return 'success';
-        });
+    });
 
-    //返回操作结果
-    return result;
+    return result; //返回操作结果
 }
 
 /**
