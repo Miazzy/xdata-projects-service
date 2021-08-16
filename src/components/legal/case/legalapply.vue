@@ -2931,7 +2931,7 @@ export default {
                   const data = legal;
                   const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
                   data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
-                  await this.handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , data.id , data , ctime);
+                  await this.handleSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
