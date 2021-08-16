@@ -753,15 +753,11 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             //获取当前审批节点的所有数据
             curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
 
+            const flag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
+
             //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
-            if (!(
-                    Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) ||
-                    Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
-                )) {
-                vant.Dialog.alert({
-                    message: "您不在此审批流程记录的操作职员列中，无法进行驳回操作！"
-                });
-                return false;
+            if (!flag) {
+                return vant.Dialog.alert({ message: "您不在此审批流程记录的操作职员列中，无法进行驳回操作！" });
             }
 
             //获取关于此表单的所有当前审批日志信息
@@ -777,23 +773,25 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             });
 
             //执行审批驳回业务
-            await workflow.postWorkflowApprove( tableName, curRow, null, null, node, bpmStatus );
-
-            //提示用户撤销审批操作成功
-            vant.Dialog.alert({ message: "驳回审批成功！" });
+            try {
+                await workflow.postWorkflowApprove( tableName, curRow, null, null, node, bpmStatus );
+            } catch (error) {
+                console.error(error);
+            }
 
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
-                receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
+                const curHost = window.location.protocol + '//' + window.location.host;
+                const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? `https://legal.yunwisdom.club:30443` : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
                 await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
 
-            result = 'success';
+            vant.Dialog.alert({ message: "驳回审批成功！" }); //提示用户撤销审批操作成功
 
-            return result;
+            return 'success';
         });
 
     //返回操作结果
