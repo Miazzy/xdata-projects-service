@@ -76,7 +76,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     });
 
     //返回结果
-    var result;
+    var result = '';
 
     //获取当前用户
     var userInfo = Betools.storage.getStore("system_userinfo");
@@ -677,7 +677,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
 
 }
 
-// 通知HR（人力薪资相关专职人员查看数据）
+// 通知（相关专职人员查看数据）
 async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
     try {
         await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/亲爱的同事，员工‘${userinfo}’提交了的案件发起申请，请到奖惩申请服务进行流程审批操作！?type=reward&rurl=${receiveURL}`)
@@ -727,7 +727,7 @@ async function handleTaskItem(data, curRow, result = "") {
 /**
  * @function 驳回审批
  */
-export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID) {
+export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID , domain = 'https://legal.yunwisdom.club:30443') {
 
     let result = '';
 
@@ -781,7 +781,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
-                const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? `https://legal.yunwisdom.club:30443` : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
+                const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domain : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
                 await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {

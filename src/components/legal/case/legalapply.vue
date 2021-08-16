@@ -2812,10 +2812,10 @@ export default {
       },
 
       // 工作流程审批驳回
-      async handleDisagree(){
-          // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
+      async handleDisagree(){ // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
           const processID = Betools.tools.getUrlParam('processID');
-          return await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID)
+          const domainURL = 'https://legal.yunwisdom.club:30443';
+          return await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, domainURL);
       },
 
       // 执行知会批注操作
