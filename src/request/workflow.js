@@ -218,10 +218,7 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             result = await Betools.manage.postProcessLogHistory(prLogHisNode);
 
             //删除当前审批节点中的所有记录
-            result = await Betools.manage.deleteProcessLog(
-                tableName,
-                prLogHisNode
-            );
+            result = await Betools.manage.deleteProcessLog(tableName, prLogHisNode);
 
             //修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中
             result = await Betools.manage.patchTableData(

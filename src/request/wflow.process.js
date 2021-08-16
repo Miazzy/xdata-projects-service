@@ -767,7 +767,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
                 item["approve_user"] = userInfo["username"]; // 设置审批人员
                 item["action"] = operation; // 设置操作动作
                 item["operate_time"] = date; // 设置操作时间
-                item["action_opinion"] = message; // 设置操作意见
+                item["action_opinion"] = item['content'] = message; // 设置操作意见
                 item["create_time"] = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 设置创建时间
             });
 
