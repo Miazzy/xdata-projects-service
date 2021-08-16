@@ -1948,12 +1948,12 @@
                     <a-col :span="8">
                     </a-col>
                     <a-col class="reward-apply-content-title-text" :span="4" style="">
-                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleSave();"  >
+                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleAgree();"  >
                         同意
                       </a-button>
                     </a-col>
                     <a-col class="reward-apply-content-title-text" :span="4" style="">
-                      <a-button type="primary" style="width: 120px;" @click="handleApply();"  >
+                      <a-button type="primary" style="width: 120px;" @click="handleDisagree();"  >
                         驳回
                       </a-button>
                     </a-col>
