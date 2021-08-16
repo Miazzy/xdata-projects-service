@@ -777,24 +777,15 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             });
 
             //执行审批驳回业务
-            await workflow.postWorkflowApprove(
-                tableName,
-                curRow,
-                null,
-                null,
-                node,
-                bpmStatus
-            );
+            await workflow.postWorkflowApprove( tableName, curRow, null, null, node, bpmStatus );
 
             //提示用户撤销审批操作成功
-            vant.Dialog.alert({
-                message: "驳回审批成功！"
-            });
+            vant.Dialog.alert({ message: "驳回审批成功！" });
 
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/亲爱的同事，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，内容：${bussinessNode['content']}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.create_by}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {
                 console.log(error);
