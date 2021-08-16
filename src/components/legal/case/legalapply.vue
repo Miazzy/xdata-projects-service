@@ -2612,8 +2612,14 @@ export default {
       // 启动自由流程
       async handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime){
 
+        let accounts = '';
         const approve_userlist = data.approve_userlist; //获取审批人员列表
-        const accounts = approve_userlist.map(item=>item.loginid);
+
+        try {
+          accounts = approve_userlist.map(item=>item.loginid).toString();
+        } catch (error) {
+          console.error(error);
+        }
 
         try {
            // 自由流程节点
@@ -2622,7 +2628,7 @@ export default {
                create_by: userinfo["username"],
                create_time: ctime,
                table_name: curTableName,
-               main_key: curItemID,
+               main_key: data.id,
                audit_node: Betools.tools.deNull(wfUsers),
                approve_node: Betools.tools.deNull(approver),
                notify_node: Betools.tools.deNull(nfUsers),
@@ -2637,8 +2643,8 @@ export default {
            node = {
                id: Betools.tools.queryUniqueID(), //获取随机数
                table_name: curTableName, //业务表名
-               main_value: curItemID, //表主键值
-               business_data_id: curItemID, //业务具体数据主键值
+               main_value: data.id, //表主键值
+               business_data_id: data.id, //业务具体数据主键值
                business_code: "000000000", //业务编号
                process_name: "流程审批", //流程名称
                employee: userinfo["username"],
@@ -2648,7 +2654,7 @@ export default {
                approve_user: userinfo["username"],
                action: "发起",
                action_opinion: "发起流程",
-               content: data["content"],
+               content: data['content'] || data['title'],
                operate_time: ctime,
                create_time: ctime,
                business_data: JSON.stringify(freeWFNode),
@@ -2666,8 +2672,8 @@ export default {
            node = {
                id: Betools.tools.queryUniqueID(), //获取随机数
                table_name: curTableName, //业务表名
-               main_value: curItemID, //表主键值
-               business_data_id: curItemID, //业务具体数据主键值
+               main_value: data.id, //表主键值
+               business_data_id: data.id, //业务具体数据主键值
                business_code: "000000000", //业务编号
                process_name: "流程审批", //流程名称
                employee: firstWflowUser,
@@ -2713,7 +2719,7 @@ export default {
            // 操作完毕，返回结果
            return true;
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
 
       },
@@ -2864,7 +2870,7 @@ export default {
                   const data = legal;
                   const ctime = dayjs().format('YYYY-MM-DD');
                   data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
-                  await this.handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , id , data , ctime);
+                  await this.handleSubmitWF(userinfo, wfUsers, nfUsers , approver , this.tablename , data.id , data , ctime);
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
