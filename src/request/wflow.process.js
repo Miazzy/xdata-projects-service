@@ -1,6 +1,5 @@
 import * as manage from '@/request/manage';
 import * as workflow from '@/request/workflow';
-import * as query from '@/request/query';
 
 /**
  * @function 同意审批 wflowAddUsers , wflowNotifyUsers
@@ -26,7 +25,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
     var wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID);
 
     //查询当前数据
-    curRow = await query.queryTableData(tableName, bussinessCodeID);
+    curRow = await Betools.query.queryTableData(tableName, bussinessCodeID);
 
     //流程的创建人员
     const bussinessNode = JSON.parse(JSON.stringify(curRow));
@@ -502,7 +501,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = [], t
             //将此审批流程中所涉及的所有奖惩明细数据的状态设置为已完成
             try {
                 //查询奖惩明细数据
-                const list = await query.queryTableDataByPid('bs_reward_items', bussinessCodeID); //查询诉讼案件明细数据
+                const list = await Betools.query.queryTableDataByPid('bs_reward_items', bussinessCodeID); //查询诉讼案件明细数据
 
                 //遍历奖惩明细数据，并设置状态为已完成
                 for (const elem of list) {
@@ -818,7 +817,7 @@ export async function handleConfirmWF() {
             var tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname'));
 
             //查询当前数据
-            var curRow = await query.queryTableData(tableName, bussinessCodeID);
+            var curRow = await Betools.query.queryTableData(tableName, bussinessCodeID);
 
             //获取当前用户
             var userInfo = Betools.storage.getStore("system_userinfo");
