@@ -2683,21 +2683,19 @@ export default {
                origin_data: accounts,
            };
 
-           //保存审批相关处理信息
+           // 保存审批相关处理信息
            const nextWflowNode = JSON.parse(JSON.stringify(node));
 
-           //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+           // 提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
            if (await Betools.manage.queryApprovalExist(curTableName,  curItemID)) {
              return vant.Toast.fail("已提交过申请，无法再次提交审批！");
            }
 
-           debugger;
-
-           //处理自由流程发起提交审批操作
+           // 处理自由流程发起提交审批操作
            await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, "2");
-           //弹出审批完成提示框
+           // 弹出审批完成提示框
            vant.Toast.success("提交流程审批成功！");
-           //记录当前流程已经提交，短时间内无法再次提交
+           // 记录当前流程已经提交，短时间内无法再次提交
            Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );
 
            // 此处推送消息至第一个审批处
@@ -2705,14 +2703,13 @@ export default {
               const receiveURL = encodeURIComponent(`${window.location.protocol}//${window.location.host}/#/legal/case/legalview?id=${data.id}&bpm_status=2&proponents=${firstWflowUser}`);
               await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                           .set('accept', 'json');
-              debugger;
            } catch (error) {
              console.log(error);
            }
 
            // 我的待办，新增一条待办记录
 
-           //操作完毕，返回结果
+           // 操作完毕，返回结果
            return true;
         } catch (error) {
             console.log(error);
