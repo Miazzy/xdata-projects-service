@@ -2481,7 +2481,7 @@ export default {
         userlist = this.release_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         this.release_userlist = userlist; 
-        this.release_userlist.map(item=>{ item.index = index;});
+        this.release_userlist.map((item,index) => { item.index = index;});
       },
 
       // 检测审批人员，并加入审批列表
@@ -2492,7 +2492,7 @@ export default {
         userlist = this.approve_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         this.approve_userlist = userlist; 
-        this.approve_userlist.map(item=>{ item.index = index;});
+        this.approve_userlist.map((item,index)=>{ item.index = index;});
       },
 
       // 移除第Index个审批人员
@@ -2613,7 +2613,7 @@ export default {
       async handleStartWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime){
 
         const approve_userlist = data.approve_userlist; //获取审批人员列表
-        debugger;
+        const accounts = approve_userlist.map(item=>item.loginid);
 
         try {
            // 自由流程节点
@@ -2627,6 +2627,7 @@ export default {
                approve_node: Betools.tools.deNull(approver),
                notify_node: Betools.tools.deNull(nfUsers),
                data: data,
+               accounts: accounts,
                all_node: approve_userlist,
            };
 
@@ -2652,6 +2653,7 @@ export default {
                create_time: ctime,
                business_data: JSON.stringify(freeWFNode),
                relate_data: JSON.stringify(approve_userlist),
+               origin_data: accounts,
            };
 
            // 发起节点，审批信息，写入审批历史表中
@@ -2678,6 +2680,7 @@ export default {
                create_time: ctime,
                business_data: JSON.stringify(freeWFNode),
                relate_data: JSON.stringify(approve_userlist),
+               origin_data: accounts,
            };
 
            //保存审批相关处理信息
