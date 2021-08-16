@@ -728,9 +728,9 @@ async function handleTaskItem(data, curRow, result = "") {
 /**
  * @function 驳回审批
  */
-export async function handleRejectWF() {
+export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID) {
 
-    var result = '';
+    let result = '';
 
     await vant.Dialog.confirm({
             title: '确认操作',
@@ -738,44 +738,20 @@ export async function handleRejectWF() {
         })
         .then(async() => {
 
-            //查询业务编号
-            var bussinessCodeID = Betools.tools.queryUrlString("id");
-
-            //获取表单名称
-            var tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname'));
-
-            //查询当前数据
-            var curRow = await Betools.query.queryTableData(tableName, bussinessCodeID);
-
-            //克隆当前业务数据
-            const bussinessNode = JSON.parse(JSON.stringify(curRow));
-
-            //获取当前用户
-            var userInfo = Betools.storage.getStore("system_userinfo");
-
-            //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
-            await manage.handleUserInfo(userInfo);
-
-            //获取当前时间
-            var date = Betools.tools.formatDate(
-                new Date().getTime(),
-                "yyyy-MM-dd hh:mm:ss"
-            );
-
-            //审批动作
-            var operation = operation || "驳回";
-
-            //审批意见
-            var message = message || curRow.idea_content || "驳回";
-
-            //流程日志编号
-            var processLogID = Betools.tools.queryUrlString("pid");
-
-            //流程状态
-            var bpmStatus = { bpm_status: "1" };
+            tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
+            bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
+            curRow = !Betools.tools.isNull(curRow) ? curRow : (await Betools.query.queryTableData(tableName, bussinessCodeID)); //查询当前数据
+            message = message || "驳回";//审批意见
+            processID = !Betools.tools.isNull(processID) ? processID : Betools.tools.queryUrlString("processID"); //流程日志编号
+            
+            const bussinessNode = JSON.parse(JSON.stringify(curRow)); //克隆当前业务数据
+            const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
+            const operation = "驳回"; //审批动作
+            const date = dayjs().format('YYYY-MM-DD'); //获取当前时间
+            const bpmStatus = { bpm_status: "1" }; //流程状态
 
             //获取当前审批节点的所有数据
-            curRow = await Betools.manage.queryProcessLogByID(tableName, processLogID);
+            curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
 
             //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
             if (!(
@@ -788,32 +764,16 @@ export async function handleRejectWF() {
                 return false;
             }
 
-            //获取当前审批节点的所有数据
-            curRow = await manage.queryProcessLogByID(tableName, curRow["id"]);
-
             //获取关于此表单的所有当前审批日志信息
-            let node = await manage.queryProcessLog(
-                tableName,
-                curRow["business_data_id"]
-            );
+            let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"]);
 
             //遍历node,设置approve_user，action
             node.map((item) => {
-                //获取创建时间
-                let ctime = item["create_time"];
-                //设置审批人员
-                item["approve_user"] = userInfo["username"];
-                //设置操作动作
-                item["action"] = operation;
-                //设置操作时间
-                item["operate_time"] = date;
-                //设置操作意见
-                item["action_opinion"] = message;
-                //设置创建时间
-                item["create_time"] = Betools.tools.formatDate(
-                    ctime,
-                    "yyyy-MM-dd hh:mm:ss"
-                );
+                item["approve_user"] = userInfo["username"]; // 设置审批人员
+                item["action"] = operation; // 设置操作动作
+                item["operate_time"] = date; // 设置操作时间
+                item["action_opinion"] = message; // 设置操作意见
+                item["create_time"] = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 设置创建时间
             });
 
             //执行审批驳回业务
