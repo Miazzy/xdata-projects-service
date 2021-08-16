@@ -1869,7 +1869,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="(role == 'view' || role == 'notify' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-show="(role == 'view' || role == 'notify' || role == 'workflow' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       处理记录
@@ -1877,7 +1877,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="(role == 'view' || role == 'notify' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;margin-left:75px;">
+                <div v-show="(role == 'view' || role == 'notify' || role == 'workflow' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;margin-left:75px;">
                   <van-cell-group style="margin-top:0px;" v-show="processLogList.length > 0">
                     <div>
                       <van-steps direction="vertical" :active="processLogList.length - 1">
@@ -2377,14 +2377,17 @@ export default {
            
           if(!Betools.tools.isNull(id)){
             this.legal = null;
+
             (async()=>{
               const elem = await this.handleList(this.tablename , id);
               Betools.tools.isNull(this.legal)?this.legal = elem:null;
             })();
+
             (async()=>{
               const elem = await this.handleList(this.tablename , id);
               Betools.tools.isNull(this.legal)?this.legal = elem:null;
             })();
+
             (async()=>{
               this.processLogList = await Betools.query.queryProcessLog();
             })();
