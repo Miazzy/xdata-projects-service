@@ -9,10 +9,10 @@ import * as workflow from '@/request/workflow';
  */
 export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
 
-    let result = ''; //返回结果
-    let wflowAddUsers = ''; //加签用户，暂时设置为空
-    let wflowNotifyUsers = ''; //会签用户，暂时设置为空
-    let bussinessCodeID = Betools.tools.queryUrlString("id"); //查询业务编号
+    let result = ''; // 返回结果
+    let wflowAddUsers = ''; // 加签用户，暂时设置为空
+    let wflowNotifyUsers = ''; // 会签用户，暂时设置为空
+    let bussinessCodeID = Betools.tools.queryUrlString("id"); // 查询业务编号
     let tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname')); // 获取表单名称
     let wflowSpecUser = wflowAddUsers + "," + wflowNotifyUsers; // 会签、加签用户
     let wfreeNode = await manage.queryCurFreeWorkflow(bussinessCodeID); // 查询自由流程节点
