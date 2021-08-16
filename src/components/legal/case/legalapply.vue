@@ -1716,7 +1716,7 @@
                 <div v-show=" role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
                   <a-row>
                     <a-col :span="24">
-                      <div style="margin-left:50px;margin-top:5px; width:100%">
+                      <div style="margin-left:50px;margin-top:5px; width:100%; height:100px;">
                         <span style="margin-left:32.5px;">审批：</span>
                         <template v-for="(item , index) in approve_userlist ">
                           <span :key="index" style="position: relative; width:75px; height:180px;">
@@ -1730,41 +1730,6 @@
                     </a-col>
                   </a-row>
                 </div>  
-
-                <div v-show="role == 'workflow' && !isNull(id) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
-                    </a-col>
-                    <a-col :span="20">
-                      <a-textarea
-                        v-model="workflow.content"
-                        placeholder="请输入审批意见！"
-                        :auto-size="{ minRows: 5, maxRows: 50 }"
-                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
-                      />
-                    </a-col>
-                  </a-row>
-                </div>
-
-                <div v-show="role == 'workflow' && !isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
-                   <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col :span="8">
-                    </a-col>
-                    <a-col class="reward-apply-content-title-text" :span="4" style="">
-                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleSave();"  >
-                        同意
-                      </a-button>
-                    </a-col>
-                    <a-col class="reward-apply-content-title-text" :span="4" style="">
-                      <a-button type="primary" style="width: 120px;" @click="handleApply();"  >
-                        驳回
-                      </a-button>
-                    </a-col>
-                    <a-col :span="8">
-                    </a-col>
-                   </a-row>
-                </div>
 
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -1955,6 +1920,41 @@
                     <a-col class="reward-apply-content-title-text" :span="4" style="margin-left:100px;">
                       <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleRemark();"  >
                         批注
+                      </a-button>
+                    </a-col>
+                    <a-col :span="8">
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show="role == 'workflow' && !isNull(id) " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
+                    </a-col>
+                    <a-col :span="20">
+                      <a-textarea
+                        v-model="workflow.content"
+                        placeholder="请输入审批意见！"
+                        :auto-size="{ minRows: 5, maxRows: 50 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                      />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show="role == 'workflow' && !isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col :span="8">
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="">
+                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleSave();"  >
+                        同意
+                      </a-button>
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="">
+                      <a-button type="primary" style="width: 120px;" @click="handleApply();"  >
+                        驳回
                       </a-button>
                     </a-col>
                     <a-col :span="8">
@@ -2390,6 +2390,10 @@ export default {
 
             (async()=>{
               this.processLogList = await Betools.query.queryProcessLog();
+              if(this.role == 'workflow'){
+                const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
+                this.approve_userlist = JSON.parse(process.relate_data);
+              }
             })();
 
             this.progressData = await Betools.manage.queryTableDataDB('bs_legal_progress' , `_where=(pid,eq,${id})&_fields=id,create_time,create_by,content&_sort=-id&_p=0&_size=10000`);
