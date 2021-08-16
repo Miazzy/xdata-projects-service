@@ -218,36 +218,23 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             result = await Betools.manage.postProcessLogHistory(prLogHisNode);
 
             //删除当前审批节点中的所有记录
-            result = await Betools.manage.deleteProcessLog(tableName, prLogHisNode);
+            await superagent.delete(`${window.BECONFIG['xmysqlAPI']}/api/pr_log/${prLogHisNode.id}`).set('accept', 'json');
+            await Betools.manage.deleteProcessLog(tableName, prLogHisNode);
 
             //修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中
-            result = await Betools.manage.patchTableData(
-                tableName,
-                curRow["business_data_id"],
-                bpmStatus
-            );
+            result = await Betools.manage.patchTableData( tableName, curRow["business_data_id"], bpmStatus );
 
             //如果本次流程结束，即状态变为已完成，或者，状态变成，待处理，则将当前的自由流程记录转为历史，以前此表单的自由流程进入历史，并删除以前此表单对应的自由流程
             result = await Betools.manage.transFreeWflowHis(curRow["business_data_id"]);
 
             //二次提交审批状态
             setTimeout(async() => {
-                //修改审批状态为审批中
-                result = await Betools.manage.patchTableData(
-                    tableName,
-                    curRow["business_data_id"],
-                    bpmStatus
-                );
+                result = await Betools.manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus); //修改审批状态为审批中
             }, 300);
 
             //二次提交审批状态
             setTimeout(async() => {
-                //修改审批状态为审批中
-                result = await Betools.manage.patchTableData(
-                    tableName,
-                    curRow["business_data_id"],
-                    bpmStatus
-                );
+                result = await Betools.manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus); //修改审批状态为审批中
             }, 1000);
 
         }
