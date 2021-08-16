@@ -214,12 +214,9 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
         //如果“审批处理当前节点的审批信息”不为空，则执行当前处理
         if (tableName != null && curRow != null && prLogHisNode != null && bpmStatus != null) {
 
-            //将当前审批日志转为历史日志，并删除当前审批日志中相关信息
-            result = await Betools.manage.postProcessLogHistory(prLogHisNode);
-
-            //删除当前审批节点中的所有记录
-            await superagent.delete(`${window.BECONFIG['xmysqlAPI']}/api/pr_log/${prLogHisNode.id}`).set('accept', 'json');
-            await Betools.manage.deleteProcessLog(tableName, prLogHisNode);
+            await Betools.manage.postProcessLogHistory(prLogHisNode); //将当前审批日志转为历史日志，并删除当前审批日志中相关信息
+            await Betools.manage.deleteTableData('pr_log', prLogHisNode.id); //删除当前审批节点中的所有记录
+            await Betools.manage.deleteProcessLog(tableName, prLogHisNode); //删除当前审批节点中的所有记录
 
             //修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中
             result = await Betools.manage.patchTableData( tableName, curRow["business_data_id"], bpmStatus );
