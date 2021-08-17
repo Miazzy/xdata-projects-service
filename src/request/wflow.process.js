@@ -524,6 +524,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             const userInfo = Betools.storage.getStore("system_userinfo"); // 获取当前用户
             const operation = "同意"; // 审批动作
             const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 获取当前时间
+            debugger;
 
             // 获取当前审批节点的所有数据
             curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
@@ -531,7 +532,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             // 获取后续节点
             const data = JSON.parse(curRow.relate_data); // 所有审批流程节点
             const curUserNode = data.find(item => { return item.loginid == username }); // 当前审批流程节点
-            const nextUserNodes = data.filter(item => item.index >= curUserNode.index); 
+            const nextUserNodes = data.filter(item => item.index > curUserNode.index); 
             const accounts = data.map(item=>item.loginid).toString();
 
             // 判断是否还有后续节点，如果存在后续节点，则bpm_status状态为4
@@ -553,7 +554,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
                 nextProcessNode = {
                     id: Betools.tools.queryUniqueID(), //获取随机数
-                    table_name: curTableName, //业务表名
+                    table_name: tableName, //业务表名
                     main_value: bussinessNode.id, //表主键值
                     business_data_id: bussinessNode.id, //业务具体数据主键值
                     business_code: "000000000", //业务编号
