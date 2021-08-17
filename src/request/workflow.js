@@ -223,24 +223,22 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             //如果本次流程结束，即状态变为已完成，或者，状态变成，待处理，则将当前的自由流程记录转为历史，以前此表单的自由流程进入历史，并删除以前此表单对应的自由流程
             result = await Betools.manage.transFreeWflowHis(curRow["business_data_id"]);
 
-            //提交审批状态
-            setTimeout(async() => {
+            setTimeout(async() => { // 提交审批状态 
                 result = await Betools.manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus); //修改审批状态为审批中
             }, 300);
 
-            //提交审批状态
-            setTimeout(async() => {
+            setTimeout(async() => { // 提交审批状态
                 result = await Betools.manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus); //修改审批状态为审批中
             }, 1000);
 
-            //提交审批状态
-            setTimeout(async() => {
+            setTimeout(async() => { // 提交审批状态
                 result = await Betools.manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus); //修改审批状态为审批中
             }, 1000);
 
+            setTimeout(async() => { // 提交审批状态
+                result = await Betools.manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus); //修改审批状态为审批中
+            }, 1000);
         }
-
-        
     } catch (error) {
         console.log("审批处理当前节点的审批信息", error);
     }
@@ -251,12 +249,12 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
         console.error(error);
     }
     
-    //如果加签、会签用户不为空，则需要将加签、会签用户，追加至自由流程审批表中
+    // 如果加签、会签用户不为空，则需要将加签、会签用户，追加至自由流程审批表中
     try {
 
         freeNode.audit_node = `,${freeNode.audit_node},`;
 
-        //如果加签用户数据不为空，则向自由流程数据表中，添加加签数据
+        // 如果加签用户数据不为空，则向自由流程数据表中，添加加签数据
         if (Betools.tools.deNull(wflowAddUser) && !freeNode.audit_node.includes(wflowAddUser)) {
 
             freeNode.audit_node = freeNode.audit_node.replace(
@@ -265,7 +263,7 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             );
         }
 
-        //如果会签用户数据不为空，则向自由流程数据表中，添加会签数据
+        // 如果会签用户数据不为空，则向自由流程数据表中，添加会签数据
         if (Betools.tools.deNull(wflowNotifyUser) && !freeNode.audit_node.includes(wflowNotifyUser)) {
 
             freeNode.audit_node = freeNode.audit_node.replace(
@@ -274,7 +272,7 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             );
         }
 
-        //如果当前用户，进行了会签操作，则不应在audit_node记录多次，删除第一次记录
+        // 如果当前用户，进行了会签操作，则不应在audit_node记录多次，删除第一次记录
         if (Betools.tools.deNull(wflowNotifyUser) && freeNode.audit_node.indexOf(curAuditor) != freeNode.audit_node.lastIndexOf(curAuditor)) {
             freeNode.audit_node = freeNode.audit_node.replace(
                 `,${curAuditor},`,
@@ -282,12 +280,12 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
             );
         }
 
-        //去掉开头、结尾的逗号
+        // 去掉开头、结尾的逗号
         if (freeNode.audit_node.startsWith(",")) {
             freeNode.audit_node = freeNode.audit_node.substring(1);
         }
 
-        //去掉开头、结尾的逗号
+        // 去掉开头、结尾的逗号
         if (freeNode.audit_node.endsWith(",")) {
             freeNode.audit_node = freeNode.audit_node.substring(0, freeNode.audit_node.length - 1);
         }
@@ -303,10 +301,10 @@ export async function postWorkflowApprove(tableName, curRow, operationData, pnod
         console.log(error);
     }
 
-    //审批处理过程中，添加相关的动态信息
+    // 审批处理过程中，添加相关的动态信息
     try {
 
-        //如果流程状态为1，则提交驳回动态到数据库，如果流程状态为4或者5，则提交审批通过动态到数据库
+        // 如果流程状态为1，则提交驳回动态到数据库，如果流程状态为4或者5，则提交审批通过动态到数据库
         if (bpmStatus.bpm_status == "1") {
             //await postDynamicReject(tableName, curRow);
         } else if (bpmStatus.bpm_status == "4") {
