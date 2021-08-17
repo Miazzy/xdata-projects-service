@@ -2659,10 +2659,12 @@ export default {
       async handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL = `https://legal.yunwisdom.club:30443`){
 
         let accounts = '';
+        let employeeName = '';
         const approve_userlist = data.approve_userlist; //获取审批人员列表
 
         try {
           accounts = approve_userlist.map(item=>item.loginid).toString();
+          employeeName = approve_userlist[0].name;
         } catch (error) {
           console.error(error);
         }
@@ -2694,6 +2696,7 @@ export default {
                business_code: "000000000", //业务编号
                process_name: "流程审批", //流程名称
                employee: userinfo['name'] || userinfo["realname"] || userinfo["username"],
+               employeeName: userinfo['name'] || userinfo["realname"] || userinfo["username"],
                process_station: "流程审批",
                process_audit: "000000000",
                proponents: userinfo["username"],
@@ -2723,6 +2726,7 @@ export default {
                business_code: "000000000", //业务编号
                process_name: "流程审批", //流程名称
                employee: firstWflowUser,
+               employeeName: employeeName,
                process_station: "流程审批",
                process_audit: "000000000",
                proponents: userinfo["username"],

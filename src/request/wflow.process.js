@@ -543,6 +543,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             //遍历node,设置approve_user，action
             node.map((item) => {
                 item["approve_user"] = userInfo["username"]; // 设置审批人员
+                item["employeeName"] = userInfo["realname"] || userInfo["name"]; // 设置审批人员
                 item["action"] = operation; // 设置操作动作
                 item["operate_time"] = item["create_time"] = date; // 设置操作时间
                 item["action_opinion"] = item['content'] = message; // 设置操作意见
@@ -558,6 +559,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     business_code: "000000000", //业务编号
                     process_name: "流程审批", //流程名称
                     employee: nextUserNodes[0].loginid,
+                    employeeName: nextUserNodes[0].name,
                     process_station: "流程审批",
                     process_audit: "000000000",
                     proponents: nextUserNodes[0].loginid,
