@@ -2752,7 +2752,7 @@ export default {
            try {
               const curHost = window.location.protocol + '//' + window.location.host;
               const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${data.id}&processID=${nextWflowNode.id}&tname=${this.tablename}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
-              await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
+              await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                           .set('accept', 'json');
            } catch (error) {
              console.log(error);
