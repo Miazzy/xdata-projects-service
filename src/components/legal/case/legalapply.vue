@@ -2893,10 +2893,12 @@ export default {
 
         // 校验字段完整性
         if(invalidKey != '' && invalidKey != null){
-          return await vant.Dialog.alert({
-            title: '温馨提示',
-            message: `请确认内容是否填写完整，错误：请输入[${invalidKey}]信息！`,
-          });
+          return await vant.Dialog.alert({ title: '温馨提示', message: `请确认内容是否填写完整，错误：请输入[${invalidKey}]信息！`,});
+        }
+
+        // 检查审批人员列表
+        if(Betools.tools.isNull(this.approve_userlist) || this.approve_userlist.length == 0 ){
+          return await vant.Dialog.alert({ title: '温馨提示', message: `请选择审批人员！`,});
         }
 
         // 是否确认提交此自由流程?
