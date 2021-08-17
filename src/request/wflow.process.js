@@ -539,15 +539,14 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             const bpmStatus = (Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0) ? { bpm_status: "4" } : { bpm_status: "2" }; //流程状态
 
             //获取关于此表单的所有当前审批日志信息
-            let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"]);
+            let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"] );
 
             //遍历node,设置approve_user，action
             node.map((item) => {
                 item["approve_user"] = userInfo["username"]; // 设置审批人员
                 item["action"] = operation; // 设置操作动作
-                item["operate_time"] = date; // 设置操作时间
+                item["operate_time"] = item["create_time"] = date; // 设置操作时间
                 item["action_opinion"] = item['content'] = message; // 设置操作意见
-                item["create_time"] = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 设置创建时间
             });
 
             let nextProcessNode = null;
@@ -566,8 +565,8 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     approve_user: nextUserNodes[0].loginid,
                     content: '',
                     action: "审批",
-                    operate_time: ctime,
-                    create_time: ctime,
+                    operate_time: date,
+                    create_time: date,
                     business_data: JSON.stringify(bussinessNode),
                     relate_data: JSON.stringify(data),
                     origin_data: accounts,
@@ -584,16 +583,13 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
-
                 if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=${nextProcessNode.id}&tname=bs_legal&origin_username=${origin_username}&bpm_status=${bpmStatus.bpm_status}&proponents=${nextUserNodes[0].loginid}`);
                     await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${nextUserNodes[0].loginid}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`).set('accept', 'json');
                 } else { //流程已经完毕，向发起人推送通知消息
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=&tname=bs_legal&origin_username=${origin_username}&bpm_status=4&proponents=${origin_username}`);
-                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
-                        .set('accept', 'json');
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`).set('accept', 'json');
                 }
-
             } catch (error) {
                 console.error(error);
             }
