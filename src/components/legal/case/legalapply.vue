@@ -1713,7 +1713,7 @@
                   </a-row>
                 </div>  
 
-                <div v-show=" role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
+                <div v-show=" role == 'view' || role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
                   <a-row>
                     <a-col :span="24">
                       <div style="margin-left:50px;margin-top:5px; width:100%; height:100px;">
