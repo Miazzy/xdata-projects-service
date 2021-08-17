@@ -1688,7 +1688,7 @@
                   <a-divider></a-divider>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-show=" role == 'view' || role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       审批流程
@@ -2391,7 +2391,7 @@ export default {
 
             (async()=>{
               this.processLogList = await Betools.query.queryProcessLog();
-              if(this.role == 'workflow'){
+              if(this.role == 'workflow' || this.role == 'view'){
                 const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
                 this.approve_userlist = JSON.parse(process.relate_data);
               }
