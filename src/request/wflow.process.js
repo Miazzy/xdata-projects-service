@@ -521,10 +521,10 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             username = !Betools.tools.isNull(username) ? username : Betools.tools.queryUrlString("proponents");
             
             const origin_username = Betools.tools.queryUrlString("origin_username");
-            const bussinessNode = JSON.parse(JSON.stringify(curRow)); //克隆当前业务数据
-            const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
-            const operation = "同意"; //审批动作
-            const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
+            const bussinessNode = JSON.parse(JSON.stringify(curRow)); // 克隆当前业务数据
+            const userInfo = Betools.storage.getStore("system_userinfo"); // 获取当前用户
+            const operation = "同意"; // 审批动作
+            const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 获取当前时间
 
             // 获取当前审批节点的所有数据
             curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
@@ -589,7 +589,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=${nextProcessNode.id}&tname=bs_legal&origin_username=${origin_username}&bpm_status=${bpmStatus.bpm_status}&proponents=${nextUserNodes[0].loginid}`);
                     await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${nextUserNodes[0].loginid}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`).set('accept', 'json');
                 } else { //流程已经完毕，向发起人推送通知消息
-                    const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_legal&origin_username=${origin_username}&bpm_status=4&proponents=${bussinessNode.create_by}`);
+                    const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=&tname=bs_legal&origin_username=${origin_username}&bpm_status=4&proponents=${origin_username}`);
                     await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}}，驳回意见：${message}，请修改申请内容后重新提交流程?type=reward&rurl=${receiveURL}`)
                         .set('accept', 'json');
                 }
