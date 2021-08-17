@@ -47,13 +47,12 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
     await vant.Dialog.confirm({ title: '确认操作', message: '是否确认提交此自由流程?', });
     await manage.handleUserInfo(userInfo); //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
 
-    let rights = null; // 流程权责
-    let approveNode = null; // 审批节点信息
-    let node = []; // 定义当前审批日志信息
-    let bussinessCodeID = null; // 业务代码ID
-    let processAudit = null; // 获取流程审批信息
-    let prLogHisNode = null; // 转历史日志节点
-    let freeNode = null;  //自由流程节点
+    let rights = null; // 流程权责 
+    let approveNode = null; // 审批节点信息 
+    let node = []; // 定义当前审批日志信息 // let bussinessCodeID = null; // 业务代码ID
+    let processAudit = null; // 获取流程审批信息 
+    let prLogHisNode = null; // 转历史日志节点 
+    let freeNode = null;  //自由流程节点 
 
     try {
         curRow = await manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
