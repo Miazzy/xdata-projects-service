@@ -1848,7 +1848,7 @@
                       <van-steps direction="vertical" :active="processLogList.length - 1">
                         <template v-for="value in processLogList">
                           <van-step :key="value.id">
-                            <h3>{{ deNull(value.employee,'') + ' ' + deNull(value.action,'') + ' ' + deNull(value.action_opinion,'') + ' ' + value.content.replace(/null/g,'') }}</h3>
+                            <h3>{{ (isNull(value.employeeName) ? deNull(value.employee,'') : `${deNull(value.employeeName,'')}(${deNull(value.employee,'')})`) + ' ' + deNull(value.action,'') + ' ' + deNull(value.action_opinion,'') + ' ' + deNull(value.content,'').replace(/null/g,'') }}</h3>
                             <p>{{ value.create_time }}</p>
                           </van-step>
                         </template>

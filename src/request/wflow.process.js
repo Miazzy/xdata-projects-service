@@ -539,10 +539,10 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                         main_value: bussinessNode.id, //表主键值
                         business_data_id: bussinessNode.id, //业务具体数据主键值
                         business_code: "000000000", //业务编号
-                        process_name: "流程审批", //流程名称
+                        process_name: "流程审批" + (nextUserNodes.length > 1 ? '' : '[终审节点]'), //流程名称
                         employee: nextUserNodes[0].loginid,
                         employeeName: nextUserNodes[0].name,
-                        process_station: "流程审批",
+                        process_station: "流程审批" + (nextUserNodes.length > 1 ? '' : '[终审节点]'),
                         process_audit: "000000000",
                         proponents: nextUserNodes[0].loginid,
                         approve_user: nextUserNodes[0].loginid,
@@ -580,7 +580,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 console.error(error);
             }
 
-            vant.Dialog.alert({ message: "同意审批成功！" }); //提示用户撤销审批操作成功
+            vant.Dialog.alert({ title: '温馨提示', message: "同意审批成功！" }); //提示用户撤销审批操作成功
             return 'success';
     });
     return result; //返回操作结果
@@ -646,7 +646,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
                 console.error(error);
             }
 
-            vant.Dialog.alert({ message: "驳回审批成功！" }); //提示用户撤销审批操作成功
+            vant.Dialog.alert({ title: '温馨提示', message: "驳回审批成功！" }); //提示用户撤销审批操作成功
 
             return 'success';
     });
