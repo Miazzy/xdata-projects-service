@@ -504,12 +504,16 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
     let result = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行同意审批操作?', }).then(async() => {
 
-            tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
-            bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
-            curRow = !Betools.tools.isNull(curRow) ? curRow : (await Betools.query.queryTableData(tableName, bussinessCodeID)); //查询当前数据
-            message = message || "同意";//审批意见
-            processID = !Betools.tools.isNull(processID) ? processID : Betools.tools.queryUrlString("processID"); //流程日志编号
-            username = !Betools.tools.isNull(username) ? username : Betools.tools.queryUrlString("proponents");
+            try {
+                tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
+                bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
+                curRow = !Betools.tools.isNull(curRow) ? curRow : (await Betools.query.queryTableData(tableName, bussinessCodeID)); //查询当前数据
+                message = message || "同意";//审批意见
+                processID = !Betools.tools.isNull(processID) ? processID : Betools.tools.queryUrlString("processID"); //流程日志编号
+                username = !Betools.tools.isNull(username) ? username : Betools.tools.queryUrlString("proponents");
+            } catch (error) {
+                console.error(error);
+            }
             
             const origin_username = Betools.tools.queryUrlString("origin_username");
             const bussinessNode = JSON.parse(JSON.stringify(curRow)); // 克隆当前业务数据
@@ -518,7 +522,11 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 获取当前时间
 
             // 获取当前审批节点的所有数据
-            curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
+            try {
+                curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
+            } catch (error) {
+                console.error(error);
+            }
 
             // 获取后续节点
             const data = JSON.parse(curRow.relate_data); // 所有审批流程节点
@@ -533,37 +541,45 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"] );
 
             //遍历node,设置approve_user，action
-            node.map((item) => {
-                item["approve_user"] = userInfo["username"]; // 设置审批人员
-                item["employeeName"] = userInfo["realname"] || userInfo["name"]; // 设置审批人员
-                item["action"] = operation; // 设置操作动作
-                item["operate_time"] = item["create_time"] = date; // 设置操作时间
-                item["action_opinion"] = item['content'] = message; // 设置操作意见
-            });
+            try {
+                node.map((item) => {
+                    item["approve_user"] = userInfo["username"]; // 设置审批人员
+                    item["employeeName"] = userInfo["realname"] || userInfo["name"]; // 设置审批人员
+                    item["action"] = operation; // 设置操作动作
+                    item["operate_time"] = item["create_time"] = date; // 设置操作时间
+                    item["action_opinion"] = item['content'] = message; // 设置操作意见
+                });
+            } catch (error) {
+                console.error(error);
+            }
 
             let nextProcessNode = null;
             if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
-                nextProcessNode = {
-                    id: Betools.tools.queryUniqueID(), //获取随机数
-                    table_name: tableName, //业务表名
-                    main_value: bussinessNode.id, //表主键值
-                    business_data_id: bussinessNode.id, //业务具体数据主键值
-                    business_code: "000000000", //业务编号
-                    process_name: "流程审批", //流程名称
-                    employee: nextUserNodes[0].loginid,
-                    employeeName: nextUserNodes[0].name,
-                    process_station: "流程审批",
-                    process_audit: "000000000",
-                    proponents: nextUserNodes[0].loginid,
-                    approve_user: nextUserNodes[0].loginid,
-                    content: '',
-                    action: "审批",
-                    operate_time: date,
-                    create_time: date,
-                    business_data: JSON.stringify(bussinessNode),
-                    relate_data: JSON.stringify(data),
-                    origin_data: accounts,
-                };
+                try {
+                    nextProcessNode = {
+                        id: Betools.tools.queryUniqueID(), //获取随机数
+                        table_name: tableName, //业务表名
+                        main_value: bussinessNode.id, //表主键值
+                        business_data_id: bussinessNode.id, //业务具体数据主键值
+                        business_code: "000000000", //业务编号
+                        process_name: "流程审批", //流程名称
+                        employee: nextUserNodes[0].loginid,
+                        employeeName: nextUserNodes[0].name,
+                        process_station: "流程审批",
+                        process_audit: "000000000",
+                        proponents: nextUserNodes[0].loginid,
+                        approve_user: nextUserNodes[0].loginid,
+                        content: '',
+                        action: "审批",
+                        operate_time: date,
+                        create_time: date,
+                        business_data: JSON.stringify(bussinessNode),
+                        relate_data: JSON.stringify(data),
+                        origin_data: accounts,
+                    };
+                } catch (error) {
+                    console.error(error);
+                }
             }
 
             //执行审批业务
@@ -572,7 +588,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             } catch (error) {
                 console.error(error);
             }
-
+                                                
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
