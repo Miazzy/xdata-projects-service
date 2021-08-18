@@ -2685,7 +2685,9 @@ export default {
           }
           const processID = Betools.tools.getUrlParam('processID');
           const domainURL = 'https://legal.yunwisdom.club:30443';
-          return await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
+          const response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
+          this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+          return response;
       },
 
       // 工作流程审批驳回
@@ -2695,7 +2697,9 @@ export default {
           }
           const processID = Betools.tools.getUrlParam('processID');
           const domainURL = 'https://legal.yunwisdom.club:30443';
-          return await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
+          const response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
+          this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+          return response;
       },
 
       // 执行知会批注操作
