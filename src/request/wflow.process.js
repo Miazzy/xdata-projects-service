@@ -465,7 +465,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
  * @param {*} value 
  * @param {*} receiveURL 
  */
- export async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
+export async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
     try {
         await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/亲爱的同事，员工‘${userinfo}’提交了的案件发起申请，请进行流程审批操作！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
     } catch (error) {
@@ -774,47 +774,32 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 /**
  * @function 知会确认
  */
-export async function handleConfirmWF() {
+export async function handleConfirmWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
 
-    var result = '';
+    let result = '';
 
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行确认知会操作?', })
         .then(async() => {
-            //查询业务编号
-            var bussinessCodeID = Betools.tools.queryUrlString("id");
-            //获取表单名称
-            var tableName = window.decodeURIComponent(Betools.tools.queryUrlString('tname'));
-            //查询当前数据
-            var curRow = await Betools.query.queryTableData(tableName, bussinessCodeID);
-            //获取当前用户
-            var userInfo = Betools.storage.getStore("system_userinfo");
 
-            //如果没有获取到用户信息，提示用户登录信息过期，请重新登录
-            await manage.handleUserInfo(userInfo);
+            const userInfo = Betools.storage.getStore("system_userinfo"); //获取当前用户
 
-            //获取当前时间
-            var date = Betools.tools.formatDate(
-                new Date().getTime(),
-                "yyyy-MM-dd hh:mm:ss"
-            );
+            try {
+                tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
+                bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
+                curRow = !Betools.tools.isNull(curRow) ? curRow : (await Betools.query.queryTableData(tableName, bussinessCodeID)); //查询当前数据
+                message = message || "同意";//审批意见
+                processID = !Betools.tools.isNull(processID) ? processID : Betools.tools.queryUrlString("processID"); //流程日志编号
+                username = !Betools.tools.isNull(username) ? username : Betools.tools.queryUrlString("proponents");
+            } catch (error) {
+                console.error(error);
+            }
 
-            //审批动作
-            var operation = operation || "知会";
-
-            //审批意见
-            var message = message || curRow.idea_content || "知会确认";
-
-            //流程日志编号
-            var processLogID = Betools.tools.queryUrlString("pid");
-
-            //定义流程状态
-            var bpmStatus = { bpm_status: "5" };
+            const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
+            const operation = "知会"; //审批动作
+            const bpmStatus = { bpm_status: "5" }; //定义流程状态
 
             //获取当前审批节点的所有数据
-            curRow = await manage.queryProcessLogInfByID(
-                tableName,
-                processLogID
-            );
+            curRow = await manage.queryProcessLogInfByID(tableName, processID );
 
             //设置本次知会确认创建时间
             curRow["create_time"] = date;
@@ -831,11 +816,7 @@ export async function handleConfirmWF() {
                     //删除当前审批节点中的所有记录
                     result = await manage.deleteProcessLogInf(tableName, [curRow]);
                     //如果当前已经进入流程，则需要将流程状态设置为5：已完成
-                    result = await manage.patchTableData(
-                        tableName,
-                        curRow["business_data_id"],
-                        bpmStatus
-                    );
+                    result = await manage.patchTableData(tableName, curRow["business_data_id"], bpmStatus);
                 } catch (error) {
                     console.log(error);
                 }
@@ -877,12 +858,8 @@ export async function handleConfirmWF() {
                 .deNull(appoveUserList)
                 .includes("," + userInfo["realname"] + ",")
             ) {
-                vant.Dialog.alert({
-                    message: "您已经在此知会记录中，执行过确认操作了！"
-                });
-
+                vant.Dialog.alert({ message: "您已经在此知会记录中，执行过确认操作了！" });
                 result = 'success';
-
                 return result;
             }
 
