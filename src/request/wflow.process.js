@@ -468,28 +468,6 @@ async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
 };
 
 /**
- * @function 生成任务记录数据
- */
-async function handleTaskItem(data, curRow, result = "") {
-    let tableName = Betools.tools.queryUrlString("table_name"); // 打印表单名称
-    let timestamp = new Date().getTime(); // 获取当前时间戳
-    if (tableName == "bs_plan_task") { // 如果是计划任务表，则生成任务数据
-        for (var item of data) {  //遍历数据，执行持久化操作
-            delete item.no; //删除字段
-            delete item.real_start_time; //删除字段
-            delete item.real_end_time; //删除字段
-            delete item.date; //删除字段
-            delete item.work_date;  //删除字段
-            item.create_time = Betools.tools.formatDate(timestamp, "yyyy-MM-dd");  //设置创建日期
-            item.depart_name = curRow.depart_name;  //设置所属部门
-            item.status = "待提交";  //设置任务状态
-            result = await manage.postTableData("bs_plan_task_mission", item); //生成数据，并持久化
-        }
-    }
-    return result; // 返回执行结果
-}
-
-/**
  * @function 同意审批
  */
 export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message, processID , username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
