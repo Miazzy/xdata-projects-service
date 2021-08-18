@@ -446,9 +446,7 @@ export default {
     async querylegalview(id = '', panename = '', typename = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
-        typename = Be
         this.$router.push(`/legal/case/legalview?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`);
-        debugger;
       } catch (error) {
         console.log(error);
       }
