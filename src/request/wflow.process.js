@@ -458,7 +458,13 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
 
 }
 
-// 通知（相关专职人员查看数据）
+/**
+ * 通知（相关专职人员查看数据）
+ * @param {*} user_group_ids 
+ * @param {*} userinfo 
+ * @param {*} value 
+ * @param {*} receiveURL 
+ */
 async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
     try {
         await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/亲爱的同事，员工‘${userinfo}’提交了的案件发起申请，请进行流程审批操作！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
