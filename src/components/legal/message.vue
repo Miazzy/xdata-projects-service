@@ -346,7 +346,7 @@ export default {
 
         //如果tabname == 0 ，则展示所有数据 ，如果为 1 展示审批数据 ， 如果为 2 展示知会数据
         if(tabname == 1){
-          logList = logList.filter(item => {  return item.action == '待审批';  });
+          logList = logList.filter(item => {  return item.action == '审批';  });
         } else if(tabname == 2){
           logList = logList.filter(item => {  return item.action == '知会';  });
         }
@@ -377,15 +377,13 @@ export default {
         let logList = await Betools.query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
+          const elem = JSON.parse(item.business_data).data;
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = `发起：${item.content} `;
-          item.title = item.name;
-          item.avatar = '',
-          item.description = '';
+          item.title = `标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (elem.defendant.length > 15 ? '...' : '' ) }`;
           item.owner = item.create_by;
-          item.tel = '';
-          item.all = '';
+          item.all = item.tel = item.description = item.avatar = '';
           item.typename = typename;
           item.progress = { value: 90 };
           item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
@@ -399,7 +397,7 @@ export default {
         } else if(tabname == 3){
           logList = logList.filter(item => {  return item.action == '驳回';  });
         } else if(tabname == 4){
-          logList = logList.filter(item => {  return item.action == '知会' || item.action == '人力确认';  });
+          logList = logList.filter(item => {  return item.action == '知会';  });
         }
 
         return logList;
