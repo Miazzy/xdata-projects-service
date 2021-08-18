@@ -689,29 +689,33 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        const freeWFNode = JSON.parse(JSON.stringify(node));
 
        // 提交发起人审批相关处理信息
-       node = {
-           id: Betools.tools.queryUniqueID(), //获取随机数
-           table_name: curTableName, //业务表名
-           main_value: data.id, //表主键值
-           business_data_id: data.id, //业务具体数据主键值
-           business_code: "000000000", //业务编号
-           process_name: "流程审批", //流程名称
-           employee: userinfo['name'] || userinfo["realname"] || userinfo["username"],
-           employeeName: userinfo['name'] || userinfo["realname"] || userinfo["username"],
-           process_station: "流程审批",
-           process_audit: "000000000",
-           proponents: userinfo["username"],
-           approve_user: userinfo["username"],
-           action: "发起",
-           action_opinion: "发起流程",
-           content: data['content'] || data['title'],
-           operate_time: ctime,
-           create_time: ctime,
-           business_data: JSON.stringify(freeWFNode),
-           relate_data: JSON.stringify(approve_userlist),
-           origin_data: accounts,
-       };
-
+       try {
+            node = {
+                id: Betools.tools.queryUniqueID(), //获取随机数
+                table_name: curTableName, //业务表名
+                main_value: data.id, //表主键值
+                business_data_id: data.id, //业务具体数据主键值
+                business_code: "000000000", //业务编号
+                process_name: "流程审批", //流程名称
+                employee: userinfo['name'] || userinfo["realname"] || userinfo["username"],
+                employeeName: userinfo['name'] || userinfo["realname"] || userinfo["username"],
+                process_station: "流程审批",
+                process_audit: "000000000",
+                proponents: userinfo["username"],
+                approve_user: userinfo["username"],
+                action: "发起",
+                action_opinion: "发起流程",
+                content: data['content'] || data['title'],
+                operate_time: ctime,
+                create_time: ctime,
+                business_data: JSON.stringify(freeWFNode),
+                relate_data: JSON.stringify(approve_userlist),
+                origin_data: accounts,
+            };
+       } catch (error) {
+            console.error(error);
+       }
+       
        // 发起节点，审批信息，写入审批历史表中
        const startFreeNode = JSON.parse(JSON.stringify(node));
 
