@@ -107,7 +107,7 @@
                             <span style="display:block;margin-top:5px;">{{ item.content ? (item.content.slice(0,30) + '...') : '' }} </span>
                           </a>
                         </a-list-item-meta>
-                     <div slot="actions">
+                        <div slot="actions">
                           <a @click="querylegalview(item.id , panename , item.typename , item.bpm_status , item.apply_realname || item.proponents , item.pid)">查看</a>
                         </div>
                         <div class="list-content">
@@ -300,28 +300,35 @@ export default {
         const month = dayjs().subtract(6, 'months').format('YYYY-MM-DD'); //获取最近6个月对应的日期
         let searchSql = ''; //设置查询语句
         const titlePrefix = typename == 'notify' ? '知会人力' : '申请历史';
-        const typeFieldName = typename == 'notify' ? 'notify' : 'create_by';
+        const typeFieldName = typename == 'notify' ? 'notify' : 'apply_username';
 
         //如果存在搜索关键字
         if(this.searchWord) {
-          searchSql = `~and((name,like,~${this.searchWord}~)~or(create_by,like,~${this.searchWord}~))`;
+          searchSql = `~and((title,like,~${this.searchWord}~)~or(create_by,like,~${this.searchWord}~))`;
         }
 
-        if(tabname == 0){
-          this.allList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,1,2,3,4,5,6,10,100,0)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`); //获取最近12个月的待用印记录
-          this.allList.map((item , index) => {
-            item.name = `#${item.serialid} ` + ` ${titlePrefix} `  + '申请: ' + item.title ;
-            item.description = item.tel = item.avatar = '';
-            item.owner = item.create_by;
-            item.all = '待审批';
-            item.typename = typename;
-            item.progress = { value: 90 };
-            item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-            item.address = ``;
-            item.isDefault = true;
-          });
-          return this.allList;
+        const logList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,1,2,3,4,5,6,10,100,0)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`); //获取最近12个月的待用印记录
+        
+        logList.map((item , index) => {
+          const elem = item;
+          item.description = item.tel = item.avatar = item.address = '';
+          item.owner = item.create_by;
+          item.all = '待审批';
+          item.typename = typename;
+          item.title = `标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (elem.defendant.length > 15 ? '...' : '' ) }`;
+          item.progress = { value: 90 };
+          item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
+          item.isDefault = true;
+        });
+
+        //如果tabname == 0 ，则展示所有数据 ，如果为 1 展示审批数据 ， 如果为 2 展示知会数据
+        if(tabname == 1){
+          logList = logList.filter(item => {  return item.action == '审批';  }); 
+        } else if(tabname == 2){
+          logList = logList.filter(item => {  return item.action == '知会';  });
         }
+
+        return logList;
     },
 
     async querySystemTodoList(tabname = '', typename = ''){
@@ -342,13 +349,15 @@ export default {
           item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
         });
 
-        debugger;
-
         //如果tabname == 0 ，则展示所有数据 ，如果为 1 展示审批数据 ， 如果为 2 展示知会数据
         if(tabname == 1){
-          logList = logList.filter(item => {  return item.action == '审批';  });
+          logList = logList.filter(item => {  return item.bpm_status == '1';  });
         } else if(tabname == 2){
-          logList = logList.filter(item => {  return item.action == '知会';  });
+          logList = logList.filter(item => {  return item.bpm_status == '2';  });
+        } else if(tabname == 3){
+          logList = logList.filter(item => {  return item.bpm_status == '3' || item.bpm_status == '4' || item.bpm_status == '5' || item.bpm_status == '6';  });
+        } else if(tabname == 3){
+          logList = logList.filter(item => {  return item.bpm_status == '99' || item.bpm_status == '100' || item.bpm_status == '10';  });
         }
 
         return logList;
