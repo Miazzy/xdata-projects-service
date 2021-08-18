@@ -473,35 +473,27 @@ async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
  */
 async function handleTaskItem(data, curRow, result = "") {
 
-    //打印表单名称
+    // 打印表单名称
     var tableName = Betools.tools.queryUrlString("table_name");
 
-    //获取当前时间戳
+    // 获取当前时间戳
     var timestamp = new Date().getTime();
 
-    //如果是计划任务表，则生成任务数据
+    // 如果是计划任务表，则生成任务数据
     if (tableName == "bs_plan_task") {
-        //遍历数据，执行持久化操作
-        for (var item of data) {
-            //删除字段
-            delete item.no;
-            delete item.real_start_time;
-            delete item.real_end_time;
-            delete item.date;
-            delete item.work_date;
-            //设置创建日期
-            item.create_time = Betools.tools.formatDate(timestamp, "yyyy-MM-dd");
-            //设置所属部门
-            item.depart_name = curRow.depart_name;
-            //设置任务状态
-            item.status = "待提交";
-            //生成数据，并持久化
-            result = await manage.postTableData("bs_plan_task_mission", item);
+        for (var item of data) {  //遍历数据，执行持久化操作
+            delete item.no; //删除字段
+            delete item.real_start_time; //删除字段
+            delete item.real_end_time; //删除字段
+            delete item.date; //删除字段
+            delete item.work_date;  //删除字段
+            item.create_time = Betools.tools.formatDate(timestamp, "yyyy-MM-dd");  //设置创建日期
+            item.depart_name = curRow.depart_name;  //设置所属部门
+            item.status = "待提交";  //设置任务状态
+            result = await manage.postTableData("bs_plan_task_mission", item); //生成数据，并持久化
         }
     }
-
-    //返回执行结果
-    return result;
+    return result; // 返回执行结果
 }
 
 /**
