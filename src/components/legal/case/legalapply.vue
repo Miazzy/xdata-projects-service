@@ -2522,7 +2522,7 @@ export default {
       // 检测知会人员，并加入知会列表
       async execValidNotify(){
         const username = this.release_userid;
-        let userlist = await Betools.manage.queryUserByNameVHRM(username);
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         userlist = this.release_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
@@ -2533,7 +2533,7 @@ export default {
       // 检测审批人员，并加入审批列表
       async execValidApprove(){
         const username = this.approve_userid;
-        let userlist = await Betools.manage.queryUserByNameVHRM(username);
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         userlist = this.approve_userlist.concat(userlist);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
