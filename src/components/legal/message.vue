@@ -213,16 +213,16 @@ export default {
       this.constpaneflows = JSON.parse(JSON.stringify(this.paneflows));
       if(this.panename == 'mynotifylist' ){
         this.typename = 'notify';
-        this.queryRewardListByType(this.tabname , this.typename , this.panename);
+        this.querySystemListByType(this.tabname , this.typename , this.panename);
       } else if(this.panename == 'mytodolist'){ //我的待办
         this.typename = 'wflow_todo';
-        this.queryRewardTodoListByType(this.tabname, this.typename , this.panename);
+        this.querySystemTodoListByType(this.tabname, this.typename , this.panename);
       } else if(this.panename == 'mydonelist'){ //我的已办
         this.typename = 'wflow_done';
-        this.queryRewardDoneListByType(this.tabname , this.typename , this.panename);
+        this.querySystemDoneListByType(this.tabname , this.typename , this.panename);
       } else if(this.panename == 'myapplylist'){ //我的申请
         this.typename = 'apply';
-        this.queryRewardListByType(this.tabname , this.typename , this.panename);
+        this.querySystemListByType(this.tabname , this.typename , this.panename);
       }
       this.paneflows.map((item) => {item.css = item.ename == this.panename ? "background:#f9f9f9;" : '';});
       Betools.storage.setStore(`system_message_typename` , this.typename , 3600 );
@@ -240,16 +240,16 @@ export default {
       this.tabname = tabname;
       if(this.panename == 'mynotifylist' ){
         this.typename = 'notify';
-        this.queryRewardListByType(this.tabname , typename , panename);
+        this.querySystemListByType(this.tabname , typename , panename);
       } else if(this.panename == 'mytodolist'){ //我的待办
         this.typename = 'wflow_todo';
-        this.queryRewardTodoListByType(this.tabname, typename , panename);
+        this.querySystemTodoListByType(this.tabname, typename , panename);
       } else if(this.panename == 'mydonelist'){ //我的已办
         this.typename = 'wflow_done';
-        this.queryRewardDoneListByType(this.tabname , typename , panename);
+        this.querySystemDoneListByType(this.tabname , typename , panename);
       } else if(this.panename == 'myapplylist'){ //我的申请
         this.typename = 'apply';
-        this.queryRewardListByType(this.tabname , typename , panename);
+        this.querySystemListByType(this.tabname , typename , panename);
       }
     },
 
@@ -277,16 +277,16 @@ export default {
         item.dataSource = item.id === id || item.ename == panename ? item.dataSource : [];
         if(panename == 'mynotifylist'){ //我的知会
           this.typename = 'notify';
-          this.queryRewardListByType(0 , 'notify' , panename);
+          this.querySystemListByType(0 , 'notify' , panename);
         } else if(panename == 'mytodolist'){ //我的待办
           this.typename = 'wflow_todo';
-          this.queryRewardTodoListByType(0 , 'wflow_todo' , panename);
+          this.querySystemTodoListByType(0 , 'wflow_todo' , panename);
         } else if(panename == 'mydonelist'){ //我的已办
           this.typename = 'wflow_done';
-          this.queryRewardDoneListByType(0 , 'wflow_done' , panename);
+          this.querySystemDoneListByType(0 , 'wflow_done' , panename);
         } else if(panename == 'myapplylist'){ //我的申请
           this.typename = 'apply';
-          this.queryRewardListByType(0 , 'apply' , panename);
+          this.querySystemListByType(0 , 'apply' , panename);
         }
       });
       Betools.storage.setStore(`system_message_typename` , this.typename , 3600 );
@@ -294,7 +294,7 @@ export default {
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
-    async queryRewardList(tabname = '', typename = ''){
+    async querySystemList(tabname = '', typename = ''){
 
         const userinfo = await Betools.storage.getStore('system_userinfo');  //获取当前用户信息
         const month = dayjs().subtract(6, 'months').format('YYYY-MM-DD'); //获取最近6个月对应的日期
@@ -324,7 +324,7 @@ export default {
         }
     },
 
-    async queryRewardTodoList(tabname = '', typename = ''){
+    async querySystemTodoList(tabname = '', typename = ''){
 
       try {
         let logList = await Betools.query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
@@ -358,9 +358,9 @@ export default {
 
     },
 
-    async queryRewardTodoListByType(tabname = '', typename = '' , panename){
+    async querySystemTodoListByType(tabname = '', typename = '' , panename){
       this.tabname = tabname;
-      const tlist =  await this.queryRewardTodoList(tabname , typename , panename);
+      const tlist =  await this.querySystemTodoList(tabname , typename , panename);
       this.paneflows.map( item => { //遍历paneflows
         if( panename == item.ename){
           item.dataSource = tlist;
@@ -371,7 +371,7 @@ export default {
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
-    async queryRewardDoneList(tabname = '', typename = ''){
+    async querySystemDoneList(tabname = '', typename = ''){
 
       try {
         let logList = await Betools.query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
@@ -407,9 +407,9 @@ export default {
 
     },
 
-    async queryRewardDoneListByType(tabname = '', typename = '' , panename){
+    async querySystemDoneListByType(tabname = '', typename = '' , panename){
       this.tabname = tabname;
-      const tlist =  await this.queryRewardDoneList(tabname , typename , panename);
+      const tlist =  await this.querySystemDoneList(tabname , typename , panename);
       this.paneflows.map( item => { //遍历paneflows
         if( panename == item.ename){
           item.dataSource = tlist;
@@ -420,9 +420,9 @@ export default {
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
-    async queryRewardListByType(tabname = 1 , typename = '' , panename){
+    async querySystemListByType(tabname = 1 , typename = '' , panename){
       this.tabname = tabname;
-      const tlist =  await this.queryRewardList(tabname , typename , panename);
+      const tlist =  await this.querySystemList(tabname , typename , panename);
       this.paneflows.map( item => { //遍历paneflows
         if( panename == item.ename){
           item.dataSource = tlist;
