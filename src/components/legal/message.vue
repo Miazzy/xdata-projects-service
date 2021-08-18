@@ -334,7 +334,7 @@ export default {
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = `发起：${item.content} `;
-          item.title = `序号: ${elem.serialID} 标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (item.defendant.length > 15 ? '...' : '' ) }`;
+          item.title = `标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (elem.defendant.length > 15 ? '...' : '' ) }`;
           item.owner = item.create_by;
           item.tel = item.all = item.description = item.avatar = '';
           item.typename = typename;
