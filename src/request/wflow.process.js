@@ -723,6 +723,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
             applyNode.action = '申请';
             applyNode.action_opinion = '我的申请';
             await Betools.manage.postProcessLogHistory(applyNode, 'pr_log_apply'); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
+            debugger;
         } catch (error) {
             console.log(error);
         }
