@@ -321,20 +321,13 @@ export default {
           item.isDefault = true;
         });
 
-        //如果tabname == 0 ，则展示所有数据 ，如果为 1 展示审批数据 ， 如果为 2 展示知会数据
-        if(tabname == 1){
-          logList = logList.filter(item => {  return item.action == '审批';  }); 
-        } else if(tabname == 2){
-          logList = logList.filter(item => {  return item.action == '知会';  });
-        }
-
         if(tabname == 1){
           logList = logList.filter(item => {  return item.bpm_status == '1';  });
         } else if(tabname == 2){
           logList = logList.filter(item => {  return item.bpm_status == '2';  });
         } else if(tabname == 3){
           logList = logList.filter(item => {  return item.bpm_status == '3' || item.bpm_status == '4' || item.bpm_status == '5' || item.bpm_status == '6';  });
-        } else if(tabname == 3){
+        } else if(tabname == 4){
           logList = logList.filter(item => {  return item.bpm_status == '99' || item.bpm_status == '100' || item.bpm_status == '10';  });
         }
 
@@ -446,14 +439,16 @@ export default {
       });
       const redirectURL = typename == 'notify' ?  `/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
       this.$router.push(redirectURL, '_blank');
-      debugger;
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
     // 跳转到详情页面
     async querylegalview(id = '', panename = '', typename = '', bpm_status = 1 , proponents = '' , pid){
       try {
-        this.$router.push(`/legal/case/legalview?id=${id}&pid=${pid}&tname=bs_reward_apply&panename=${panename}&typename=${typename}&bpm_status=${bpm_status}&proponents=${proponents}`);
+        panename = Betools.tools.isNull(panename) ? this.panename : panename;
+        typename = Be
+        this.$router.push(`/legal/case/legalview?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`);
+        debugger;
       } catch (error) {
         console.log(error);
       }
