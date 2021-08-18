@@ -1702,7 +1702,8 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
                     </a-col>
                     <a-col :span="20">
-                      <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; display:none; " />
+                      <a-auto-complete :data-source="lawyerInNamelist" v-model="approve_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择审批人员！" :filter-option="filterOption" />
                       <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidApprove()"  >
                         添加
                       </a-button>
@@ -2533,6 +2534,7 @@ export default {
       // 检测审批人员，并加入审批列表
       async execValidApprove(){
         const username = this.approve_userid;
+        debugger;
         let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         userlist = this.approve_userlist.concat(userlist);
