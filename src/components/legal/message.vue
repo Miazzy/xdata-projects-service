@@ -321,102 +321,16 @@ export default {
             item.isDefault = true;
           });
           return this.allList;
-        } else if(tabname == 1){
-          //获取最近6个月的待用印记录
-          this.initList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,1)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`);
-
-          this.initList.map((item , index) => {
-            item.name = `#${item.serialid} ` + ` ${titlePrefix} ` + item.reward_type + '申请: ' + item.title ;
-            item.title = item.name;
-            item.avatar = '',
-            item.description = '';
-            item.owner = item.create_by;
-            item.tel = '';
-            item.all = '待审批';
-            item.typename = typename;
-            item.progress = { value: 90 };
-            item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-            item.address = item.apply_realname + ' ' + item.content + ' ' + item.company + ' ' + item.department + ` 时间:${item.create_time.slice(0,10)}`;
-            item.isDefault = true;
-          })
-
-          return this.initList;
-
-        } else if(tabname == 2){
-          //获取最近6个月的已用印记录
-          this.confirmList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,2,3)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`);
-
-          this.confirmList.map((item , index) => {
-            item.name = `#${item.serialid} ` + ` ${titlePrefix} ` + item.reward_type + '诉讼案件申请: ' + item.title ,
-            item.title = item.name;
-            item.avatar = '',
-            item.description = '';
-            item.owner = item.create_by;
-            item.tel = '';
-            item.all = '审批中';
-            item.typename = typename;
-            item.progress = { value: 90 };
-            item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-            item.tel = '';
-            item.address = item.apply_realname + ' ' + item.content + ' ' + item.company + ' ' + item.department + ` 时间:${item.create_time.slice(0,10)}`;
-            item.isDefault = true;
-          })
-
-          return this.confirmList;
-
-        } else if(tabname == 3) {
-          //获取最近6个月的已领取记录
-          this.doneList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,4,5,6)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`);
-
-          this.doneList.map((item , index) => {
-            item.name = `#${item.serialid} `  + ` ${titlePrefix} ` +  item.reward_type + '诉讼案件申请: ' + item.title ,
-            item.title = item.name;
-            item.avatar = '',
-            item.description = '';
-            item.owner = item.create_by;
-            item.tel = '';
-            item.all = '已完成';
-            item.typename = typename;
-            item.progress = { value: 90 };
-            item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-            item.tel = '';
-            item.address = item.apply_realname + ' ' + item.content + ' ' + item.company + ' ' + item.department + ` 时间:${item.create_time.slice(0,10)}`;
-            item.isDefault = true;
-          })
-
-          return this.doneList;
-
-         } else if(tabname == 4) {
-          //获取最近6个月的已领取记录
-          this.rejectList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,10,100)~and(${typename},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`);
-
-          this.rejectList.map((item , index) => {
-            item.name = `#${item.serialid} ` + ` ${titlePrefix} ` + item.reward_type + '诉讼案件申请: ' + item.title ,
-            item.title = item.name;
-            item.avatar = '',
-            item.description = '';
-            item.owner = item.create_by;
-            item.tel = '';
-            item.all = '已驳回';
-            item.typename = typename;
-            item.progress = { value: 90 };
-            item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-            item.tel = '';
-            item.address = item.apply_realname + ' ' + item.content + ' ' + item.company + ' ' + item.department + ` 时间:${item.create_time.slice(0,10)}`;
-            item.isDefault = true;
-          })
-
-          return this.rejectList;
-
         }
     },
 
     async queryRewardTodoList(tabname = '', typename = ''){
 
       try {
-        let logList = [];//await query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
+        let logList = await Betools.query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
+          item.data = JSON.parse(item.business_data).data,
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = `发起：${item.content} `;
@@ -429,7 +343,9 @@ export default {
           item.typename = typename;
           item.progress = { value: 90 };
           item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-        })
+        });
+
+        debugger;
 
         //如果tabname == 0 ，则展示所有数据 ，如果为 1 展示审批数据 ， 如果为 2 展示知会数据
         if(tabname == 1){
@@ -461,7 +377,7 @@ export default {
     async queryRewardDoneList(tabname = '', typename = ''){
 
       try {
-        let logList = []; //await query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
+        let logList = await Betools.query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
           item.pid = item.id;
