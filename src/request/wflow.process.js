@@ -716,7 +716,6 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
             console.error(error);
        }
 
-
         try {
             const applyNode = JSON.parse(JSON.stringify(node)); // 发起节点，审批信息，写入我的申请审批表中
             applyNode.action = '申请';
