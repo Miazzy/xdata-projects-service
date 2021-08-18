@@ -637,10 +637,12 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
                 console.error(error);
             }
 
+            const curHost = window.location.protocol + '//' + window.location.host;
+            
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
-                const curHost = window.location.protocol + '//' + window.location.host;
                 const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&origin_username=${origin_username}&tname=bs_legal&role=view&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.apply_username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                 await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
             } catch (error) {
                 console.error(error);
@@ -720,7 +722,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
             const applyNode = JSON.parse(JSON.stringify(node)); // 发起节点，审批信息，写入我的申请审批表中
             applyNode.action = '申请';
             applyNode.action_opinion = '我的申请';
-            await Betools.manage.postProcessLogHistory(applyNode); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
+            await Betools.manage.postProcessLogHistory(applyNode, 'pr_log_apply'); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
         } catch (error) {
             console.log(error);
         }
@@ -766,12 +768,12 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        vant.Toast.success("提交流程审批成功！");  // 弹出审批完成提示框
        Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );  // 记录当前流程已经提交，短时间内无法再次提交
 
+       const curHost = window.location.protocol + '//' + window.location.host;
+
        // 此处推送消息至第一个审批处 
        try {
-          const curHost = window.location.protocol + '//' + window.location.host;
           const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${data.id}&processID=${nextWflowNode.id}&tname=${curTableName}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
-          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
-                      .set('accept', 'json');
+          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
        } catch (error) {
          console.log(error);
        }
