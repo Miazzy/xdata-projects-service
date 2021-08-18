@@ -715,6 +715,16 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        } catch (error) {
             console.error(error);
        }
+
+
+        try {
+            const applyNode = JSON.parse(JSON.stringify(node)); // 发起节点，审批信息，写入我的申请审批表中
+            applyNode.action = '申请';
+            applyNode.action_opinion = '我的申请';
+            await Betools.manage.postProcessLogHistory(applyNode); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
+        } catch (error) {
+            console.log(error);
+        }
        
        // 发起节点，审批信息，写入审批历史表中
        const startFreeNode = JSON.parse(JSON.stringify(node));
