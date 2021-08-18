@@ -307,7 +307,7 @@ export default {
           searchSql = `~and((title,like,~${this.searchWord}~)~or(create_by,like,~${this.searchWord}~))`;
         }
 
-        const logList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,1,2,3,4,5,6,10,100,0)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`); //获取最近12个月的待用印记录
+        let logList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,1,2,3,4,5,6,10,100,0)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`); //获取最近12个月的待用印记录
         
         logList.map((item , index) => {
           const elem = item;
@@ -326,6 +326,16 @@ export default {
           logList = logList.filter(item => {  return item.action == '审批';  }); 
         } else if(tabname == 2){
           logList = logList.filter(item => {  return item.action == '知会';  });
+        }
+
+        if(tabname == 1){
+          logList = logList.filter(item => {  return item.bpm_status == '1';  });
+        } else if(tabname == 2){
+          logList = logList.filter(item => {  return item.bpm_status == '2';  });
+        } else if(tabname == 3){
+          logList = logList.filter(item => {  return item.bpm_status == '3' || item.bpm_status == '4' || item.bpm_status == '5' || item.bpm_status == '6';  });
+        } else if(tabname == 3){
+          logList = logList.filter(item => {  return item.bpm_status == '99' || item.bpm_status == '100' || item.bpm_status == '10';  });
         }
 
         return logList;
@@ -351,13 +361,9 @@ export default {
 
         //如果tabname == 0 ，则展示所有数据 ，如果为 1 展示审批数据 ， 如果为 2 展示知会数据
         if(tabname == 1){
-          logList = logList.filter(item => {  return item.bpm_status == '1';  });
+          logList = logList.filter(item => {  return item.action == '审批';  });
         } else if(tabname == 2){
-          logList = logList.filter(item => {  return item.bpm_status == '2';  });
-        } else if(tabname == 3){
-          logList = logList.filter(item => {  return item.bpm_status == '3' || item.bpm_status == '4' || item.bpm_status == '5' || item.bpm_status == '6';  });
-        } else if(tabname == 3){
-          logList = logList.filter(item => {  return item.bpm_status == '99' || item.bpm_status == '100' || item.bpm_status == '10';  });
+          logList = logList.filter(item => {  return item.action == '知会';  });
         }
 
         return logList;
