@@ -2680,27 +2680,37 @@ export default {
 
       // 工作流程审批同意
       async handleAgree(){ // 生成下一条流程记录 // 转移当前审批流程记录到历史记录中 // 通知下一位审批人员
+          let response = null;
           if(Betools.tools.isNull(this.workflow.content)){
             return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
           }
-          const processID = Betools.tools.getUrlParam('processID');
-          const domainURL = 'https://legal.yunwisdom.club:30443';
-          const response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
-          this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
-          this.role = this.apply = 'view';
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = 'https://legal.yunwisdom.club:30443';
+            response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
+            this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.role = this.apply = 'view';
+          } catch (error) {
+            console.error(error);
+          }
           return response;
       },
 
       // 工作流程审批驳回
       async handleDisagree(){ // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
+          let response = null;
           if(Betools.tools.isNull(this.workflow.content)){
             return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
           }
-          const processID = Betools.tools.getUrlParam('processID');
-          const domainURL = 'https://legal.yunwisdom.club:30443';
-          const response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
-          this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
-          this.role = this.apply = 'view';
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = 'https://legal.yunwisdom.club:30443';
+            response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
+            this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.role = this.apply = 'view';
+          } catch (error) {
+            console.error(error);
+          }
           return response;
       },
 
