@@ -461,8 +461,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
 // 通知（相关专职人员查看数据）
 async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
     try {
-        await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/亲爱的同事，员工‘${userinfo}’提交了的案件发起申请，请进行流程审批操作！?type=legal&rurl=${receiveURL}`)
-            .set('accept', 'json');
+        await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/亲爱的同事，员工‘${userinfo}’提交了的案件发起申请，请进行流程审批操作！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
     } catch (error) {
         console.log(error);
     }
@@ -472,15 +471,9 @@ async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
  * @function 生成任务记录数据
  */
 async function handleTaskItem(data, curRow, result = "") {
-
-    // 打印表单名称
-    var tableName = Betools.tools.queryUrlString("table_name");
-
-    // 获取当前时间戳
-    var timestamp = new Date().getTime();
-
-    // 如果是计划任务表，则生成任务数据
-    if (tableName == "bs_plan_task") {
+    let tableName = Betools.tools.queryUrlString("table_name"); // 打印表单名称
+    let timestamp = new Date().getTime(); // 获取当前时间戳
+    if (tableName == "bs_plan_task") { // 如果是计划任务表，则生成任务数据
         for (var item of data) {  //遍历数据，执行持久化操作
             delete item.no; //删除字段
             delete item.real_start_time; //删除字段
