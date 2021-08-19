@@ -1696,7 +1696,7 @@
                    </a-row>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-show=" role == 'add' || role == 'edit' || (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row style="position: relative;">
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
@@ -1731,6 +1731,20 @@
                     </a-col>
                   </a-row>
                 </div>  
+
+                <div v-show="!isNull(id) && (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col :span="8">
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="margin-left:100px;">
+                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleReApply();"  >
+                        重新提交
+                      </a-button>
+                    </a-col>
+                    <a-col :span="8">
+                    </a-col>
+                   </a-row>
+                </div>
 
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
@@ -1928,7 +1942,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '1' || legal.bpm_status == '2' || legal.bpm_status == '3' ) " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -1944,7 +1958,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '1' || legal.bpm_status == '2' || legal.bpm_status == '3' ) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -2633,6 +2647,51 @@ export default {
         await this.handleSave(); //先执行保存操作，保存完毕后执行流程跳转功能
       },
 
+      // 用户重新提交审批流程
+      async handleReApply(){
+          this.loading = true; // 显示加载状态
+          const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
+
+          // 检查审批人员列表
+          if(Betools.tools.isNull(this.approve_userlist) || this.approve_userlist.length == 0 ){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请选择审批人员！`,});
+          }
+
+          // 是否确认提交此自由流程?
+          this.$confirm({
+              title: "确认操作",
+              content: "是否重新提交此案件发起申请流程?",
+              onOk: async(result) => {
+
+                    const legal = JSON.parse(JSON.stringify(this.legal));
+
+                    // 提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+                    if (await Betools.manage.queryApprovalExist(this.tablename,  legal.id)) {
+                      return vant.Toast.fail("您好，当前申请还在审批过程中，无法再次提交流程！");
+                    }
+
+                    // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
+                    const users = this.approve_userlist.map(item=>item.loginid);
+                    const wfUsers = users.slice(0,-1).toString(); // 审批人员
+                    const nfUsers = ''; // 知会人员
+                    const approver = users.slice(-1).toString(); // 最后一个终审人员
+                    const data = legal;
+                    const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
+                    data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
+                    await this.handleReSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
+                    
+                    (async()=>{
+                      Betools.manage.handleLog(this.tablename , legal , '发起', '重新发起流程审批' , `${userinfo.realname} 发起${legal.caseSType}流程，案号：${legal.caseID}`);
+                    })();
+
+                    this.loading = false; //设置状态
+                    this.readonly = true;
+                    this.role = 'view';
+                    vant.Dialog.alert({  title: '温馨提示',  message: `案件发起申请成功！`, }); //this.$toast.success('案件发起申请成功！');
+                }
+            });
+      },
+
       // 提交自由流程
       async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
         try {
@@ -2643,6 +2702,21 @@ export default {
               return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
           }
           return await workprocess.handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 重新提交自由流程
+      async handleReSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleReStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
         } catch (error) {
           console.log(error);
         }
