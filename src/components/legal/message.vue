@@ -276,6 +276,7 @@ export default {
       this.paneflows.map((item) => {
         item.css =  item.id === id || item.ename == panename ? "background:#f9f9f9;" : '';
         item.dataSource = item.id === id || item.ename == panename ? item.dataSource : [];
+        debugger;
         if(panename == 'mynotifylist'){ //我的知会
           this.typename = 'notify';
           this.querySystemListByType(0 , 'notify' , panename);
@@ -450,6 +451,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
+      debugger;
       const redirectURL = typename == 'notify' ?  `/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
       this.$router.push(redirectURL, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );

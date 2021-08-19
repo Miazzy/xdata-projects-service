@@ -413,10 +413,10 @@ export const reward = ($router) => {
         taskflows: [{
             name: "我的知会",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liebiao_jy.png`,
-            href: "/account/myrewardlist",
+            href: "/account/mynotifylist",
             description: '查看我的案件知会信息',
             click: () => {
-                $router.push(`/legal/message?panename=myrewardlist&type=7&back=/legal/workspace`, '_blank');
+                $router.push(`/legal/message?panename=mynotifylist&type=7&back=/legal/workspace`, '_blank');
             },
         }, {
             name: "我的待办",
@@ -1402,9 +1402,9 @@ export function getPaneflows(that) {
     return [{
             id: 100,
             name: "我的知会",
-            ename: "myrewardlist",
+            ename: "mynotifylist",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liebiao_jy.png`,
-            href: "/account/myrewardlist",
+            href: "/account/mynotifylist",
             description: "查看我的案件审批知会流程",
             show: true,
             css: "",
@@ -1413,7 +1413,7 @@ export function getPaneflows(that) {
             tabs: ['全部', '待审批', '审批中', '已完成', '已驳回'],
             dataSource: [],
             click: () => {
-                that.panename = 'myrewardlist';
+                that.panename = 'mynotifylist';
             },
         }, {
             id: 200,
