@@ -720,10 +720,10 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 
         try {
             const applyNode = JSON.parse(JSON.stringify(node)); // 发起节点，审批信息，写入我的申请审批表中
+            applyNode.id = data.id;
             applyNode.action = '申请';
             applyNode.action_opinion = '我的申请';
             await Betools.manage.postProcessLogHistory(applyNode, 'pr_log_apply'); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
-            debugger;
         } catch (error) {
             console.log(error);
         }

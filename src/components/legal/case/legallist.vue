@@ -235,8 +235,8 @@
                                     </a-menu>
                                   </a-dropdown>
 
-                                  <a-list-item-meta :index="index" :description="`${item.caseID} 法院：${item.court}，法官：${item.judge}，程序：${item.stage}`" @click="execView(item)" >
-                                    <a slot="title" >{{ `序号: ${item.serialID} ${item.caseID} 程序：${item.stage} ，案由：${ item.caseType } ，原告：${item.accuser}，被告：${item.defendant.slice(0,15) + (item.defendant.length>15?'...':'') }` }}</a>
+                                  <a-list-item-meta :index="index" :description="`案件编号：${item.caseID} 法院：${item.court}，法官：${item.judge}，程序：${item.stage}`" @click="execView(item)" >
+                                    <a slot="title" >{{ `序号: ${item.serialID} 标题：${item.title} 程序：${item.stage} ，案由：${ item.caseType } ，原告：${item.accuser}，被告：${item.defendant.slice(0,15) + (item.defendant.length>15?'...':'') }` }}</a>
                                   </a-list-item-meta>
 
                                   <a-badge style="float:left;z-index:1000000;right:-10px;position:absolute;top:35px;">
@@ -460,7 +460,7 @@ export default {
         if(Betools.tools.isNull(userinfo) || Betools.tools.isNull(userinfo.username)){
             return [];
         }
-        const condition = `_where=(status,in,${status})${searchSql}&_fields=id,create_time,create_by,receiveTime,lawRTime,handledTime,legalType,plate,legalTname,zone,zoneProject,thirdParty,legalStatus,caseType,court,caseID,judge,stage,serialID,caseType,accuser,defendant,lawcase,disclosure,claimsBidSum,claims,lawyerMobile,lawyer,lawOfficeTime,lawOffice,inHouseLawyersMobile,inHouseLawyers,judgeMobile,judge,court,fstEvidence,fstCourtDate,fstPlan,fstReason,fstConform,fstUnConformReasom,fstDetractionSum,fstValid,fstAppeal,fstAppealTime,secEvidence,secCourtDate,secPlan,secReason,secConform,secUnConformReasom,secDetractionSum,secValid,secAppeal,secAppealTime,reviewEvidence,reviewCourtDate,reviewPlan,reviewReason,reviewConform,reviewUnConformReasom,reviewDetractionSum,reviewValid,reviewAppeal,reviewAppealTime&_sort=-id&_p=${page}&_size=${size}`;
+        const condition = `_where=(status,in,${status})${searchSql}&_fields=id,create_time,create_by,title,receiveTime,lawRTime,handledTime,legalType,plate,legalTname,zone,zoneProject,thirdParty,legalStatus,caseType,court,caseID,judge,stage,serialID,caseType,accuser,defendant,lawcase,disclosure,claimsBidSum,claims,lawyerMobile,lawyer,lawOfficeTime,lawOffice,inHouseLawyersMobile,inHouseLawyers,judgeMobile,judge,court,fstEvidence,fstCourtDate,fstPlan,fstReason,fstConform,fstUnConformReasom,fstDetractionSum,fstValid,fstAppeal,fstAppealTime,secEvidence,secCourtDate,secPlan,secReason,secConform,secUnConformReasom,secDetractionSum,secValid,secAppeal,secAppealTime,reviewEvidence,reviewCourtDate,reviewPlan,reviewReason,reviewConform,reviewUnConformReasom,reviewDetractionSum,reviewValid,reviewAppeal,reviewAppealTime&_sort=-id&_p=${page}&_size=${size}`;
         let list = await Betools.manage.queryTableData(tableName , condition);
         this.search.total = await Betools.manage.queryTableDataCount(tableName, condition);
         list.map((element)=>{ 
@@ -492,6 +492,7 @@ export default {
               } catch (error) {
                 console.error(error);
               }
+              debugger;
             } catch (error) {
               console.error(error);
             }
