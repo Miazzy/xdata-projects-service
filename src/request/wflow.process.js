@@ -674,6 +674,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
     let accounts = '';
     let employeeName = '';
     const approve_userlist = data.approve_userlist; //获取审批人员列表
+    const bpmStatus = "2";
 
     try {
       accounts = approve_userlist.map(item=>item.loginid).toString();
@@ -733,6 +734,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
             applyNode.id = data.id;
             applyNode.action = '申请';
             applyNode.action_opinion = '我的申请';
+            applyNode.bpm_status = bpmStatus;
             await Betools.manage.postProcessLogHistory(applyNode, 'pr_log_apply'); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
         } catch (error) {
             console.log(error);
@@ -775,7 +777,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
          return vant.Toast.fail("已提交过申请，无法再次提交审批！");
        }
 
-       await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, "2");  // 处理自由流程发起提交审批操作
+       await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, bpmStatus);  // 处理自由流程发起提交审批操作
        vant.Toast.success("提交流程审批成功！");  // 弹出审批完成提示框
        Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );  // 记录当前流程已经提交，短时间内无法再次提交
 
