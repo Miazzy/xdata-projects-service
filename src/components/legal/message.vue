@@ -302,25 +302,20 @@ export default {
         const month = dayjs().subtract(6, 'months').format('YYYY-MM-DD'); //获取最近6个月对应的日期
         let searchSql = ''; //设置查询语句
         const titlePrefix = typename == 'notify' ? '知会人力' : '申请历史';
-        const typeFieldName = typename == 'notify' ? 'notify' : 'apply_username';
 
-        //如果存在搜索关键字
-        if(this.searchWord) {
-          searchSql = `~and((title,like,~${this.searchWord}~)~or(create_by,like,~${this.searchWord}~))`;
-        }
-
-        let logList = await manageAPI.queryTableData(this.tablename , `_where=(bpm_status,in,1,2,3,4,5,6,10,100,0)~and(${typeFieldName},like,~${userinfo.username}~)~and(create_time,gt,${month})${searchSql}&_sort=-id`); //获取最近12个月的待用印记录
+        let logList = await Betools.query.queryProcessLogApplyByUserName(this.tablename , this.userinfo.username);
         
         logList.map((item , index) => {
-          const elem = item;
-          item.description = item.tel = item.avatar = item.address = '';
-          item.owner = item.create_by;
-          item.all = '待审批';
-          item.typename = typename;
+          const elem = JSON.parse(item.business_data).data;
+          item.pid = item.id;
+          item.id = item.business_data_id;
+          item.name = `发起：${item.content} `;
           item.title = `标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (elem.defendant.length > 15 ? '...' : '' ) }`;
+          item.owner = item.create_by;
+          item.tel = item.all = item.description = item.avatar = '';
+          item.typename = typename;
           item.progress = { value: 90 };
           item.startAt = dayjs(item.create_time).format('YYYY-MM-DD');
-          item.isDefault = true;
         });
 
         if(tabname == 1){
