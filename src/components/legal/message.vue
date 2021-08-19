@@ -304,7 +304,7 @@ export default {
         const titlePrefix = typename == 'notify' ? '知会人力' : '申请历史';
 
         let logList = await Betools.query.queryProcessLogApplyByUserName(this.tablename , this.userinfo.username);
-        
+        debugger;
         logList.map((item , index) => {
           const elem = JSON.parse(item.business_data).data;
           item.pid = item.id;
