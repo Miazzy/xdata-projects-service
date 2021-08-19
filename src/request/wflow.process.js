@@ -525,6 +525,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     item["action"] = operation; // 设置操作动作
                     item["operate_time"] = item["create_time"] = date; // 设置操作时间
                     item["action_opinion"] = item['content'] = message; // 设置操作意见
+                    item["bpm_status"] = bpmStatus.bpm_status;
                 });
             } catch (error) {
                 console.error(error);
@@ -553,6 +554,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                         business_data: JSON.stringify(bussinessNode),
                         relate_data: JSON.stringify(data),
                         origin_data: accounts,
+                        bpm_status: nextUserNodes.length > 1 ? bpmStatus.bpm_status : '4',
                     };
                 } catch (error) {
                     console.error(error);
@@ -635,6 +637,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
                 item["operate_time"] = date; // 设置操作时间
                 item["action_opinion"] = item['content'] = message; // 设置操作意见
                 item["create_time"] = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 设置创建时间
+                item["bpm_status"] = bpmStatus.bpm_status;
             });
 
             //执行审批驳回业务
@@ -728,6 +731,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
                 business_data: JSON.stringify(freeWFNode),
                 relate_data: JSON.stringify(approve_userlist),
                 origin_data: accounts,
+                bpm_status: bpmStatus,
             };
        } catch (error) {
             console.error(error);
@@ -771,6 +775,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
            business_data: JSON.stringify(freeWFNode),
            relate_data: JSON.stringify(approve_userlist),
            origin_data: accounts,
+           bpm_status: bpmStatus,
        };
 
        // 保存审批相关处理信息
