@@ -587,7 +587,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     
                     // 流程审批已经完成(审批同意且完成后，修改所有的审批历史记录的bpm_status为4)
                     const processLogList = await Betools.query.queryProcessLog();
-                    for (const element of processLogList){
+                    for await (const element of processLogList){
                         if(element.bpm_status != bpmStatus.bpm_status){
                             Betools.manage.patchTableData('pr_log_history', element.id, bpmStatus); //修改为驳回后的状态
                         }
