@@ -882,6 +882,13 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
         } catch (error) {
             console.log(error);
         }
+
+        try { // 将 pr_log_apply 的 申请记录，状态修改为 bpm_status = 1;
+            await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus}); //修改为驳回后的状态
+            await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus}); //修改为驳回后的状态
+        } catch (error) {
+            console.error(error);
+        }
        
        // 发起节点，审批信息，写入审批历史表中
        const startFreeNode = JSON.parse(JSON.stringify(node));
