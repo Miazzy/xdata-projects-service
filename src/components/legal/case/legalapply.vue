@@ -1714,7 +1714,7 @@
                   </a-row>
                 </div>  
 
-                <div v-show=" role == 'view' || role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
+                <div v-show=" (role == 'view' || role == 'add' || role == 'edit' || role == 'workflow') && approve_userlist && approve_userlist.length > 0 " class="reward-apply-content-item" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
                   <a-row>
                     <a-col :span="24">
                       <div style="margin-left:50px;margin-top:5px; width:100%; height:100px;">
@@ -1928,7 +1928,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '1' || legal.bpm_status == '2' || legal.bpm_status == '3' ) " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -1944,7 +1944,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '1' || legal.bpm_status == '2' || legal.bpm_status == '3' ) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -2383,6 +2383,7 @@ export default {
             (async()=>{
               const elem = await this.handleList(this.tablename , id);
               Betools.tools.isNull(this.legal)?this.legal = elem:null;
+              debugger;
             })();
 
             (async()=>{
