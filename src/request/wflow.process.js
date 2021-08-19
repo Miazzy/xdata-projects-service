@@ -565,6 +565,13 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             } catch (error) {
                 console.error(error);
             }
+
+            try { // 将 pr_log_apply 的 申请记录，状态修改为 bpm_status = 1;
+                await Betools.manage.patchTableData('pr_log_apply', bussinessNode.id, bpmStatus); //修改为驳回后的状态
+                await Betools.manage.patchTableData('pr_log_apply', bussinessNode.id, bpmStatus); //修改为驳回后的状态
+            } catch (error) {
+                console.error(error);
+            }
                                                 
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
@@ -638,13 +645,10 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             }
 
             try { // 将 pr_log_apply 的 申请记录，状态修改为 bpm_status = 1;
-                const applyNode = JSON.parse(JSON.stringify(node)); // 发起节点，审批信息，写入我的申请审批表中
-                applyNode.id = data.id;
-                applyNode.action = '申请';
-                applyNode.action_opinion = '我的申请';
-                await Betools.manage.postProcessLogHistory(applyNode, 'pr_log_apply'); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
+                await Betools.manage.patchTableData('pr_log_apply', bussinessNode.id, bpmStatus); //修改为驳回后的状态
+                await Betools.manage.patchTableData('pr_log_apply', bussinessNode.id, bpmStatus); //修改为驳回后的状态
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
 
             const curHost = window.location.protocol + '//' + window.location.host;
