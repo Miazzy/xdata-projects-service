@@ -326,9 +326,9 @@ export default {
         if(tabname == 1){
           logList = logList.filter(item => {  return item.bpm_status == '1';  });
         } else if(tabname == 2){
-          logList = logList.filter(item => {  return item.bpm_status == '2';  });
+          logList = logList.filter(item => {  return item.bpm_status == '2' || item.bpm_status == '3';  });
         } else if(tabname == 3){
-          logList = logList.filter(item => {  return item.bpm_status == '3' || item.bpm_status == '4' || item.bpm_status == '5' || item.bpm_status == '6';  });
+          logList = logList.filter(item => {  return item.bpm_status == '4' || item.bpm_status == '5' || item.bpm_status == '6';  });
         } else if(tabname == 4){
           logList = logList.filter(item => {  return item.bpm_status == '99' || item.bpm_status == '100' || item.bpm_status == '10';  });
         }
@@ -368,23 +368,6 @@ export default {
 
     },
 
-    async querySystemTodoListByType(tabname = '', typename = '' , panename){
-      try {
-        this.tabname = tabname;
-        const tlist =  await this.querySystemTodoList(tabname , typename , panename);
-        this.paneflows.map( item => { //遍历paneflows
-          if( panename == item.ename){
-            item.dataSource = tlist;
-            item.ename = panename;
-          }
-        })
-      } catch (error) {
-        console.error(error);
-      }
-      this.$router.push(`/legal/message?panename=mytodolist&type=7&back=/legal/workspace`, '_blank');
-      Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
-    },
-
     async querySystemDoneList(tabname = '', typename = ''){
 
       try {
@@ -421,6 +404,23 @@ export default {
 
     },
 
+    async querySystemTodoListByType(tabname = '', typename = '' , panename){
+      try {
+        this.tabname = tabname;
+        const tlist =  await this.querySystemTodoList(tabname , typename , panename);
+        this.paneflows.map( item => { //遍历paneflows
+          if( panename == item.ename){
+            item.dataSource = tlist;
+            item.ename = panename;
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+      this.$router.push(`/legal/message?panename=mytodolist&type=7&back=/legal/workspace`, '_blank');
+      Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
+    },
+
     async querySystemDoneListByType(tabname = '', typename = '' , panename){
       try {
         this.tabname = tabname;
@@ -451,7 +451,6 @@ export default {
       } catch (error) {
         console.error(error);
       }
-      debugger;
       const redirectURL = typename == 'notify' ?  `/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
       this.$router.push(redirectURL, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
