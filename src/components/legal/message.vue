@@ -251,6 +251,7 @@ export default {
         this.typename = 'apply';
         this.querySystemListByType(this.tabname , typename , panename);
       }
+      debugger;
     },
 
     async searchWordChange() {
@@ -367,14 +368,18 @@ export default {
     },
 
     async querySystemTodoListByType(tabname = '', typename = '' , panename){
-      this.tabname = tabname;
-      const tlist =  await this.querySystemTodoList(tabname , typename , panename);
-      this.paneflows.map( item => { //遍历paneflows
-        if( panename == item.ename){
-          item.dataSource = tlist;
-          item.ename = panename;
-        }
-      })
+      try {
+        this.tabname = tabname;
+        const tlist =  await this.querySystemTodoList(tabname , typename , panename);
+        this.paneflows.map( item => { //遍历paneflows
+          if( panename == item.ename){
+            item.dataSource = tlist;
+            item.ename = panename;
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
       this.$router.push(`/legal/message?panename=mytodolist&type=7&back=/legal/workspace`, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
@@ -416,27 +421,35 @@ export default {
     },
 
     async querySystemDoneListByType(tabname = '', typename = '' , panename){
-      this.tabname = tabname;
-      const tlist =  await this.querySystemDoneList(tabname , typename , panename);
-      this.paneflows.map( item => { //遍历paneflows
-        if( panename == item.ename){
-          item.dataSource = tlist;
-          item.ename = panename;
-        }
-      });
+      try {
+        this.tabname = tabname;
+        const tlist =  await this.querySystemDoneList(tabname , typename , panename);
+        this.paneflows.map( item => { //遍历paneflows
+          if( panename == item.ename){
+            item.dataSource = tlist;
+            item.ename = panename;
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
       this.$router.push(`/legal/message?panename=mydonelist&type=7&back=/legal/workspace`, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
     async querySystemListByType(tabname = 1 , typename = '' , panename){
-      this.tabname = tabname;
-      const tlist =  await this.querySystemList(tabname , typename , panename);
-      this.paneflows.map( item => { //遍历paneflows
-        if( panename == item.ename){
-          item.dataSource = tlist;
-          item.ename = panename;
-        }
-      });
+      try {
+        this.tabname = tabname;
+        const tlist =  await this.querySystemList(tabname , typename , panename);
+        this.paneflows.map( item => { //遍历paneflows
+          if( panename == item.ename){
+            item.dataSource = tlist;
+            item.ename = panename;
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
       const redirectURL = typename == 'notify' ?  `/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
       this.$router.push(redirectURL, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
