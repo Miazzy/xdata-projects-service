@@ -446,8 +446,8 @@ export default {
       } catch (error) {
         console.error(error);
       }
-      const redirectURL = typename == 'notify' ?  `/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
-      this.$router.push(redirectURL, '_blank');
+      const redirectURL = typename == 'notify' ?  `${window.location.protocol}//${window.location.host}/#/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `${window.location.protocol}//${window.location.host}/#/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
+      window.open(redirectURL,'_blank'); // this.$router.push(redirectURL, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
