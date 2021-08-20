@@ -2435,6 +2435,7 @@ export default {
               if(this.role == 'workflow' || this.role == 'view'){
                 const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
                 this.approve_userlist = JSON.parse(process.relate_data);
+                this.release_userlist = JSON.parse(process.notify_data);
               }
             })();
 
