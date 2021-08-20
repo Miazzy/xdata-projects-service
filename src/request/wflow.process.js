@@ -498,15 +498,23 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             const operation = "同意"; // 审批动作
             const date = dayjs().format('YYYY-MM-DD HH:mm:ss'); // 获取当前时间
 
-            // 获取当前审批节点的所有数据
             try {
-                curRow = await Betools.manage.queryProcessLogByID(tableName, processID);
+                curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
             } catch (error) {
                 console.error(error);
             }
 
+            let data = ''; // 审批节点数组
+            let notifyData = ''; // 抄送节点数组
+
+            try {
+                data = JSON.parse(curRow.relate_data); // 所有审批流程节点
+                notifyData = JSON.parse(curRow.notify_data); // 所有审批流程节点
+            } catch (error) {
+                console.error(error);
+            }
+            
             // 获取后续节点
-            const data = JSON.parse(curRow.relate_data); // 所有审批流程节点
             const curUserNode = data.find(item => { return item.loginid == username }); // 当前审批流程节点
             const nextUserNodes = data.filter(item => item.index > curUserNode.index); 
             const accounts = data.map(item=>item.loginid).toString();
@@ -553,6 +561,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                         create_time: date,
                         business_data: JSON.stringify(bussinessNode),
                         relate_data: JSON.stringify(data),
+                        notify_data: JSON.stringify(notifyData),
                         origin_data: accounts,
                         bpm_status: nextUserNodes.length > 1 ? bpmStatus.bpm_status : '4',
                     };
