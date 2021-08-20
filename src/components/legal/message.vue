@@ -446,8 +446,8 @@ export default {
       } catch (error) {
         console.error(error);
       }
-      const redirectURL = typename == 'notify' ?  `${window.location.protocol}//${window.location.host}/#/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `${window.location.protocol}//${window.location.host}/#/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
-      window.open(redirectURL,'_blank'); // this.$router.push(redirectURL, '_blank');
+      const redirectURL = typename == 'notify' ?  `/legal/message?panename=mynotifylist&type=7&back=/legal/workspace` : `/legal/message?panename=myapplylist&type=7&back=/legal/workspace`;
+      this.$router.push(redirectURL, '_blank');
       Betools.storage.setStore(`system_message_tabname` , this.tabname , 3600 );
     },
 
@@ -455,7 +455,8 @@ export default {
     async querylegalview(id = '', panename = '', typename = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
-        this.$router.push(`/legal/case/legalview?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`);
+        const redirectURL = `${window.location.protocol}//${window.location.host}/#/legal/case/legalview?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`;
+        window.open(redirectURL,'_blank'); // this.$router.push(redirectURL, '_blank');
       } catch (error) {
         console.log(error);
       }
