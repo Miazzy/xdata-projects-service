@@ -2714,6 +2714,7 @@ export default {
                     const data = legal;
                     const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
                     data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
+                    data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
                     await this.handleReSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
                     
                     (async()=>{
