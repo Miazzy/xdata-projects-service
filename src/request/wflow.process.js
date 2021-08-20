@@ -609,6 +609,30 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                         const content = window.encodeURIComponent(`您好，您有一份流程抄送：${bussinessNode["title"]}，请及时处理！`.replace(/\//g,''));
                         await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.loginid}/${content}?type=legal&rurl=${receiveURL}&notify_type=notify`).set('accept', 'json');
                         // 记录一份pr_log_notify ，用于我的知会查询知会记录
+                        const notifyNode = {
+                            id: Betools.tools.queryUniqueID(), //获取随机数
+                            table_name: tableName, //业务表名
+                            main_value: bussinessNode.id, //表主键值
+                            business_data_id: bussinessNode.id, //业务具体数据主键值
+                            business_code: "000000000", //业务编号
+                            process_name: "知会", //流程名称
+                            employee: element.loginid,
+                            employeeName: element.name,
+                            process_station: "知会",
+                            process_audit: "000000000",
+                            proponents: element.loginid,
+                            approve_user: element.loginid,
+                            content: '',
+                            action: "审批",
+                            operate_time: date,
+                            create_time: date,
+                            business_data: JSON.stringify(bussinessNode),
+                            relate_data: JSON.stringify(data),
+                            notify_data: JSON.stringify(notifyData),
+                            origin_data: accounts,
+                            bpm_status: bpmStatus.bpm_status || "4",
+                        };
+                        await Betools.manage.postProcessLogHistory(notifyNode, 'pr_log_notify');
                     }
                 }
             } catch (error) {
