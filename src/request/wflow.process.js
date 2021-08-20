@@ -913,9 +913,9 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
             console.error(error);
         }
 
-        try {
+        try { // 修改发起节点对应的审批人员数据，抄送人员数据
             process_loglist.map(async (item) =>{
-                await Betools.manage.patchTableData('pr_log_history', item.id, {notify_data: JSON.stringify(release_userlist)}); //修改为驳回后的状态
+                await Betools.manage.patchTableData('pr_log_history', item.id, {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist)}); //修改为驳回后的状态
             });
         } catch (error) {
             console.error(error);
