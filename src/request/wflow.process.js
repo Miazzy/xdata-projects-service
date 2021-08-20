@@ -591,10 +591,10 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 const curHost = window.location.protocol + '//' + window.location.host;
                 if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=${nextProcessNode.id}&tname=bs_legal&role=workflow&origin_username=${origin_username}&bpm_status=${bpmStatus.bpm_status}&proponents=${nextUserNodes[0].loginid}&proponentName=${nextUserNodes[0].name}`);
-                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${nextUserNodes[0].loginid}/您好，您有一个案件发起申请待审批：${bussinessNode["title"]}，请及时处理?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${nextUserNodes[0].loginid}/您好，您有一个流程申请待审批：${bussinessNode["title"]}，请及时处理?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                 } else { //流程已经完毕，向发起人推送通知消息
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=&tname=bs_legal&role=view&origin_username=${origin_username}&bpm_status=4&proponents=${origin_username}`);
-                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您发起的案件申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                     
                     // 流程审批已经完成(审批同意且完成后，修改所有的审批历史记录的bpm_status为4)
                     const processLogList = await Betools.query.queryProcessLog();
@@ -606,7 +606,9 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     
                     // 流程审批完成，向添加的抄送人员推送消息
                     for await (const element of notifyData){
-
+                        const content = window.encodeURIComponent(`您好，您有一份流程抄送：${bussinessNode["title"]}，请及时处理！`.replace(/\//g,''));
+                        await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.loginid}/${content}?type=legal&rurl=${receiveURL}&notify_type=notify`).set('accept', 'json');
+                        // 记录一份pr_log_notify ，用于我的知会查询知会记录
                     }
                 }
             } catch (error) {
