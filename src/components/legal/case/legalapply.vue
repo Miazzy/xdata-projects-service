@@ -2364,7 +2364,7 @@ export default {
       // 上传提示
       async toastUpload(flag){
         if(flag == 'start'){
-          vant.Toast.loading({duration: 0, forbidClick: true, message: '上传中...',});
+          vant.Toast.loading({duration: 3000, forbidClick: false, message: '上传中...',});
         } else if(flag == 'fail'){
           this.$toast.success('文件上传失败，请稍后重试！');
         }
@@ -2611,7 +2611,7 @@ export default {
       async execPatch(elem){
           const { $router } = this;
           this.role = 'edit';
-          vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
+          vant.Toast.loading({ duration: 3000, forbidClick: false, message: '刷新中...', });
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
           const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', elem.apply_username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
           vant.Toast.clear();
@@ -2633,7 +2633,7 @@ export default {
       async execProcess(elem){
           const { $router } = this;
           this.role = 'process';
-          vant.Toast.loading({ duration: 0,  forbidClick: true,  message: '刷新中...', });
+          vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
           const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', elem.apply_username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
           vant.Toast.clear();
@@ -2655,7 +2655,7 @@ export default {
       async execStage(elem){
           const { $router } = this;
           this.role = 'operate';
-          vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
+          vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
           const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', elem.apply_username); 
           vant.Toast.clear();
@@ -2704,7 +2704,7 @@ export default {
               title: "确认操作",
               content: "是否重新提交此案件发起申请流程?",
               onOk: async(result) => {
-
+                    vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '提交中...', });
                     const legal = JSON.parse(JSON.stringify(this.legal));
 
                     // 提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
@@ -2728,6 +2728,7 @@ export default {
                       Betools.manage.handleLog(this.tablename , legal , '发起', '重新发起流程审批' , `${userinfo.realname} 发起${legal.caseSType}流程，案号：${legal.caseID}`);
                     })();
 
+                    vant.Toast.clear();
                     this.loading = false; //设置状态
                     this.readonly = true;
                     this.role = 'view';
@@ -2806,12 +2807,14 @@ export default {
             return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
           }
           try {
+            vant.Toast.loading({ duration: 3000, forbidClick: false, message: '提交中...', });
             const processID = Betools.tools.getUrlParam('processID');
             const domainURL = 'https://legal.yunwisdom.club:30443';
             response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
             this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
             this.processLogList = await Betools.query.queryProcessLog();
             this.role = this.apply = 'view';
+            vant.Toast.clear();
           } catch (error) {
             console.error(error);
           }
@@ -2825,12 +2828,14 @@ export default {
             return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
           }
           try {
+            vant.Toast.loading({ duration: 3000, forbidClick: false, message: '提交中...', });
             const processID = Betools.tools.getUrlParam('processID');
             const domainURL = 'https://legal.yunwisdom.club:30443';
             response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
             this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
             this.processLogList = await Betools.query.queryProcessLog();
             this.role = this.apply = 'view';
+            vant.Toast.clear();
           } catch (error) {
             console.error(error);
           }
@@ -2924,6 +2929,7 @@ export default {
             content: "是否确认保存此案件发起申请单?",
             onOk: async(result) => {
 
+                  vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '提交中...', });
                   const legal = JSON.parse(JSON.stringify(this.legal));
                   legal.id = id;
 
@@ -2967,6 +2973,7 @@ export default {
                     Betools.manage.handleLog(this.tablename , legal , '发起', '案件流程审批' , `${userinfo.realname} 发起${legal.caseSType}流程，案号：${legal.caseID}`);
                   })();
 
+                  vant.Toast.clear();
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';

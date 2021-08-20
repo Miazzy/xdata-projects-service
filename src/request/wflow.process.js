@@ -601,6 +601,11 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                             Betools.manage.patchTableData('pr_log_history', element.id, bpmStatus); //修改为驳回后的状态
                         }
                     }
+                    
+                    // 流程审批完成，向添加的抄送人员推送消息
+                    for await (const element of notifyData){
+
+                    }
                 }
             } catch (error) {
                 console.error(error);
