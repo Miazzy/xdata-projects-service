@@ -481,6 +481,8 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
     let result = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行同意审批操作?', }).then(async() => {
 
+            vant.Toast.loading({ duration: 5000, forbidClick: false, message: '提交中...', });
+
             try {
                 tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
                 bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
@@ -611,7 +613,9 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 console.error(error);
             }
 
+            vant.Toast.clear();
             vant.Dialog.alert({ title: '温馨提示', message: "同意审批成功！" }); //提示用户撤销审批操作成功
+
             return 'success';
     });
     return result; //返回操作结果
@@ -624,6 +628,8 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
 
     let result = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行驳回审批操作?', }).then(async() => {
+
+            vant.Toast.loading({ duration: 5000, forbidClick: false, message: '提交中...', });
 
             tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
             bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
@@ -687,6 +693,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
                 console.error(error);
             }
 
+            vant.Toast.clear();
             vant.Dialog.alert({ title: '温馨提示', message: "驳回审批成功！" }); //提示用户撤销审批操作成功
 
             return 'success';

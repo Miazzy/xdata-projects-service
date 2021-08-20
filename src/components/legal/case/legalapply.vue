@@ -2807,7 +2807,6 @@ export default {
             return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
           }
           try {
-            vant.Toast.loading({ duration: 3000, forbidClick: false, message: '提交中...', });
             const processID = Betools.tools.getUrlParam('processID');
             const domainURL = 'https://legal.yunwisdom.club:30443';
             response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
@@ -2828,7 +2827,6 @@ export default {
             return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
           }
           try {
-            vant.Toast.loading({ duration: 3000, forbidClick: false, message: '提交中...', });
             const processID = Betools.tools.getUrlParam('processID');
             const domainURL = 'https://legal.yunwisdom.club:30443';
             response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
