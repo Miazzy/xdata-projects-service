@@ -306,7 +306,7 @@ export default {
         let logList = await queryNotifyLog(this.tablename , this.userinfo.username);
         debugger;
         logList.map((item , index) => {
-          const elem = JSON.parse(item.business_data).data;
+          const elem = typename == 'notify' ?  JSON.parse(item.business_data) : JSON.parse(item.business_data).data;
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = typename == 'notify' ? `抄送：${item.content} ` : `发起：${item.content} `;
