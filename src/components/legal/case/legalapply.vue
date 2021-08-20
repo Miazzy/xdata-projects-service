@@ -1716,8 +1716,8 @@
 
                 <div v-show=" (role == 'view' || role == 'add' || role == 'edit' || role == 'workflow') && approve_userlist && approve_userlist.length > 0 " class="reward-apply-content-item" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
                   <a-row>
-                    <a-col :span="24">
-                      <div style="margin-left:50px;margin-top:5px; width:100%; height:100px;">
+                    <a-col :span="24" :style="`width:100%; ${(50 + approve_userlist.length * 7.5) > 100 ? `overflow-x:scroll;` : '' } `">
+                      <div :style="`margin-left:50px;margin-top:15px; width:${50 + approve_userlist.length * 7.5}%; height:100px;`">
                         <span style="margin-left:32.5px;">审批：</span>
                         <template v-for="(item , index) in approve_userlist ">
                           <span :key="index" style="position: relative; width:75px; height:180px;">
@@ -2189,6 +2189,7 @@ export default {
       release_userlist:[],
       approve_userid:'',
       approve_userlist:[],
+      notify_userlist:[],
       approve_executelist:[],
       role:'',
       stage:'',
@@ -2838,6 +2839,9 @@ export default {
                     const url = `${window.BECONFIG.domain.replace('www','legal')}/evaluate/${this.legal.id}/${user.loginid || item.name}/#/`;
                     const content = window.encodeURIComponent(`您好，您有一份案件知会通知(${userinfo.realname})，案号:${this.legal.caseID}！`.replace(/\//g,''));
                     await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user.loginid}/${content}?type=legal&url=${url}`).set('accept', 'json');
+
+                    // 记录一份pr_log_notify ，用于我的知会查询知会记录
+
                   }
                   vant.Dialog.alert({  title: '温馨提示',  message: `案件知会通知推送成功！`, });
               }});
