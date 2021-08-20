@@ -1701,10 +1701,18 @@
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
                     </a-col>
-                    <a-col :span="20">
-                      <a-input v-model="approve_userid"  placeholder="请添加并选择审批人员！" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; display:none; " />
+                    <a-col :span="8">
                       <a-auto-complete :data-source="lawyerInNamelist" v-model="approve_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择审批人员！" :filter-option="filterOption" />
                       <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidApprove()"  >
+                        添加
+                      </a-button>
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>抄送人员</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="lawyerInNamelist" v-model="release_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择抄送人员！" :filter-option="filterOption" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidNotify()"  >
                         添加
                       </a-button>
                     </a-col>
@@ -1729,7 +1737,22 @@
                         </template>
                       </div>
                     </a-col>
-                  </a-row>
+                  </a-row> 
+                  <a-row v-show=" release_userlist && release_userlist.length > 0 "> 
+                    <a-col :span="24" :style="`width:100%; ${(50 + release_userlist.length * 7.5) > 100 ? `overflow-x:scroll;` : '' } `">
+                      <div :style="`margin-left:50px;margin-top:15px; width:${50 + release_userlist.length * 7.5}%; height:100px;`">
+                        <span style="margin-left:32.5px;">抄送：</span>
+                        <template v-for="(item , index) in release_userlist ">
+                          <span :key="index" style="position: relative; width:75px; height:180px;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveNotify(item, index)" style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveNotify(item, index)" >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveNotify(item, index)" >{{ item.loginid }}</span>
+                            <a-icon v-show=" ( index + 1 )< release_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
+                          </span>
+                        </template>
+                      </div>
+                    </a-col>
+                  </a-row> 
                 </div>  
 
                 <div v-show="!isNull(id) && (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
@@ -2189,6 +2212,7 @@ export default {
       release_userlist:[],
       approve_userid:'',
       approve_userlist:[],
+      notify_userid:'',
       notify_userlist:[],
       approve_executelist:[],
       role:'',
@@ -2550,7 +2574,6 @@ export default {
       // 检测审批人员，并加入审批列表
       async execValidApprove(){
         const username = this.approve_userid;
-        debugger;
         let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
         userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
         userlist = this.approve_userlist.concat(userlist);
@@ -2567,6 +2590,18 @@ export default {
               onOk: async(result) => {
                 this.approve_userlist.splice(index, 1);
                 this.approve_userlist.map((item,index) => { item.index = index;});
+              }
+        });
+      },
+
+      // 移除第Index个抄送人员
+      async execRemoveNotify(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除抄送人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.release_userlist.splice(index, 1);
+                this.release_userlist.map((item,index) => { item.index = index;});
               }
         });
       },
