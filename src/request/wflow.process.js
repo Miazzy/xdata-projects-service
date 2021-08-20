@@ -837,6 +837,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
     let employeeName = '';
     const approve_userlist = data.approve_userlist; //获取审批人员列表
     const release_userlist = data.release_userlist; //获取抄送人员列表
+    const process_loglist = data.process_loglist;   //获取审批流程日志记录
     const bpmStatus = "2";
 
     try {
@@ -908,6 +909,14 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
         try { // 将 pr_log_apply 的 申请记录，状态修改为 bpm_status = 1;
             await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus}); //修改为驳回后的状态
             await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus}); //修改为驳回后的状态
+        } catch (error) {
+            console.error(error);
+        }
+
+        try {
+            process_loglist.map(async (item) =>{
+                await Betools.manage.patchTableData('pr_log_history', item.id, {notify_data: JSON.stringify(release_userlist)}); //修改为驳回后的状态
+            });
         } catch (error) {
             console.error(error);
         }
