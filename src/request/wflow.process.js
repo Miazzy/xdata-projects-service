@@ -689,6 +689,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
     let accounts = '';
     let employeeName = '';
     const approve_userlist = data.approve_userlist; //获取审批人员列表
+    const release_userlist = data.release_userlist; //获取抄送人员列表
     const bpmStatus = "2";
 
     try {
@@ -738,6 +739,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
                 create_time: ctime,
                 business_data: JSON.stringify(freeWFNode),
                 relate_data: JSON.stringify(approve_userlist),
+                notify_data: JSON.stringify(release_userlist),
                 origin_data: accounts,
                 bpm_status: bpmStatus,
             };
@@ -782,6 +784,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
            create_time: ctime,
            business_data: JSON.stringify(freeWFNode),
            relate_data: JSON.stringify(approve_userlist),
+           notify_data: JSON.stringify(release_userlist),
            origin_data: accounts,
            bpm_status: bpmStatus,
        };
@@ -824,6 +827,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
     let accounts = '';
     let employeeName = '';
     const approve_userlist = data.approve_userlist; //获取审批人员列表
+    const release_userlist = data.release_userlist; //获取抄送人员列表
     const bpmStatus = "2";
 
     try {
@@ -873,6 +877,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
                 create_time: ctime,
                 business_data: JSON.stringify(freeWFNode),
                 relate_data: JSON.stringify(approve_userlist),
+                notify_data: JSON.stringify(release_userlist),
                 origin_data: accounts,
                 bpm_status: bpmStatus,
             };
@@ -924,6 +929,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
            create_time: ctime,
            business_data: JSON.stringify(freeWFNode),
            relate_data: JSON.stringify(approve_userlist),
+           notify_data: JSON.stringify(release_userlist),
            origin_data: accounts,
            bpm_status: bpmStatus,
        };
