@@ -495,8 +495,18 @@ export default {
             console.error(error);
           }
 
-          this.element.legal_title = this.legal.title;
+          this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.element.title;
           this.element.pid = pid;
+
+          (async()=>{
+            this.processLogList = await Betools.query.queryProcessLog();
+            if(this.role == 'workflow' || this.role == 'view'){
+              const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
+              this.approve_userlist = JSON.parse(process.relate_data);
+              this.release_userlist = JSON.parse(process.notify_data);
+            }
+          })();
+          
         } catch (error) {
           console.log(error);
         }
