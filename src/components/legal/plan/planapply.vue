@@ -356,6 +356,7 @@ export default {
           remark: '暂无备注', //备注信息
           xid:'',
           pid:'',
+          bpm_status:'',
       },
       data: [],
       readonly: false,

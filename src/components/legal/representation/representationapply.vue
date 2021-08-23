@@ -226,7 +226,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="role != 'view' && !isNull(id)  " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role != 'view' && role != 'workflow' && !isNull(id)  " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -263,7 +263,7 @@
                   </van-cell-group>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -279,7 +279,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -357,6 +357,7 @@ export default {
           remark: '暂无备注', //备注信息
           xid:'',
           pid:'',
+          bpm_status:'',
       },
       data: [],
       readonly: false,
@@ -377,6 +378,7 @@ export default {
       collection: [{ }],
       userinfo: '',
       usertitle:'',
+      processLogList:[],
       columns: workconfig.columns.reward.items,
       wfcolumns: workconfig.columns.reward.wfcolumns,
       message: workconfig.compValidation.legalapply.message,
@@ -532,6 +534,52 @@ export default {
         }
       },
 
+      // 检测知会人员，并加入知会列表
+      async execValidNotify(){
+        const username = this.release_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.release_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.release_userlist = userlist; 
+        this.release_userlist.map((item,index) => { item.index = index;});
+      },
+
+      // 检测审批人员，并加入审批列表
+      async execValidApprove(){
+        const username = this.approve_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.approve_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.approve_userlist = userlist; 
+        this.approve_userlist.map((item,index)=>{ item.index = index;});
+      },
+
+      // 移除第Index个审批人员
+      async execRemoveApprove(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除审批人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.approve_userlist.splice(index, 1);
+                this.approve_userlist.map((item,index) => { item.index = index;});
+              }
+        });
+      },
+
+      // 移除第Index个抄送人员
+      async execRemoveNotify(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除抄送人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.release_userlist.splice(index, 1);
+                this.release_userlist.map((item,index) => { item.index = index;});
+              }
+        });
+      },
+
       // 案件记录查看申请
       async execView(elem){
           const { $router } = this;
@@ -639,6 +687,76 @@ export default {
                   return vant.Dialog.alert({  title: '温馨提示',  message: `修改操作成功！`, }); //this.$toast.success('律师修改操作成功！');
                }
           });
+      },
+
+      // 提交自由流程
+      async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 重新提交自由流程
+      async handleReSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleReStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 工作流程审批同意
+      async handleAgree(){ // 生成下一条流程记录 // 转移当前审批流程记录到历史记录中 // 通知下一位审批人员
+          let response = null;
+          if(Betools.tools.isNull(this.workflow.content)){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
+          }
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = 'https://legal.yunwisdom.club:30443';
+            response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
+            this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.processLogList = await Betools.query.queryProcessLog();
+            this.role = this.apply = 'view';
+            vant.Toast.clear();
+          } catch (error) {
+            console.error(error);
+          }
+          return response;
+      },
+
+      // 工作流程审批驳回
+      async handleDisagree(){ // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
+          let response = null;
+          if(Betools.tools.isNull(this.workflow.content)){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
+          }
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = 'https://legal.yunwisdom.club:30443';
+            response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
+            this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.processLogList = await Betools.query.queryProcessLog();
+            this.role = this.apply = 'view';
+            vant.Toast.clear();
+          } catch (error) {
+            console.error(error);
+          }
+          return response;
       },
 
   },
