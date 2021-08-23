@@ -512,6 +512,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             try {
                 data = JSON.parse(curRow.relate_data); // 所有审批流程节点
                 notifyData = JSON.parse(curRow.notify_data); // 所有审批流程节点
+                data.map((item,index) => item.index = index);
             } catch (error) {
                 console.error(error);
             }
