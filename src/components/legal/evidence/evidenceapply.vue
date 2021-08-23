@@ -166,16 +166,16 @@
                 <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据日期</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据提交日期</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="element.evd_time" readonly placeholder="请填写证据日期！" @blur="validFieldToast('evd_time')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-date-picker v-model="element.evd_time" readonly placeholder="请填写证据提交日期！" @blur="validFieldToast('evd_time')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>负责人员</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据提供人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.evd_by" readonly placeholder="请输入此证据先行相关负责人员！" @blur="validFieldToast('evt_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.evd_by" readonly placeholder="请输入此证据提供人员！" @blur="validFieldToast('evt_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
