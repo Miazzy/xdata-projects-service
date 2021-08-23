@@ -2694,6 +2694,7 @@ export default {
           if(Betools.tools.isNull(this.approve_userlist) || this.approve_userlist.length == 0 ){
             return await vant.Dialog.alert({ title: '温馨提示', message: `请选择审批人员！`,});
           }
+          
           // 获取流程日志记录
           if(!Betools.tools.isNull(this.processLogList) && this.processLogList.length > 0){
             process_loglist = this.processLogList.filter(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' });
@@ -2722,7 +2723,12 @@ export default {
                     data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
                     data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
                     data.process_loglist = JSON.parse(JSON.stringify(process_loglist));
-                    await this.handleReSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
+
+                    try {
+                      await this.handleReSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
+                    } catch (error) {
+                      console.error(error);
+                    }
                     
                     (async()=>{
                       Betools.manage.handleLog(this.tablename , legal , '发起', '重新发起流程审批' , `${userinfo.realname} 发起${legal.caseSType}流程，案号：${legal.caseID}`);
