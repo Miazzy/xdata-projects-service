@@ -1,3 +1,9 @@
 #legal-progress-table-content .ant-table-tbody>tr>td, .ant-table-thead>tr>th {
     padding: 4px 12px 4px 12px;
 }
+
+#system-approve-userlist-content .ant-avatar>img {
+    display: block;
+    width: auto;
+    height: 100%;
+}
