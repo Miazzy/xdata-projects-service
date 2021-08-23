@@ -108,7 +108,7 @@
                           </a>
                         </a-list-item-meta>
                         <div slot="actions">
-                          <a @click="querylegalview(item.id , panename , item.typename , item.bpm_status , item.apply_realname || item.proponents , item.pid)">查看</a>
+                          <a @click="querylegalview(item.id , panename , item , item.bpm_status , item.proponents , item.pid , item)">查看</a>
                         </div>
                         <div class="list-content">
                           <div v-show="item.reward_period" class="list-content-item">
@@ -461,11 +461,12 @@ export default {
     },
 
     // 跳转到详情页面
-    async querylegalview(id = '', panename = '', typename = '', bpm_status = 1 , proponents = '' , pid){
+    async querylegalview(id = '', panename = '', element = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
-        const redirectURL = `${window.location.protocol}//${window.location.host}/#/legal/case/legalview?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`;
-        window.open(redirectURL,'_blank'); // this.$router.push(redirectURL, '_blank');
+        const pviewName = element.table_name.replace('bs_','') + 'apply';
+        const redirectURL = `${window.location.protocol}//${window.location.host}/#/legal/${pviewName}?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`;
+        window.open(redirectURL,'_blank'); 
       } catch (error) {
         console.log(error);
       }
