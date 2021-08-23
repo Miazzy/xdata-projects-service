@@ -226,7 +226,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="role != 'view' && !isNull(id)  " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role != 'view' && role != 'workflow' && !isNull(id)  " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -240,7 +240,30 @@
                    </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="(role == 'view' || role == 'notify' || role == 'workflow' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      处理记录
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'notify' || role == 'workflow' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;margin-left:75px;">
+                  <van-cell-group style="margin-top:0px;" v-show="processLogList.length > 0">
+                    <div>
+                      <van-steps direction="vertical" :active="processLogList.length - 1">
+                        <template v-for="value in processLogList">
+                          <van-step :key="value.id">
+                            <h3>{{ (isNull(value.employeeName) ? deNull(value.employee,'') : `${deNull(value.employeeName,'')}(${deNull(value.employee,'')})`) + ' ' + deNull(value.action,'') + ' ' + deNull(value.action_opinion,'') + ' ' + deNull(value.content,'').replace(/null/g,'') }}</h3>
+                            <p>{{ value.create_time }}</p>
+                          </van-step>
+                        </template>
+                      </van-steps>
+                    </div>
+                  </van-cell-group>
+                </div>
+
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -256,7 +279,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -333,6 +356,7 @@ export default {
           remark: '暂无备注', //备注信息
           xid:'',
           pid:'',
+          bpm_status:'',
       },
       data: [],
       readonly: false,
@@ -473,6 +497,16 @@ export default {
 
           this.element.legal_title = this.legal.title;
           this.element.pid = pid;
+
+          (async()=>{
+            this.processLogList = await Betools.query.queryProcessLog();
+            if(this.role == 'workflow' || this.role == 'view'){
+              const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
+              this.approve_userlist = JSON.parse(process.relate_data);
+              this.release_userlist = JSON.parse(process.notify_data);
+            }
+          })();
+
         } catch (error) {
           console.log(error);
         }
@@ -597,8 +631,6 @@ export default {
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
-
-                  debugger; 
 
                   // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
                   try {
