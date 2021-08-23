@@ -482,7 +482,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
     let applyNode = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行同意审批操作?', }).then(async() => {
 
-            vant.Toast.loading({ duration: 5000, forbidClick: false, message: '提交中...', });
+            vant.Toast.loading({ duration: 10000, forbidClick: false, message: '提交中...', });
 
             try {
                 tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
@@ -673,7 +673,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
     let applyNode = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行驳回审批操作?', }).then(async() => {
 
-            vant.Toast.loading({ duration: 5000, forbidClick: false, message: '提交中...', });
+            vant.Toast.loading({ duration: 10000, forbidClick: false, message: '提交中...', });
 
             tableName = !Betools.tools.isNull(tableName) ? tableName : window.decodeURIComponent(Betools.tools.queryUrlString('tname')); //获取表单名称
             bussinessCodeID = !Betools.tools.isNull(bussinessCodeID) ? bussinessCodeID : Betools.tools.queryUrlString("id"); //查询业务编号
@@ -695,13 +695,6 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             } catch (error) {
                 console.error(error);
             }
-
-            /** 
-             const flag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
-             if (!flag) {
-                 return vant.Dialog.alert({ message: "您不在此审批流程记录的操作职员列中，无法进行驳回操作！" });  //检查审批权限，当前用户必须属于操作职员中，才可以进行审批操作
-             }
-             */
 
             //获取关于此表单的所有当前审批日志信息
             let node = await Betools.manage.queryProcessLog(tableName, curRow["business_data_id"]);
