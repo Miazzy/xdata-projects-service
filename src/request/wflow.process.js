@@ -503,7 +503,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
 
             try {
                 curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
-                applyNode = await Betools.manage.queryProcessLogByID(tableName, processID, 'pr_log_apply'); // 获取申请审批节点的所有数据
+                applyNode = await Betools.manage.queryProcessLogByID(tableName, bussinessNode.id, 'pr_log_apply'); // 获取申请审批节点的所有数据
             } catch (error) {
                 console.error(error);
             }
@@ -658,6 +658,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
 export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
 
     let result = '';
+    let applyNode = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行驳回审批操作?', }).then(async() => {
 
             vant.Toast.loading({ duration: 5000, forbidClick: false, message: '提交中...', });
@@ -676,7 +677,13 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             const date = dayjs().format('YYYY-MM-DD'); //获取当前时间
             const bpmStatus = { bpm_status: "1" }; //流程状态
 
-            curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
+            
+            try {
+                curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
+                applyNode = await Betools.manage.queryProcessLogByID(tableName, bussinessNode.id, 'pr_log_apply'); // 获取申请审批节点的所有数据
+            } catch (error) {
+                console.error(error);
+            }
 
             /** 
              const flag = Betools.tools.deNull(curRow["employee"]).includes(userInfo["username"]) || Betools.tools.deNull(curRow["employee"]).includes(userInfo["realname"])
@@ -686,7 +693,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
              */
 
             //获取关于此表单的所有当前审批日志信息
-            let node = await Betools.manage.queryProcessLog( tableName, curRow["business_data_id"]);
+            let node = await Betools.manage.queryProcessLog(tableName, curRow["business_data_id"]);
 
             //遍历node,设置approve_user，action
             node.map((item) => {
