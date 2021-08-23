@@ -499,8 +499,9 @@ export default {
             console.error(error);
           }
 
-          this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.element.title;
+          this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.legal.title;
           this.element.pid = pid;
+          debugger;
 
           (async()=>{
             this.processLogList = await Betools.query.queryProcessLog();
@@ -510,7 +511,7 @@ export default {
               this.release_userlist = JSON.parse(process.notify_data);
             }
           })();
-          
+
         } catch (error) {
           console.log(error);
         }
