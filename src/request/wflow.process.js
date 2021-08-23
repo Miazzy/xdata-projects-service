@@ -1025,6 +1025,18 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
          console.log(error);
        }
 
+       try {
+        const processLogList = await Betools.query.queryProcessLog();
+        processLogList.map(item => { 
+            if(Betools.tools.isNull(item.relate_data)){
+                const node = {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}
+                Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
+            }
+        })
+       } catch (error) {
+        console.log(error);
+       }
+
        // 操作完毕，返回结果
        return true;
     } catch (error) {
