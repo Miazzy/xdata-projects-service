@@ -240,6 +240,29 @@
                    </a-row>
                 </div>
 
+                <div v-show="(role == 'view' || role == 'notify' || role == 'workflow' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      处理记录
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'notify' || role == 'workflow' ) && processLogList.length > 0 " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;margin-left:75px;">
+                  <van-cell-group style="margin-top:0px;" v-show="processLogList.length > 0">
+                    <div>
+                      <van-steps direction="vertical" :active="processLogList.length - 1">
+                        <template v-for="value in processLogList">
+                          <van-step :key="value.id">
+                            <h3>{{ (isNull(value.employeeName) ? deNull(value.employee,'') : `${deNull(value.employeeName,'')}(${deNull(value.employee,'')})`) + ' ' + deNull(value.action,'') + ' ' + deNull(value.action_opinion,'') + ' ' + deNull(value.content,'').replace(/null/g,'') }}</h3>
+                            <p>{{ value.create_time }}</p>
+                          </van-step>
+                        </template>
+                      </van-steps>
+                    </div>
+                  </van-cell-group>
+                </div>
+
                 <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
