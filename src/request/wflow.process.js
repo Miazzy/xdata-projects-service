@@ -520,7 +520,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             }
             
             // 获取后续节点
-            const curUserNode = data.find(item => { return item.loginid == username }); // 当前审批流程节点
+            const curUserNode = data.find(item => { return item.loginid == userInfo.username || item.loginid == username }); // 当前审批流程节点
             const nextUserNodes = data.filter(item => item.index > curUserNode.index); 
             const accounts = data.map(item=>item.loginid).toString();
 
@@ -597,6 +597,8 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${nextUserNodes[0].loginid}/您好，您有一个流程申请待审批：${bussinessNode["title"]}，请及时处理?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                 } else { //流程已经完毕，向发起人推送通知消息
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=&tname=bs_legal&role=view&origin_username=${origin_username}&bpm_status=4&proponents=${origin_username}`);
+                    
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                     await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                     
                     // 流程审批已经完成(审批同意且完成后，修改所有的审批历史记录的bpm_status为4)
@@ -863,12 +865,13 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 
        try {
         const processLogList = await Betools.query.queryProcessLog();
+        const node = { relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist), }
         processLogList.map(item => { 
             if(Betools.tools.isNull(item.relate_data)){
-                const node = {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}
                 Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
             }
-        })
+        });
+        // Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
        } catch (error) {
         console.log(error);
        }
@@ -1029,12 +1032,13 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 
        try {
         const processLogList = await Betools.query.queryProcessLog();
+        const node = { relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist), }
         processLogList.map(item => { 
             if(Betools.tools.isNull(item.relate_data)){
-                const node = {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}
                 Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
             }
-        })
+        });
+        Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
        } catch (error) {
         console.log(error);
        }
