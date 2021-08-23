@@ -644,6 +644,18 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 console.error(error);
             }
 
+            try {
+                const processLogList = await Betools.query.queryProcessLog();
+                const node = { relate_data: JSON.stringify(data), notify_data: JSON.stringify(notifyData) , }
+                processLogList.map(item => { 
+                    if(Betools.tools.isNull(item.relate_data)){
+                        Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+
             vant.Toast.clear();
             vant.Dialog.alert({ title: '温馨提示', message: "同意审批成功！" }); //提示用户撤销审批操作成功
 
