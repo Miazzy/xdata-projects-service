@@ -506,8 +506,8 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 console.error(error);
             }
 
-            let data = ''; // 审批节点数组
-            let notifyData = ''; // 抄送节点数组
+            let data = []; // 审批节点数组
+            let notifyData = []; // 抄送节点数组
 
             try {
                 data = JSON.parse(curRow.relate_data); // 所有审批流程节点
@@ -857,6 +857,18 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
           await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
        } catch (error) {
          console.log(error);
+       }
+
+       try {
+        const processLogList = await Betools.query.queryProcessLog();
+        processLogList.map(item => { 
+            if(Betools.tools.isNull(item.relate_data)){
+                const node = {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}
+                Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
+            }
+        })
+       } catch (error) {
+        console.log(error);
        }
 
        // 操作完毕，返回结果
