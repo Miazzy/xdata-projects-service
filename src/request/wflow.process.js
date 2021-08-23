@@ -598,8 +598,8 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 } else { //流程已经完毕，向发起人推送通知消息
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessNode.id}&processID=&tname=bs_legal&role=view&origin_username=${origin_username}&bpm_status=4&proponents=${origin_username}`);
                     
-                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
-                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                    await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您发起的流程申请已审批通过：${bussinessNode["title"]}。?type=legal&rurl=${receiveURL}`).set('accept', 'json');
                     
                     // 流程审批已经完成(审批同意且完成后，修改所有的审批历史记录的bpm_status为4)
                     const processLogList = await Betools.query.queryProcessLog();
