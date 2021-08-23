@@ -463,7 +463,7 @@ export default {
     async querylegalview(id = '', panename = '', element = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
-        const pviewName = element.table_name.replace('bs_','') + 'apply';
+        const pviewName = element.table_name.replace('bs_legal','') + 'apply';
         const redirectURL = `${window.location.protocol}//${window.location.host}/#/legal/${pviewName}?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`;
         window.open(redirectURL,'_blank'); 
       } catch (error) {

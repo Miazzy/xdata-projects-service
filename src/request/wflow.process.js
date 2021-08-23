@@ -592,7 +592,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
-                const pviewName = tableName.replace('bs_','') + 'apply';
+                const pviewName = tableName.replace('bs_legal','') + 'apply';
 
                 if(!(Betools.tools.isNull(nextUserNodes) || nextUserNodes.length == 0)){
                     const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/${pviewName}?id=${bussinessNode.id}&processID=${nextProcessNode.id}&tname=bs_legal&role=workflow&origin_username=${origin_username}&bpm_status=${bpmStatus.bpm_status}&proponents=${nextUserNodes[0].loginid}&proponentName=${nextUserNodes[0].name}`);
@@ -876,7 +876,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );  // 记录当前流程已经提交，短时间内无法再次提交
 
        const curHost = window.location.protocol + '//' + window.location.host;
-       const pviewName = curTableName.replace('bs_','') + 'apply';
+       const pviewName = curTableName.replace('bs_legal','') + 'apply';
 
        // 此处推送消息至第一个审批处 
        try {
@@ -1044,7 +1044,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );  // 记录当前流程已经提交，短时间内无法再次提交
 
        const curHost = window.location.protocol + '//' + window.location.host;
-       const pviewName = curTableName.replace('bs_','') + 'apply';
+       const pviewName = curTableName.replace('bs_legal','') + 'apply';
 
        // 此处推送消息至第一个审批处 
        try {
