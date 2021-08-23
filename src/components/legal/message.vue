@@ -306,7 +306,10 @@ export default {
         let logList = await queryNotifyLog(this.tablename , this.userinfo.username);
         debugger;
         logList.map((item , index) => {
-          const elem = typename == 'notify' ?  JSON.parse(item.business_data) : JSON.parse(item.business_data).data;
+          let elem = typename == 'notify' ?  JSON.parse(item.business_data) : JSON.parse(item.business_data).data;
+          if(Betools.tools.isNull(elem)){
+            elem = JSON.parse(item.business_data);
+          }
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = typename == 'notify' ? `抄送：${item.content} ` : `发起：${item.content} `;
@@ -337,7 +340,10 @@ export default {
         let logList = await Betools.query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
-          const elem = JSON.parse(item.business_data).data;
+          let elem = JSON.parse(item.business_data).data;
+          if(Betools.tools.isNull(elem)){
+            elem = JSON.parse(item.business_data);
+          }
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = `发起：${item.content} `;
@@ -369,7 +375,10 @@ export default {
         let logList = await Betools.query.queryProcessLogHistoryByUserName(this.tablename , this.userinfo.username);
 
         logList.map((item , index) => {
-          const elem = JSON.parse(item.business_data).data;
+          let elem = JSON.parse(item.business_data).data;
+          if(Betools.tools.isNull(elem)){
+            elem = JSON.parse(item.business_data);
+          }
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = `发起：${item.content} `;
