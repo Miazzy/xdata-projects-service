@@ -725,10 +725,18 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
             try {
                 const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/case/legalview?id=${bussinessCodeID}&pid=&origin_username=${origin_username}&tname=bs_legal&role=view&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${bussinessNode.apply_username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${username}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
             } catch (error) {
                 console.error(error);
+            }
+
+            // 流程审批已经完成(审批同意且完成后，修改所有的审批历史记录的bpm_status为4)
+            const processLogList = await Betools.query.queryProcessLog();
+            for await (const element of processLogList){
+                if(element.bpm_status != bpmStatus.bpm_status){
+                    Betools.manage.patchTableData('pr_log_history', element.id, bpmStatus); //修改为驳回后的状态
+                }
             }
 
             vant.Toast.clear();
