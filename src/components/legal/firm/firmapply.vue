@@ -678,16 +678,44 @@ export default {
             title: "确认操作",
             content: "是否确认保存此律所录入申请单?",
             onOk: async() => {
-                  const { legal } = this;
+
+                  const legal = JSON.parse(JSON.stringify(this.legal));
                   legal.id = id;
                   legal.tags = JSON.stringify(legal.tags); //进行序列化
                   legal.in_zone = JSON.stringify(legal.in_zone); //进行序列化
+
                   const result = await Betools.manage.postTableData(this.tablename , this.legal); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
-                  legal.tags = JSON.parse(legal.tags); //进行解析
-                  legal.in_zone = JSON.parse(legal.in_zone); //进行解析
+
+                  // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
+                  try {
+                    const users = this.approve_userlist.map(item=>item.loginid);
+                    const wfUsers = users.slice(0,-1).toString(); // 审批人员
+                    const nfUsers = ''; // 知会人员
+                    const approver = users.slice(-1).toString(); // 最后一个终审人员
+                    const data = legal;
+                    const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
+                    data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
+                    data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
+                    
+                    try {
+                      await this.handleSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  } catch (error) {
+                    console.error(error);
+                  }
+
+                  try {
+                    legal.tags = JSON.parse(legal.tags); //进行解析
+                    legal.in_zone = JSON.parse(legal.in_zone); //进行解析
+                  } catch (error) {
+                    console.error(error);
+                  }
+                  
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';

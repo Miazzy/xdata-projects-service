@@ -2957,17 +2957,21 @@ export default {
                   }
 
                   // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
-                  const users = this.approve_userlist.map(item=>item.loginid);
-                  const wfUsers = users.slice(0,-1).toString(); // 审批人员
-                  const nfUsers = ''; // 知会人员
-                  const approver = users.slice(-1).toString(); // 最后一个终审人员
-                  const data = legal;
-                  const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
-                  data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
-                  data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
-
                   try {
-                    await this.handleSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
+                    const users = this.approve_userlist.map(item=>item.loginid);
+                    const wfUsers = users.slice(0,-1).toString(); // 审批人员
+                    const nfUsers = ''; // 知会人员
+                    const approver = users.slice(-1).toString(); // 最后一个终审人员
+                    const data = legal;
+                    const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
+                    data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
+                    data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
+  
+                    try {
+                      await this.handleSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, `https://legal.yunwisdom.club:30443`);
+                    } catch (error) {
+                      console.error(error);
+                    }
                   } catch (error) {
                     console.error(error);
                   }
