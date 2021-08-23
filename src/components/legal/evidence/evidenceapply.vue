@@ -370,6 +370,9 @@ export default {
       },
       id:'',
       pid:'',
+      workflow:{
+        content:'',
+      },
       legal: {
           title:'',
       },
@@ -538,7 +541,6 @@ export default {
               this.release_userlist = JSON.parse(process.notify_data);
             }
           })();
-
 
         } catch (error) {
           console.log(error);
