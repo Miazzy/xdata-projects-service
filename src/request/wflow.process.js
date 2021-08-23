@@ -445,7 +445,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
             //发送审批流程通知，通知流程下一位审批人，点击审批详情，处理用户提交的诉讼案件流程审批通知。
             try {
                 const receiveURL = encodeURIComponent(`${window.requestAPIConfig.vuechatdomain}/#/legal/case/legalview?id=${bussinessCodeID}&pid=&tname=bs_reward_apply&panename=mytodolist&typename=wflow_todo&bpm_status=2&proponents=${firstAuditor}`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstAuditor}/亲爱的同事，您收到案件发起申请审批处理请求：${curRow["title"]}，内容：${curRow['content']}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstAuditor}/您好，您收到流程申请审批处理请求：${curRow["title"]}，内容：${curRow['content']}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`)
                     .set('accept', 'json');
             } catch (error) {
                 console.log(error);
@@ -467,7 +467,7 @@ export async function handleApproveWF(curRow = '', fixedWFlow = '', data = []) {
  */
 export async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL) {
     try {
-        await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/亲爱的同事，员工‘${userinfo}’提交了的案件发起申请，请进行流程审批操作！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+        await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${user_group_ids}/您好，员工‘${userinfo}’提交了的流程申请，请进行流程审批操作！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
     } catch (error) {
         console.log(error);
     }
@@ -589,7 +589,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                 console.error(error);
             }
                                                 
-            //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
+            //发送企业微信通知，知会流程发起人，此流程申请已经完成！
             try {
                 const curHost = window.location.protocol + '//' + window.location.host;
                 const pviewName = tableName.replace('bs_legal','') + 'apply';
@@ -729,11 +729,11 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             const curHost = window.location.protocol + '//' + window.location.host;
                 
             
-            //发送企业微信通知，知会流程发起人，此案件发起申请已经完成！
+            //发送企业微信通知，知会流程发起人，此流程申请已经完成！
             try {
                 const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/${pviewName}?id=${bussinessCodeID}&pid=&origin_username=${origin_username}&tname=bs_legal&role=view&typename=wflow_done&bpm_status=4&proponents=${bussinessNode.create_by}`);
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
-                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您提交的案件发起申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您提交的流程申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+                await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${applyNode.proponents}/您好，您提交的流程申请已被驳回：${bussinessNode["title"]}，驳回意见：${message}，请修改申请内容后重新提交流程?type=legal&rurl=${receiveURL}`).set('accept', 'json');
             } catch (error) {
                 console.error(error);
             }
@@ -881,7 +881,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        // 此处推送消息至第一个审批处 
        try {
           const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/${pviewName}?id=${data.id}&processID=${nextWflowNode.id}&tname=${curTableName}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
-          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了流程申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
        } catch (error) {
          console.log(error);
        }
@@ -1049,7 +1049,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
        // 此处推送消息至第一个审批处 
        try {
           const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/${pviewName}?id=${data.id}&processID=${nextWflowNode.id}&tname=${curTableName}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
-          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了案件发起申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了流程申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
        } catch (error) {
          console.log(error);
        }

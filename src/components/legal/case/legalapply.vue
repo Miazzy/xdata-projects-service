@@ -2772,39 +2772,6 @@ export default {
         }
       },
 
-      // 处理流程日志
-      async handleStartWFLog(tablename , elem , userinfo){
-
-        try {
-          const prLogHisNode = {
-              id: Betools.tools.queryUniqueID(),
-              table_name: tablename,
-              main_value: elem.id,
-              proponents: userinfo.username,
-              business_data_id : elem.id ,//varchar(100)  null comment '业务数据主键值',
-              business_code  : '000000100' ,//varchar(100)  null comment '业务编号',
-              process_name   : '案件发起申请审批',//varchar(100)  null comment '流程名称',
-              employee       : userinfo.realname ,//varchar(1000) null comment '操作职员',
-              approve_user   : userinfo.username ,//varchar(100)  null comment '审批人员',
-              action         : '保存'    ,//varchar(100)  null comment '操作动作',
-              action_opinion : '保存案件申请',//text          null comment '操作意见',
-              operate_time   : dayjs().subtract(100,'second').format('YYYY-MM-DD HH:mm:ss')   ,//datetime      null comment '操作时间',
-              functions_station : userinfo.position, //varchar(100)  null comment '职能岗位',
-              process_station   : '案件申请', //varchar(100) null comment '流程岗位',
-              business_data     : JSON.stringify(elem), //text null comment '业务数据',
-              content           : `${elem.content}`,//text          null comment '业务内容',
-              process_audit     : elem.id, //varchar(100)  null comment '流程编码',
-              create_time       : dayjs().subtract(100,'second').format('YYYY-MM-DD HH:mm:ss'), //datetime      null comment '创建日期',
-              relate_data       : JSON.stringify(userinfo), //text null comment '关联数据',
-              origin_data       : JSON.stringify(elem),
-            }
-            await workflow.approveViewProcessLog(prLogHisNode);
-        } catch (error) {
-            console.log(error);
-        }
-
-      },
-
       // 工作流程审批同意
       async handleAgree(){ // 生成下一条流程记录 // 转移当前审批流程记录到历史记录中 // 通知下一位审批人员
           let response = null;
