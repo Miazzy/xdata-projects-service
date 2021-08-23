@@ -677,7 +677,6 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
             const date = dayjs().format('YYYY-MM-DD'); //获取当前时间
             const bpmStatus = { bpm_status: "1" }; //流程状态
 
-            
             try {
                 curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
                 applyNode = await Betools.manage.queryProcessLogByID(tableName, bussinessNode.id, 'pr_log_apply'); // 获取申请审批节点的所有数据
