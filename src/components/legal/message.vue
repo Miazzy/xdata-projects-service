@@ -251,7 +251,6 @@ export default {
         this.typename = 'apply';
         this.querySystemListByType(this.tabname , typename , panename);
       }
-      debugger;
     },
 
     async searchWordChange() {
