@@ -537,7 +537,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
                     item["employeeName"] = userInfo["realname"] || userInfo["name"]; // 设置审批人员
                     item["action"] = operation; // 设置操作动作
                     item["operate_time"] = item["create_time"] = date; // 设置操作时间
-                    item["action_opinion"] = item['content'] = message; // 设置操作意见
+                    item["action_opinion"] = item['content'] = message + (nextUserNodes.length > 1 ? '' : '[审批完成]'); // 设置操作意见
                     item["bpm_status"] = bpmStatus.bpm_status;
                 });
             } catch (error) {
