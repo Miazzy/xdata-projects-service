@@ -136,6 +136,77 @@
                   </a-row>
                 </div>
 
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                  <a-divider></a-divider>
+                </div>
+
+                <div v-show=" role == 'view' || role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      审批流程
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show=" role == 'add' || role == 'edit' || (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row style="position: relative;">
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="lawyerInNamelist" v-model="approve_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择审批人员！" :filter-option="filterOption" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidApprove()"  >
+                        添加
+                      </a-button>
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>抄送人员</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="lawyerInNamelist" v-model="release_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择抄送人员！" :filter-option="filterOption" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidNotify()"  >
+                        添加
+                      </a-button>
+                    </a-col>
+                    <a-col :span="24" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：请添加区域/总部负责人，点击下列审批人员头像或名字可以进行删除审批人员！</span>
+                    </a-col>
+                  </a-row>
+                </div>  
+
+                <div id="system-approve-userlist-content" v-show=" (role == 'view' || role == 'add' || role == 'edit' || role == 'workflow') && approve_userlist && approve_userlist.length > 0 " class="reward-apply-content-item system-approve-userlist-content" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
+                  <a-row class="system-approve-userlist-content">
+                    <a-col :span="24" :style="`width:100%; ${(50 + approve_userlist.length * 7.5) > 100 ? `overflow-x:scroll;` : '' } `">
+                      <div :style="`margin-left:50px;margin-top:15px; width:${50 + approve_userlist.length * 7.5}%; height:100px;`">
+                        <span style="margin-left:32.5px;">审批：</span>
+                        <template v-for="(item , index) in approve_userlist ">
+                          <span :key="index" style="position: relative; width:75px; height:180px;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveApprove(item, index)" style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveApprove(item, index)" >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveApprove(item, index)" >{{ item.loginid }}</span>
+                            <a-icon v-show=" ( index + 1 )< approve_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
+                          </span>
+                        </template>
+                      </div>
+                    </a-col>
+                  </a-row> 
+                  <a-row v-show=" release_userlist && release_userlist.length > 0 "> 
+                    <a-col :span="24" :style="`width:100%; ${(50 + release_userlist.length * 7.5) > 100 ? `overflow-x:scroll;` : '' } `">
+                      <div :style="`margin-left:50px;margin-top:15px; width:${50 + release_userlist.length * 7.5}%; height:100px;`">
+                        <span style="margin-left:32.5px;">抄送：</span>
+                        <template v-for="(item , index) in release_userlist ">
+                          <span :key="index" style="position: relative; width:75px; height:180px;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveNotify(item, index)" style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveNotify(item, index)" >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveNotify(item, index)" >{{ item.loginid }}</span>
+                            <a-icon v-show=" ( index + 1 )< release_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
+                          </span>
+                        </template>
+                      </div>
+                    </a-col>
+                  </a-row> 
+                </div>  
+
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
@@ -162,6 +233,41 @@
                     <a-col class="reward-apply-content-title-text" :span="4" style="margin-left:100px;">
                       <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handlePatch();"  >
                         修改
+                      </a-button>
+                    </a-col>
+                    <a-col :span="8">
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
+                    </a-col>
+                    <a-col :span="20">
+                      <a-textarea
+                        v-model="workflow.content"
+                        placeholder="请输入审批意见！"
+                        :auto-size="{ minRows: 5, maxRows: 50 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                      />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col :span="8">
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="">
+                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleAgree();"  >
+                        同意
+                      </a-button>
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="">
+                      <a-button type="primary" style="width: 120px;" @click="handleDisagree();"  >
+                        驳回
                       </a-button>
                     </a-col>
                     <a-col :span="8">
@@ -228,8 +334,13 @@ export default {
       userList:[],
       firmlist:[],
       firmNamelist:[],
+      processLogList:[],
+      release_userid:'',
       release_userlist:[],
+      approve_userid:'',
       approve_userlist:[],
+      notify_userid:'',
+      notify_userlist:[],
       approve_executelist:[],
       legallist:[],
       legalTitlelist:[],
@@ -377,6 +488,52 @@ export default {
         }
       },
 
+      // 检测知会人员，并加入知会列表
+      async execValidNotify(){
+        const username = this.release_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.release_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.release_userlist = userlist; 
+        this.release_userlist.map((item,index) => { item.index = index;});
+      },
+
+      // 检测审批人员，并加入审批列表
+      async execValidApprove(){
+        const username = this.approve_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.approve_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.approve_userlist = userlist; 
+        this.approve_userlist.map((item,index)=>{ item.index = index;});
+      },
+
+      // 移除第Index个审批人员
+      async execRemoveApprove(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除审批人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.approve_userlist.splice(index, 1);
+                this.approve_userlist.map((item,index) => { item.index = index;});
+              }
+        });
+      },
+
+      // 移除第Index个抄送人员
+      async execRemoveNotify(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除抄送人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.release_userlist.splice(index, 1);
+                this.release_userlist.map((item,index) => { item.index = index;});
+              }
+        });
+      },
+
       // 案件记录查看申请
       async execView(elem){
           const { $router } = this;
@@ -462,6 +619,76 @@ export default {
                   return vant.Dialog.alert({  title: '温馨提示',  message: `修改操作成功！`, }); //this.$toast.success('律师修改操作成功！');
                }
           });
+      },
+
+      // 提交自由流程
+      async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 重新提交自由流程
+      async handleReSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleReStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 工作流程审批同意
+      async handleAgree(){ // 生成下一条流程记录 // 转移当前审批流程记录到历史记录中 // 通知下一位审批人员
+          let response = null;
+          if(Betools.tools.isNull(this.workflow.content)){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
+          }
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = 'https://legal.yunwisdom.club:30443';
+            response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
+            this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.processLogList = await Betools.query.queryProcessLog();
+            this.role = this.apply = 'view';
+            vant.Toast.clear();
+          } catch (error) {
+            console.error(error);
+          }
+          return response;
+      },
+
+      // 工作流程审批驳回
+      async handleDisagree(){ // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
+          let response = null;
+          if(Betools.tools.isNull(this.workflow.content)){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
+          }
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = 'https://legal.yunwisdom.club:30443';
+            response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
+            this.$router.push(`/legal/case/legalapply?id=${this.legal.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.processLogList = await Betools.query.queryProcessLog();
+            this.role = this.apply = 'view';
+            vant.Toast.clear();
+          } catch (error) {
+            console.error(error);
+          }
+          return response;
       },
 
   },
