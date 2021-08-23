@@ -303,7 +303,7 @@ export default {
         const titlePrefix = typename == 'notify' ? '知会人力' : '申请历史';
         const queryNotifyLog = typename == 'notify' ? Betools.query.queryProcessLogNotifyByUserName : Betools.query.queryProcessLogApplyByUserName;
         let logList = await queryNotifyLog(this.tablename , this.userinfo.username);
-        debugger;
+
         logList.map((item , index) => {
           let elem = typename == 'notify' ?  JSON.parse(item.business_data) : JSON.parse(item.business_data).data;
           if(Betools.tools.isNull(elem)){
@@ -337,7 +337,7 @@ export default {
 
       try {
         let logList = await Betools.query.queryProcessLogByUserName(this.tablename , this.userinfo.username);
-
+        debugger;
         logList.map((item , index) => {
           let elem = JSON.parse(item.business_data).data;
           if(Betools.tools.isNull(elem)){
@@ -346,7 +346,7 @@ export default {
           item.pid = item.id;
           item.id = item.business_data_id;
           item.name = `发起：${item.content} `;
-          item.title = `标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (elem.defendant.length > 15 ? '...' : '' ) }`;
+          item.title = item.table_name !== 'bs_legal' ? `标题：${elem.title} ` : `标题：${elem.title} 案号：${elem.caseID} 程序：${elem.stage} ，案由：${ elem.caseType } ，原告：${elem.accuser}，被告：${elem.defendant.slice(0,15) + (elem.defendant.length > 15 ? '...' : '' ) }`;
           item.owner = item.create_by;
           item.tel = item.all = item.description = item.avatar = '';
           item.typename = typename;
@@ -463,7 +463,7 @@ export default {
     async querylegalview(id = '', panename = '', element = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
-        const pviewName = element.table_name.replace('bs_legal','') + 'apply';
+        const pviewName = element.table_name == 'bs_legal' ? 'legalapply' : element.table_name.replace('bs_legal_','') + 'apply';
         const redirectURL = `${window.location.protocol}//${window.location.host}/#/legal/${pviewName}?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`;
         window.open(redirectURL,'_blank'); 
       } catch (error) {
