@@ -31,14 +31,21 @@ const routes = [{
     }
 }, {
     path: '/legal/legalapply',
-    name: "案件申请",
+    name: "案件详情",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/case/legalapply.vue"], resolve)
     }
 }, {
     path: '/legal/case/legalview',
-    name: "案件管理",
+    name: "案件详情",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/case/legalapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/legalview',
+    name: "案件详情",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/case/legalapply.vue"], resolve)
@@ -51,7 +58,21 @@ const routes = [{
         "subPage": resolve => require(["../components/legal/firm/firmapply.vue"], resolve)
     }
 }, {
+    path: '/legal/firmapply',
+    name: "律所申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/firm/firmapply.vue"], resolve)
+    }
+}, {
     path: '/legal/lawyer/lawyerapply',
+    name: "律师申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/lawyer/lawyerapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/lawyerapply',
     name: "律师申请",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
@@ -79,7 +100,21 @@ const routes = [{
         "subPage": resolve => require(["../components/legal/firm/firmapply.vue"], resolve)
     }
 }, {
+    path: '/legal/firmview', //lawyerview
+    name: "律所详情",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/firm/firmapply.vue"], resolve)
+    }
+}, {
     path: '/legal/lawyer/lawyerview', //lawyerview
+    name: "律师详情",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/lawyer/lawyerapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/lawyerview', //lawyerview
     name: "律师详情",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
@@ -135,6 +170,13 @@ const routes = [{
         "subPage": resolve => require(["../components/legal/court/courtapply.vue"], resolve)
     }
 }, {
+    path: '/legal/courtapply',
+    name: "法院录入",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/court/courtapply.vue"], resolve)
+    }
+}, {
     path: '/legal/court/courtlist',
     name: "法院管理",
     components: {
@@ -149,7 +191,21 @@ const routes = [{
         "subPage": resolve => require(["../components/legal/court/courtapply.vue"], resolve)
     }
 }, {
+    path: '/legal/courtview',
+    name: "法院查看",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/court/courtapply.vue"], resolve)
+    }
+}, {
     path: '/legal/court/judgeapply',
+    name: "法官录入",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/court/judgeapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/judgeapply',
     name: "法官录入",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
@@ -164,6 +220,13 @@ const routes = [{
     }
 }, {
     path: '/legal/court/judgeview',
+    name: "法官查看",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/court/judgeapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/judgeview',
     name: "法官查看",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
