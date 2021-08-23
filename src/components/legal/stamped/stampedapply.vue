@@ -344,6 +344,8 @@ export default {
       approve_executelist:[],
       legallist:[],
       legalTitlelist:[],
+      lawyerInnerList:[],
+      lawyerInNamelist:[],
       role:'',
       file:'',
       selectedSheet: null,
@@ -457,6 +459,14 @@ export default {
           try {
             this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,已删除)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
             this.legalTitlelist = this.legallist.map(item => { return item.title });
+          } catch (error) {
+            console.error(error);
+          }
+
+          try {
+            this.lawyerInnerList = await Betools.query.queryLawyerList();
+            const lawyerInnerList = this.lawyerInnerList.map(item => {return item.name });
+            this.lawyerInNamelist = [...new Set(lawyerInnerList)];
           } catch (error) {
             console.error(error);
           }
