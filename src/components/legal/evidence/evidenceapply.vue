@@ -283,7 +283,7 @@
                    </a-row>
                 </div>
 
-                <div v-show="role != 'view' && !isNull(id)  " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role != 'view' && role != 'workflow' && !isNull(id)  " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -320,7 +320,7 @@
                   </van-cell-group>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -336,7 +336,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -416,6 +416,7 @@ export default {
           remark: '暂无备注', //备注信息
           xid:'',
           pid:'',
+          bpm_status:'',
       },
       data: [],
       readonly: false,
