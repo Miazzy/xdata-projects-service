@@ -316,6 +316,10 @@ export default {
           const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
           this.userinfo = weworkinfo.userinfo;
           this.usertitle = weworkinfo.usertitle;
+
+          this.role = Betools.tools.getUrlParam('role');
+          this.stage = Betools.tools.getUrlParam('stage');
+          this.apply = Betools.tools.getUrlParam('apply') || 'view';
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
