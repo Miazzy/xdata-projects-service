@@ -313,6 +313,9 @@ export default {
       },
       id:'',
       pid:'',
+      workflow:{
+        content:'',
+      },
       legal: {
           title:'',
       },

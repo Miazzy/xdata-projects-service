@@ -303,6 +303,10 @@ export default {
         out_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
       },
       id:'',
+      pid:'',
+      workflow:{
+        content:'',
+      },
       legal:{
         id: '', // varchar(36)  default ''  not null
         title: 'XX律师入库申请流程',

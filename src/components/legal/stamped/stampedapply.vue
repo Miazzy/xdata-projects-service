@@ -169,6 +169,41 @@
                    </a-row>
                 </div>
 
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
+                    </a-col>
+                    <a-col :span="20">
+                      <a-textarea
+                        v-model="workflow.content"
+                        placeholder="请输入审批意见！"
+                        :auto-size="{ minRows: 5, maxRows: 50 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                      />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col :span="8">
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="">
+                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleAgree();"  >
+                        同意
+                      </a-button>
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="">
+                      <a-button type="primary" style="width: 120px;" @click="handleDisagree();"  >
+                        驳回
+                      </a-button>
+                    </a-col>
+                    <a-col :span="8">
+                    </a-col>
+                   </a-row>
+                </div>
+
                 <div style="height:100px;">
                 </div>
               </div>
@@ -207,6 +242,9 @@ export default {
       },
       id:'',
       pid:'',
+      workflow:{
+        content:'',
+      },
       legal: {
           title:'',
       },
