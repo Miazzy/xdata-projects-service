@@ -180,7 +180,9 @@
   </div>
 </template>
 <script>
+import * as workflow from '@/request/workflow';
 import * as workconfig from '@/request/workconfig';
+import * as workprocess from '@/request/wflow.process';
 
 export default {
   mixins: [window.mixin],

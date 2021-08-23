@@ -286,7 +286,9 @@
   </div>
 </template>
 <script>
+import * as workflow from '@/request/workflow';
 import * as workconfig from '@/request/workconfig';
+import * as workprocess from '@/request/wflow.process';
 
 export default {
   mixins: [window.mixin],
@@ -610,7 +612,7 @@ export default {
                   } catch (error) {
                     console.error(error);
                   }
-                  
+
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';

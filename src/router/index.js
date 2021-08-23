@@ -30,6 +30,13 @@ const routes = [{
         "subPage": resolve => require(["../components/legal/case/legalapply.vue"], resolve)
     }
 }, {
+    path: '/legal/legalapply',
+    name: "案件申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/case/legalapply.vue"], resolve)
+    }
+}, {
     path: '/legal/case/legalview',
     name: "案件管理",
     components: {
