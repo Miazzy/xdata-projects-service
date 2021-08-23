@@ -479,6 +479,7 @@ export async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL
 export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message, processID , username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
 
     let result = '';
+    let applyNode = '';
     await vant.Dialog.confirm({ title: '确认操作', message: '是否进行同意审批操作?', }).then(async() => {
 
             vant.Toast.loading({ duration: 5000, forbidClick: false, message: '提交中...', });
@@ -502,6 +503,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
 
             try {
                 curRow = await Betools.manage.queryProcessLogByID(tableName, processID); // 获取当前审批节点的所有数据
+                applyNode = await Betools.manage.queryProcessLogByID(tableName, processID, 'pr_log_apply'); // 获取申请审批节点的所有数据
             } catch (error) {
                 console.error(error);
             }
@@ -510,8 +512,8 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             let notifyData = []; // 抄送节点数组
 
             try {
-                data = JSON.parse(curRow.relate_data); // 所有审批流程节点
-                notifyData = JSON.parse(curRow.notify_data); // 所有审批流程节点
+                data = Betools.tools.isNull(curRow.relate_data) ? JSON.parse(applyNode.relate_data) : JSON.parse(curRow.relate_data); // 所有审批流程节点
+                notifyData = Betools.tools.isNull(curRow.notify_data) ? JSON.parse(applyNode.notify_data) : JSON.parse(curRow.notify_data); // 所有审批流程节点
                 data.map((item,index) => item.index = index);
             } catch (error) {
                 console.error(error);
