@@ -235,7 +235,7 @@
                   </a-row>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px;">
                   <a-divider></a-divider>
                 </div>
 
