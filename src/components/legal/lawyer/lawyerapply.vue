@@ -235,6 +235,77 @@
                   </a-row>
                 </div>
 
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                  <a-divider></a-divider>
+                </div>
+
+                <div v-show=" role == 'view' || role == 'add' || role == 'edit' || role == 'workflow' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      审批流程
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div v-show=" role == 'add' || role == 'edit' || (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row style="position: relative;">
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="lawyerInNamelist" v-model="approve_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择审批人员！" :filter-option="filterOption" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidApprove()"  >
+                        添加
+                      </a-button>
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>抄送人员</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="lawyerInNamelist" v-model="release_userid" style="width:200px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;"  placeholder="请添加并选择抄送人员！" :filter-option="filterOption" />
+                      <a-button type="primary" style="width: 80px; color:c0c0c0; margin-left:30px; " @click="execValidNotify()"  >
+                        添加
+                      </a-button>
+                    </a-col>
+                    <a-col :span="24" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：请添加区域/总部负责人，点击下列审批人员头像或名字可以进行删除审批人员！</span>
+                    </a-col>
+                  </a-row>
+                </div>  
+
+                <div id="system-approve-userlist-content" v-show=" (role == 'view' || role == 'add' || role == 'edit' || role == 'workflow') && approve_userlist && approve_userlist.length > 0 " class="reward-apply-content-item system-approve-userlist-content" style="margin-top:15px; margin-bottom:15px; margin-right:10px;">
+                  <a-row class="system-approve-userlist-content">
+                    <a-col :span="24" :style="`width:100%; ${(50 + approve_userlist.length * 7.5) > 100 ? `overflow-x:scroll;` : '' } `">
+                      <div :style="`margin-left:50px;margin-top:15px; width:${50 + approve_userlist.length * 7.5}%; height:100px;`">
+                        <span style="margin-left:32.5px;">审批：</span>
+                        <template v-for="(item , index) in approve_userlist ">
+                          <span :key="index" style="position: relative; width:75px; height:180px;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveApprove(item, index)" style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveApprove(item, index)" >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveApprove(item, index)" >{{ item.loginid }}</span>
+                            <a-icon v-show=" ( index + 1 )< approve_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
+                          </span>
+                        </template>
+                      </div>
+                    </a-col>
+                  </a-row> 
+                  <a-row v-show=" release_userlist && release_userlist.length > 0 "> 
+                    <a-col :span="24" :style="`width:100%; ${(50 + release_userlist.length * 7.5) > 100 ? `overflow-x:scroll;` : '' } `">
+                      <div :style="`margin-left:50px;margin-top:15px; width:${50 + release_userlist.length * 7.5}%; height:100px;`">
+                        <span style="margin-left:32.5px;">抄送：</span>
+                        <template v-for="(item , index) in release_userlist ">
+                          <span :key="index" style="position: relative; width:75px; height:180px;">
+                            <a-avatar size="large" :index="index" :key="item.avatar" :src="item.avatar" @click="execRemoveNotify(item, index)" style="margin:2px 10px 2px 30px; width:auto;" />
+                            <span style="position: absolute; top:37.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveNotify(item, index)" >{{ item.name }}</span>
+                            <span style="position: absolute; top:57.5px; width: 70px; left:15px; text-align:center; " @click="execRemoveNotify(item, index)" >{{ item.loginid }}</span>
+                            <a-icon v-show=" ( index + 1 )< release_userlist.length " :key="index" type="arrow-right" style="position:absolute; margin-top:5px; top: 3px; " />
+                          </span>
+                        </template>
+                      </div>
+                    </a-col>
+                  </a-row> 
+                </div> 
+
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
