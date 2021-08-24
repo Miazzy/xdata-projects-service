@@ -755,7 +755,7 @@ export default {
           }
           try {
             const processID = Betools.tools.getUrlParam('processID');
-            const domainURL = 'https://legal.yunwisdom.club:30443';
+            const domainURL = workconfig.system.website;
             response = await workprocess.handleAgreeWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID , '', domainURL);
             this.$router.push(`/legal/${this.tablename.replace('bs_legal_','') + 'apply'}?id=${this.legal.id}&type=1&tname=流程详情&apply=view&role=view`);
             this.processLogList = await Betools.query.queryProcessLog();
@@ -775,7 +775,7 @@ export default {
           }
           try {
             const processID = Betools.tools.getUrlParam('processID');
-            const domainURL = 'https://legal.yunwisdom.club:30443';
+            const domainURL = workconfig.system.website;
             response = await workprocess.handleRejectWF(this.tablename, this.legal.id, this.legal, this.workflow.content, processID, '', domainURL);
             this.$router.push(`/legal/${this.tablename.replace('bs_legal_','') + 'apply'}?id=${this.legal.id}&type=1&tname=流程详情&apply=view&role=view`);
             this.processLogList = await Betools.query.queryProcessLog();

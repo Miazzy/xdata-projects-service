@@ -21,7 +21,8 @@ export const system = {
             mail: /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
             mobile: '',
         }
-    }
+    },
+    website: 'https://legal.yunwisdom.club:30443', // 系统网站地址
 }
 
 /**
