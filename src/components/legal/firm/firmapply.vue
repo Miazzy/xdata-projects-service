@@ -992,6 +992,65 @@ export default {
           });
       },
 
+      // 用户重新提交审批流程
+      async handleReApply(){
+          let process_loglist = [];
+          this.loading = true; // 显示加载状态
+          const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
+
+          // 检查审批人员列表
+          if(Betools.tools.isNull(this.approve_userlist) || this.approve_userlist.length == 0 ){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请选择审批人员！`,});
+          }
+          
+          // 获取流程日志记录
+          if(!Betools.tools.isNull(this.processLogList) && this.processLogList.length > 0){
+            process_loglist = this.processLogList.filter(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' });
+          }
+
+          // 是否确认提交此自由流程?
+          this.$confirm({
+              title: "确认操作",
+              content: "是否重新提交此流程申请?",
+              onOk: async(result) => {
+                    vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '提交中...', });
+                    const element = JSON.parse(JSON.stringify(this.element));
+
+                    // 提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+                    if (await Betools.manage.queryApprovalExist(this.tablename,  element.id)) {
+                      return vant.Toast.fail("您好，当前申请还在审批过程中，无法再次提交流程！");
+                    }
+
+                    // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
+                    const users = this.approve_userlist.map(item=>item.loginid);
+                    const wfUsers = users.slice(0,-1).toString(); // 审批人员
+                    const nfUsers = ''; // 知会人员
+                    const approver = users.slice(-1).toString(); // 最后一个终审人员
+                    const data = element;
+                    const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
+                    data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
+                    data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
+                    data.process_loglist = JSON.parse(JSON.stringify(process_loglist));
+
+                    try {
+                      await this.handleReSubmitWF(userinfo, wfUsers, nfUsers, approver, this.tablename, data.id, data, ctime, workconfig.system.website);
+                    } catch (error) {
+                      console.error(error);
+                    }
+                    
+                    (async()=>{
+                      Betools.manage.handleLog(this.tablename , element , '发起', '重新发起流程审批' , `${userinfo.realname} 发起流程申请`);
+                    })();
+
+                    vant.Toast.clear();
+                    this.loading = false; //设置状态
+                    this.readonly = true;
+                    this.role = 'view';
+                    vant.Dialog.alert({  title: '温馨提示',  message: `重新发起流程申请成功！`, }); //this.$toast.success('案件发起申请成功！');
+                }
+            });
+      },
+
       // 提交自由流程
       async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = workconfig.system.website) {
         try {
