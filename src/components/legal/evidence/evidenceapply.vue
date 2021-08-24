@@ -700,6 +700,7 @@ export default {
           this.element.id = id;
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+          this.element.content = `证据名称：` + this.evdData.map(item=>item.evd_name).toString();
         } catch (error) {
           console.error(error);
         }
