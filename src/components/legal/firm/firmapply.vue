@@ -884,13 +884,13 @@ export default {
                   element.id = id;
 
                   try {
-                    element.tags = Betools.tools.isNull(element.tags) ? '' : workconfig.system.crypto.encrypt(element.tags.toString()); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
-                    element.in_zone = Betools.tools.isNull(element.in_zone) ? '' : workconfig.system.crypto.encrypt(element.in_zone.toString()); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
+                    element.tags = Betools.tools.isNull(element.tags) ? '' : element.tags.toString(); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
+                    element.in_zone = Betools.tools.isNull(element.in_zone) ? '' : element.in_zone.toString(); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
                   } catch (error) {
                     console.error(error);
                   }
 
-                  const result = await Betools.manage.postTableData(this.tablename , this.element); // 向表单提交form对象数据
+                  const result = await Betools.manage.postTableData(this.tablename , element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
