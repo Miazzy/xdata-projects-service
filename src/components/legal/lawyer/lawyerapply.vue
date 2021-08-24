@@ -729,11 +729,11 @@ export default {
             onOk: async() => {
 
                   const element = JSON.parse(JSON.stringify(this.element));
+                  
                   (!Betools.tools.isNull(firm)) ? (element.firmID = firm.id,element.firmName = firm.firm_name):null;
                   element.territory = JSON.stringify(element.territory);
+                  
                   const result = await Betools.manage.postTableData(this.tablename , element); // 向表单提交form对象数据
-                  element.territory = JSON.parse(element.territory);
-                  (!Betools.tools.isNull(firm)) ? element.firmID = element.firmName : null;
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
@@ -805,15 +805,16 @@ export default {
             title: "确认操作",
             content: "是否确认保存此律师录入申请单?",
             onOk: async() => {
-                  const { element } = this;
+                  const element = JSON.parse(JSON.stringify(this.element));
+
                   (!Betools.tools.isNull(firm)) ? (element.firmID = firm.id,element.firmName = firm.firm_name):null;
                   element.territory = JSON.stringify(element.territory);
                   const result = await Betools.manage.patchTableData(this.tablename, id, element); // 向表单提交form对象数据
-                  element.territory = JSON.parse(element.territory);
-                  (!Betools.tools.isNull(firm)) ? element.firmID = element.firmName : null;
+                  
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
+
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';
