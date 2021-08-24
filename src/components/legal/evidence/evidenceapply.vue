@@ -704,8 +704,7 @@ export default {
           this.element.id = id;
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-          this.element.content = `证据名称：${this.element.evd_name}，证据提供人员：${this.element.evd_by}` + this.evdData.map(item=>item.evd_name).toString();
-          debugger;
+          this.element.content = `证据名称：${this.element.evd_name}，证据提供人员：${this.element.evd_by}；` + this.evdData.slice(1).map(item=>item.evd_name).toString();
         } catch (error) {
           console.error(error);
         }
