@@ -696,11 +696,16 @@ export default {
         const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const id = Betools.tools.queryUniqueID(); // 表单ID
 
+        if(Betools.tools.isNull(this.evdData) || this.evdData.length == 0){
+          return await vant.Dialog.alert({ title: '温馨提示', message: `请点击新增证据明细按钮保存证据信息！`,});
+        }
+
         try {
           this.element.id = id;
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-          this.element.content = `证据名称：` + this.evdData.map(item=>item.evd_name).toString();
+          this.element.content = `证据名称：${this.element.evd_name}，证据提供人员：${this.element.evd_by}` + this.evdData.map(item=>item.evd_name).toString();
+          debugger;
         } catch (error) {
           console.error(error);
         }
