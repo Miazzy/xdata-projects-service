@@ -340,7 +340,7 @@ export default {
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
-      tablename:'bs_company_legal_courtsession',
+      tablename:'bs_legal_court',
       size: 0,
       options:{
         create_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
