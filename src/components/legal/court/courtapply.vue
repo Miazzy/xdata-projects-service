@@ -460,7 +460,7 @@ export default {
             console.error(error);
           }
 
-          const legal = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
+          const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');
 
           if(!Betools.tools.isNull(id)){
@@ -585,7 +585,7 @@ export default {
             title: "确认操作",
             content: "是否确认保存此法院录入申请单?",
             onOk: async() => {
-                  const { legal } = this;
+                  const { element } = this;
                   element.id = id;
                   const result = await Betools.manage.postTableData(this.tablename , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
@@ -616,7 +616,7 @@ export default {
             title: "确认操作",
             content: "是否确认修改此法院的信息?",
             onOk: async() => {
-                  const { legal } = this;
+                  const { element } = this;
                   const result = await Betools.manage.patchTableData(this.tablename , id , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });

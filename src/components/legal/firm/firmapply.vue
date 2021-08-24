@@ -57,7 +57,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>流程标题</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.title" :readonly='false' placeholder="请填写申请流程标题！" @blur="validFieldToast('title')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.title" :readonly='false' placeholder="请填写申请流程标题！" @blur="validFieldToast('title')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
@@ -68,13 +68,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>填报日期</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.create_time" readonly placeholder="请填写填报日期！" @blur="validFieldToast('create_time')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.create_time" readonly placeholder="请填写填报日期！" @blur="validFieldToast('create_time')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>填报人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.create_by" readonly placeholder="请输入填报人员！" @blur="validFieldToast('create_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.create_by" readonly placeholder="请输入填报人员！" @blur="validFieldToast('create_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
@@ -85,13 +85,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>律所名称</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.firm_name" :readonly="false" placeholder="请输入律所名称！" @blur="validFieldToast('firm_name')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.firm_name" :readonly="false" placeholder="请输入律所名称！" @blur="validFieldToast('firm_name')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>入库区域</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-cascader v-model="legal.in_zone" :options="options.zoneOptions" placeholder="请填写入库区域！" @blur="validFieldToast('in_zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-cascader v-model="element.in_zone" :options="options.zoneOptions" placeholder="请填写入库区域！" @blur="validFieldToast('in_zone')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
@@ -102,7 +102,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>业务标签</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-select mode="multiple" v-model="legal.tags" default-value="一般案件" @blur="validFieldToast('tags')"  placeholder="请选择业务标签！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                      <a-select mode="multiple" v-model="element.tags" default-value="一般案件" @blur="validFieldToast('tags')"  placeholder="请选择业务标签！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                         <a-select-option value="常年法律顾问">
                           常年法律顾问
                         </a-select-option>
@@ -127,7 +127,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>业务板块</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-select  v-model="legal.plate" default-value="地产板块" @blur="validFieldToast('plate')"  placeholder="请选择业务板块！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                      <a-select  v-model="element.plate" default-value="地产板块" @blur="validFieldToast('plate')"  placeholder="请选择业务板块！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                         <a-select-option value="融量集团总部">
                           融量集团总部
                         </a-select-option>
@@ -160,13 +160,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>入库时间</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="legal.in_time" :default-value="options.in_time" placeholder="请输入此律所入库时间！" @blur="validFieldToast('receiveTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-date-picker v-model="element.in_time" :default-value="options.in_time" placeholder="请输入此律所入库时间！" @blur="validFieldToast('receiveTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>成立时间</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="legal.establish_time" :default-value="options.establish_time" placeholder="请输入此律所成立时间！" @blur="validFieldToast('lawRTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-date-picker v-model="element.establish_time" :default-value="options.establish_time" placeholder="请输入此律所成立时间！" @blur="validFieldToast('lawRTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -177,13 +177,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>律所地址</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.address" :default-value="options.address" placeholder="请输入此律师事务所地址信息！" @blur="validFieldToast('address')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.address" :default-value="options.address" placeholder="请输入此律师事务所地址信息！" @blur="validFieldToast('address')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>联系电话</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.phone" :default-value="options.phone" placeholder="请输入此律所联系电话！" @blur="validFieldToast('phone')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.phone" :default-value="options.phone" placeholder="请输入此律所联系电话！" @blur="validFieldToast('phone')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -194,7 +194,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>律所规模</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-select  v-model="legal.scale" default-value="1000" @blur="validFieldToast('scale')"  placeholder="请输入此律师事务所人员规模！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                      <a-select  v-model="element.scale" default-value="1000" @blur="validFieldToast('scale')"  placeholder="请输入此律师事务所人员规模！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
                         <a-select-option value="1-10人">
                           1-10人
                         </a-select-option>
@@ -222,7 +222,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>服务团队人数</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.firm_count"  placeholder="请输入此律所服务团队人数！" @blur="validFieldToast('firm_count')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.firm_count"  placeholder="请输入此律所服务团队人数！" @blur="validFieldToast('firm_count')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -241,7 +241,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>是否已合作</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-radio-group v-model="legal.coop_flag" placeholder="请选择是否已合作！" @blur="validFieldToast('coop_flag')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 0px solid #f0f0f0;">
+                      <a-radio-group v-model="element.coop_flag" placeholder="请选择是否已合作！" @blur="validFieldToast('coop_flag')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 0px solid #f0f0f0;">
                         <a-radio-button value="未合作">
                           未合作
                         </a-radio-button>
@@ -254,7 +254,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>是否出库</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-radio-group  v-model="legal.out_flag" placeholder="请选择此律所是否出库！" @blur="validFieldToast('out_flag')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 0px solid #f0f0f0;">
+                      <a-radio-group  v-model="element.out_flag" placeholder="请选择此律所是否出库！" @blur="validFieldToast('out_flag')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 0px solid #f0f0f0;">
                         <a-radio-button value="未出库">
                           未出库
                         </a-radio-button>
@@ -272,15 +272,15 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>开始合作时间</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="legal.start_time" :default-value="options.start_time" placeholder="请输入此律所开始合作时间！" @blur="validFieldToast('start_time')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-date-picker v-model="element.start_time" :default-value="options.start_time" placeholder="请输入此律所开始合作时间！" @blur="validFieldToast('start_time')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>最近合作期间</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="legal.coop_stime" :default-value="options.coop_time"  @blur="validFieldToast('coop_stime')" style="width:40%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-date-picker v-model="element.coop_stime" :default-value="options.coop_time"  @blur="validFieldToast('coop_stime')" style="width:40%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                        <span style="margin-left:10px;margin-right:10px;">至</span> 
-                      <a-date-picker v-model="legal.coop_etime" :default-value="options.coop_time"  @blur="validFieldToast('coop_etime')" style="width:40%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-date-picker v-model="element.coop_etime" :default-value="options.coop_time"  @blur="validFieldToast('coop_etime')" style="width:40%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
@@ -299,13 +299,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>常务法律费用</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.fee" placeholder="请输入此律所常务法律费用报价！" @blur="validFieldToast('fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.fee" placeholder="请输入此律所常务法律费用报价！" @blur="validFieldToast('fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>重大诉讼费用</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.major_fee" placeholder="请输入此律所重大诉讼费用报价！" @blur="validFieldToast('major_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.major_fee" placeholder="请输入此律所重大诉讼费用报价！" @blur="validFieldToast('major_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -316,13 +316,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>一般诉讼费用</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.common_fee" placeholder="请输入此律所一般诉讼费用报价！" @blur="validFieldToast('common_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.common_fee" placeholder="请输入此律所一般诉讼费用报价！" @blur="validFieldToast('common_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>尽调专项费用</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.diligence_fee" placeholder="请输入此律所尽调专项费用报价！" @blur="validFieldToast('diligence_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.diligence_fee" placeholder="请输入此律所尽调专项费用报价！" @blur="validFieldToast('diligence_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -333,13 +333,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>发函专项费用</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.notice_fee" placeholder="请输入此律所发函专项费用报价！" @blur="validFieldToast('common_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.notice_fee" placeholder="请输入此律所发函专项费用报价！" @blur="validFieldToast('common_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>刑事专项费用</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.penal_fee" placeholder="请输入此律所刑事专项费用报价！" @blur="validFieldToast('penal_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.penal_fee" placeholder="请输入此律所刑事专项费用报价！" @blur="validFieldToast('penal_fee')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -359,7 +359,7 @@
                     </a-col>
                     <a-col :span="20">
                       <a-textarea
-                        v-model="legal.brief"
+                        v-model="element.brief"
                         placeholder="请输入此律所简要介绍！"
                         :auto-size="{ minRows: 10, maxRows: 100 }"
                         style="height:120px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
@@ -375,7 +375,7 @@
                     </a-col>
                     <a-col :span="20">
                       <a-textarea
-                        v-model="legal.team_brief"
+                        v-model="element.team_brief"
                         placeholder="请输入此律所的服务团队介绍！"
                         :auto-size="{ minRows: 10, maxRows: 100 }"
                         style="height:120px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
@@ -396,7 +396,7 @@
                    </a-row>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' || (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-show=" role == 'add' || role == 'edit' || (element.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row style="position: relative;">
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
@@ -511,7 +511,7 @@
                   </van-cell-group>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -527,7 +527,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -587,7 +587,7 @@ export default {
       workflow:{
         content:'',
       },
-      legal:{
+      element:{
         id:'', // varchar(36)  default ''  not null comment '律所编号' primary key,
         title:'录入律师申请', // 申请流程标题,
         serialID:'', // varchar(16)  default ''  not null comment '律所序号',
@@ -708,10 +708,10 @@ export default {
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.legal.apply_realname = userinfo.realname;
-          this.legal.apply_username = userinfo.username;
+          this.element.apply_realname = userinfo.realname;
+          this.element.apply_username = userinfo.username;
           
-          const legal = Betools.storage.getStore(`system_${this.tablename}_item#${this.legal.type}#@${userinfo.realname}`); //获取缓存信息
+          const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');
           if(!Betools.tools.isNull(id)){
 
@@ -724,24 +724,24 @@ export default {
               }
             })();
 
-            return this.legal = await this.handleList(this.tablename , id);
+            return this.element = await this.handleList(this.tablename , id);
 
           } else {
 
             try {
-              if(legal){ //自动回显刚才填写的用户基础信息
-                this.legal.create_by = legal.create_by || this.legal.create_by;
-                this.legal.remark = legal.remark || this.legal.remark;
-                this.legal.status = legal.status || this.legal.status;
+              if(element){ //自动回显刚才填写的用户基础信息
+                this.element.create_by = element.create_by || this.element.create_by;
+                this.element.remark = element.remark || this.element.remark;
+                this.element.status = element.status || this.element.status;
               }
               if(userinfo.department && userinfo.department.name){
-                this.legal.department = userinfo.department.name;
-                this.legal.company = userinfo.parent_company.name;
+                this.element.department = userinfo.department.name;
+                this.element.company = userinfo.parent_company.name;
               } else if(userinfo.systemuserinfo && userinfo.systemuserinfo.textfield1){
                 let temp = userinfo.systemuserinfo.textfield1.split('||')[0];
-                this.legal.company = temp.split('>')[temp.split('>').length - 1];
+                this.element.company = temp.split('>')[temp.split('>').length - 1];
                 temp = userinfo.systemuserinfo.textfield1.split('||')[1];
-                this.legal.department = temp.split('>')[temp.split('>').length - 1];
+                this.element.department = temp.split('>')[temp.split('>').length - 1];
               }
             } catch (error) {
               console.log(error);
@@ -774,11 +774,11 @@ export default {
       validField(fieldName){
         const userinfo = Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const regMail = workconfig.system.config.regexp.mail; // 邮箱验证正则表达式
-        this.message[fieldName] = Betools.tools.isNull(this.legal[fieldName]) ? this.valid[fieldName] : '';
+        this.message[fieldName] = Betools.tools.isNull(this.element[fieldName]) ? this.valid[fieldName] : '';
         if(fieldName.toLocaleLowerCase().includes('mail')) {
-          this.message[fieldName] = regMail.test(this.legal[fieldName]) ? '' : '请输入正确的邮箱地址！';
+          this.message[fieldName] = regMail.test(this.element[fieldName]) ? '' : '请输入正确的邮箱地址！';
         }
-        Betools.storage.setStore(`system_${this.tablename}_item#${this.legal.type}#@${userinfo.realname}` , JSON.stringify(this.legal) , 3600 * 2 );
+        Betools.storage.setStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}` , JSON.stringify(this.element) , 3600 * 2 );
         return Betools.tools.isNull(this.message[fieldName]);
       },
 
@@ -847,8 +847,8 @@ export default {
         this.loading = true; // 显示加载状态
         const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const id = Betools.tools.queryUniqueID(); // 表单ID
-        this.legal.create_time = dayjs().format('YYYY-MM-DD');
-        this.legal.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+        this.element.create_time = dayjs().format('YYYY-MM-DD');
+        this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
 
         // 验证数据是否已经填写
         const keys = Object.keys({ title: '' , brief:'', team_brief:'' })
@@ -872,12 +872,12 @@ export default {
             content: "是否确认保存此律所录入申请单?",
             onOk: async() => {
 
-                  const legal = JSON.parse(JSON.stringify(this.legal));
-                  legal.id = id;
-                  legal.tags = JSON.stringify(legal.tags); //进行序列化
-                  legal.in_zone = JSON.stringify(legal.in_zone); //进行序列化
+                  const element = JSON.parse(JSON.stringify(this.element));
+                  element.id = id;
+                  element.tags = JSON.stringify(element.tags); //进行序列化
+                  element.in_zone = JSON.stringify(element.in_zone); //进行序列化
 
-                  const result = await Betools.manage.postTableData(this.tablename , this.legal); // 向表单提交form对象数据
+                  const result = await Betools.manage.postTableData(this.tablename , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
@@ -888,7 +888,7 @@ export default {
                     const wfUsers = users.slice(0,-1).toString(); // 审批人员
                     const nfUsers = ''; // 知会人员
                     const approver = users.slice(-1).toString(); // 最后一个终审人员
-                    const data = legal;
+                    const data = element;
                     const ctime = dayjs().subtract(2,'minute').format('YYYY-MM-DD HH:mm:ss');
                     data.approve_userlist = JSON.parse(JSON.stringify(this.approve_userlist));
                     data.release_userlist = JSON.parse(JSON.stringify(this.release_userlist));
@@ -903,8 +903,8 @@ export default {
                   }
 
                   try {
-                    legal.tags = JSON.parse(legal.tags); //进行解析
-                    legal.in_zone = JSON.parse(legal.in_zone); //进行解析
+                    element.tags = JSON.parse(element.tags); //进行解析
+                    element.in_zone = JSON.parse(element.in_zone); //进行解析
                   } catch (error) {
                     console.error(error);
                   }
@@ -945,15 +945,15 @@ export default {
             title: "确认操作",
             content: "是否确认修改此律所的信息?",
             onOk: async() => {
-                  const { legal } = this;
-                  legal.tags = JSON.stringify(legal.tags); //进行序列化
-                  legal.in_zone = JSON.stringify(legal.in_zone); //进行序列化
-                  const result = await Betools.manage.patchTableData(this.tablename , id , this.legal); // 向表单提交form对象数据
+                  const { element } = this;
+                  element.tags = JSON.stringify(element.tags); //进行序列化
+                  element.in_zone = JSON.stringify(element.in_zone); //进行序列化
+                  const result = await Betools.manage.patchTableData(this.tablename , id , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
-                  legal.tags = JSON.parse(legal.tags); //进行解析
-                  legal.in_zone = JSON.parse(legal.in_zone); //进行解析
+                  element.tags = JSON.parse(element.tags); //进行解析
+                  element.in_zone = JSON.parse(element.in_zone); //进行解析
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';

@@ -56,7 +56,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>流程标题</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.title" :readonly='false' placeholder="请填写申请流程标题！" @blur="validFieldToast('title')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.title" :readonly='false' placeholder="请填写申请流程标题！" @blur="validFieldToast('title')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
@@ -67,13 +67,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>填报日期</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.create_time" readonly placeholder="请填写填报日期！" @blur="validFieldToast('create_time')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.create_time" readonly placeholder="请填写填报日期！" @blur="validFieldToast('create_time')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>填报人员</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.create_by" readonly placeholder="请输入填报人员！" @blur="validFieldToast('create_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-input v-model="element.create_by" readonly placeholder="请输入填报人员！" @blur="validFieldToast('create_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                   </a-row>
                 </div>
@@ -84,13 +84,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>所属地区</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-auto-complete :data-source="zoneList" v-model="legal.zone" placeholder="请输入此法院所属地区！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; " :filter-option="filterOption" />
+                      <a-auto-complete :data-source="zoneList" v-model="element.zone" placeholder="请输入此法院所属地区！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; " :filter-option="filterOption" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>法院名称</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-auto-complete :data-source="courtNamelist" v-model="legal.court_name" placeholder="请输入此法院名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; " :filter-option="filterOption" />
+                      <a-auto-complete :data-source="courtNamelist" v-model="element.court_name" placeholder="请输入此法院名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; " :filter-option="filterOption" />
                     </a-col>
                   </a-row>
                 </div>
@@ -101,13 +101,13 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>法官名称</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.name" placeholder="请输入法官名称！" @blur="validFieldToast('name')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.name" placeholder="请输入法官名称！" @blur="validFieldToast('name')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>联系电话</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="legal.mobile" placeholder="请输入法官联系电话！" @blur="validFieldToast('mobile')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.mobile" placeholder="请输入法官联系电话！" @blur="validFieldToast('mobile')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -127,7 +127,7 @@
                     </a-col>
                     <a-col :span="20">
                       <a-textarea
-                        v-model="legal.brief"
+                        v-model="element.brief"
                         placeholder="请输入此法官简介！"
                         :auto-size="{ minRows: 5, maxRows: 100 }"
                         style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
@@ -148,7 +148,7 @@
                    </a-row>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' || (legal.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-show=" role == 'add' || role == 'edit' || (element.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row style="position: relative;">
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批人员</span>
@@ -263,7 +263,7 @@
                   </van-cell-group>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>审批意见</span>
@@ -279,7 +279,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="role == 'workflow' && !isNull(id) && (legal.bpm_status == '2' || legal.bpm_status == '3' ) && !(legal.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
                     </a-col>
@@ -333,7 +333,7 @@ export default {
       workflow:{
         content:'',
       },
-      legal:{
+      element:{
         'id': '',
         'title': '录入法官流程申请',
         'create_time': dayjs().format('YYYY-MM-DD'),
@@ -376,7 +376,7 @@ export default {
     };
   },
   watch:{
-    'legal.zone'(value,item2){ //此处监听obj属性a值变量 item1为新值，item2为旧值
+    'element.zone'(value,item2){ //此处监听obj属性a值变量 item1为新值，item2为旧值
       (async()=>{
         this.courtNamelist = await workconfig.courtPlainList(value);
       })();
@@ -430,9 +430,9 @@ export default {
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.legal.apply_realname = userinfo.realname;
-          this.legal.apply_username = userinfo.username;
-          const legal = Betools.storage.getStore(`system_${this.tablename}_item#${this.legal.type}#@${userinfo.realname}`); //获取缓存信息
+          this.element.apply_realname = userinfo.realname;
+          this.element.apply_username = userinfo.username;
+          const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');
 
           if(!Betools.tools.isNull(id)){
@@ -446,7 +446,7 @@ export default {
               }
             })();
 
-            return this.legal = await this.handleList(this.tablename , id);
+            return this.element = await this.handleList(this.tablename , id);
           } 
 
         } catch (error) {
@@ -470,11 +470,11 @@ export default {
       validField(fieldName){
         const userinfo = Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const regMail = workconfig.system.config.regexp.mail; // 邮箱验证正则表达式
-        this.message[fieldName] = Betools.tools.isNull(this.legal[fieldName]) ? this.valid[fieldName] : '';
+        this.message[fieldName] = Betools.tools.isNull(this.element[fieldName]) ? this.valid[fieldName] : '';
         if(fieldName.toLocaleLowerCase().includes('mail')) {
-          this.message[fieldName] = regMail.test(this.legal[fieldName]) ? '' : '请输入正确的邮箱地址！';
+          this.message[fieldName] = regMail.test(this.element[fieldName]) ? '' : '请输入正确的邮箱地址！';
         }
-        Betools.storage.setStore(`system_${this.tablename}_item#${this.legal.type}#@${userinfo.realname}` , JSON.stringify(this.legal) , 3600 * 2 );
+        Betools.storage.setStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}` , JSON.stringify(this.element) , 3600 * 2 );
         return Betools.tools.isNull(this.message[fieldName]);
       },
 
@@ -543,8 +543,8 @@ export default {
         this.loading = true; // 显示加载状态
         const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const id = Betools.tools.queryUniqueID(); // 表单ID
-        this.legal.create_time = dayjs().format('YYYY-MM-DD');
-        this.legal.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+        this.element.create_time = dayjs().format('YYYY-MM-DD');
+        this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
 
         const keys = Object.keys({ title: '' , brief:'', }); // 验证数据是否已经填写
         const invalidKey =  keys.find(key => { return !this.validField(key);});
@@ -557,9 +557,9 @@ export default {
             title: "确认操作",
             content: "是否确认保存此法院录入申请单?",
             onOk: async() => {
-                  const { legal } = this;
-                  legal.id = id;
-                  const result = await Betools.manage.postTableData(this.tablename , this.legal); // 向表单提交form对象数据
+                  const { element } = this;
+                  element.id = id;
+                  const result = await Betools.manage.postTableData(this.tablename , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
@@ -588,8 +588,8 @@ export default {
             title: "确认操作",
             content: "是否确认修改此法院的信息?",
             onOk: async() => {
-                  const { legal } = this;
-                  const result = await Betools.manage.patchTableData(this.tablename , id , this.legal); // 向表单提交form对象数据
+                  const { element } = this;
+                  const result = await Betools.manage.patchTableData(this.tablename , id , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
