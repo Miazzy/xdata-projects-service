@@ -177,8 +177,8 @@
                       <a-textarea
                         v-model="element.brief"
                         placeholder="请输入此律师简介(工作、经验、能力、学历等)！"
-                        :auto-size="{ minRows: 10, maxRows: 100 }"
-                        style="height:120px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 5, maxRows: 100 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
@@ -228,8 +228,8 @@
                       <a-textarea
                         v-model="element.out_reason"
                         placeholder="请输入此律师出库原因！"
-                        :auto-size="{ minRows: 10, maxRows: 100 }"
-                        style="height:120px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 5, maxRows: 100 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
