@@ -143,27 +143,11 @@
                     </a-col>
                   </a-row>
                   <div v-if=" ( role == 'add' || role == 'edit' ) " style="position:absolute; width:1000px; left: -26.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
-                    <a-tag color="#87d068" style="position: relative; float:right; right:0.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execAddEvd(legal)"> 新增证据明细 </a-tag>
+                    <a-tag color="#87d068" style="position: relative; float:right; right:0.5rem; margin-top:0.25rem; margin-left:0.25rem; transform-origin: left center;" @click="execAddEvd(legal)"> 新增证据明细 </a-tag>
                   </div>
                 </div>
 
-                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:25px;margin-bottom:5px; margin-right:10px; display:block; ">
-                  <a-row>
-                    <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据名称</span>
-                    </a-col>
-                    <a-col :span="20">
-                      <a-textarea
-                        v-model="element.evd_name"
-                        placeholder="请输入证据名称！"
-                        :auto-size="{ minRows: 3, maxRows: 100 }"
-                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
-                      />
-                    </a-col>
-                  </a-row>
-                </div>
-
-                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据提交日期</span>
@@ -176,6 +160,22 @@
                     </a-col>
                     <a-col :span="8">
                       <a-input v-model="element.evd_by" readonly placeholder="请输入此证据提供人员！" @blur="validFieldToast('evt_by')" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:block; ">
+                  <a-row>
+                    <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据名称</span>
+                    </a-col>
+                    <a-col :span="20">
+                      <a-textarea
+                        v-model="element.evd_name"
+                        placeholder="请输入证据名称！"
+                        :auto-size="{ minRows: 3, maxRows: 100 }"
+                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                      />
                     </a-col>
                   </a-row>
                 </div>
