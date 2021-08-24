@@ -363,8 +363,13 @@ export default {
       userList:[],
       firmlist:[],
       firmNamelist:[],
+      processLogList:[],
+      release_userid:'',
       release_userlist:[],
+      approve_userid:'',
       approve_userlist:[],
+      notify_userid:'',
+      notify_userlist:[],
       approve_executelist:[],
       legallist:[],
       legalTitlelist:[],
@@ -473,6 +478,15 @@ export default {
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
 
           if(!Betools.tools.isNull(id)){
+            (async()=>{
+              this.processLogList = await Betools.query.queryProcessLog();
+              if(this.role == 'workflow' || this.role == 'view'){
+                const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
+                this.approve_userlist = JSON.parse(process.relate_data);
+                this.release_userlist = JSON.parse(process.notify_data);
+              }
+            })();
+
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
@@ -495,17 +509,12 @@ export default {
             console.error(error);
           }
 
-          this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.legal.title;
-          this.element.pid = pid;
-
-          (async()=>{
-            this.processLogList = await Betools.query.queryProcessLog();
-            if(this.role == 'workflow' || this.role == 'view'){
-              const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
-              this.approve_userlist = JSON.parse(process.relate_data);
-              this.release_userlist = JSON.parse(process.notify_data);
-            }
-          })();
+          try {
+            this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.legal.title;
+            this.element.pid = pid;
+          } catch (error) {
+            console.error(error);
+          }
 
         } catch (error) {
           console.log(error);
