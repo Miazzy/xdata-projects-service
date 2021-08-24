@@ -557,6 +557,7 @@
   </div>
 </template>
 <script>
+import CryptoES from 'crypto-es';
 import * as workflow from '@/request/workflow';
 import * as workconfig from '@/request/workconfig';
 import * as workprocess from '@/request/wflow.process';
@@ -884,9 +885,8 @@ export default {
                   element.id = id;
 
                   try {
-                    element.tags = Betools.tools.isNull(element.tags) ? '' : JSON.stringify(element.tags); //进行序列化
-                    element.in_zone = Betools.tools.isNull(element.in_zone) ? '' : JSON.stringify(element.in_zone); //进行序列化
-                    debugger;
+                    element.tags = Betools.tools.isNull(element.tags) ? '' : CryptoES.AES.encrypt(element.tags.toString(),'AES'); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
+                    element.in_zone = Betools.tools.isNull(element.in_zone) ? '' : CryptoES.AES.encrypt(element.in_zone.toString(),'AES'); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
                   } catch (error) {
                     console.error(error);
                   }
