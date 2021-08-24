@@ -423,7 +423,7 @@ export default {
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL:'',
-      tablename:'bs_lawyer',
+      tablename:'bs_legal_lawyer',
       size: 0,
       options:{
         create_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
@@ -550,7 +550,7 @@ export default {
             console.error(error);
           }
 
-          this.firmlist = await Betools.manage.queryTableData('bs_law_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
+          this.firmlist = await Betools.manage.queryTableData('bs_legal_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
           this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
           const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');

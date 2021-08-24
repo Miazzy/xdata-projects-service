@@ -23,6 +23,8 @@ export const system = {
         }
     },
     website: 'https://legal.yunwisdom.club:30443', // 系统网站地址
+    secretkey: "secret_key",
+    crypto: new SimpleCrypto("secret_key"),
 }
 
 /**
