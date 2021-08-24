@@ -393,8 +393,13 @@ export default {
       userList:[],
       firmlist:[],
       firmNamelist:[],
+      processLogList:[],
+      release_userid:'',
       release_userlist:[],
+      approve_userid:'',
       approve_userlist:[],
+      notify_userid:'',
+      notify_userlist:[],
       approve_executelist:[],
       territoryList:[ '家庭纠纷', '借款借贷', '交通事故', '房产纠纷', '刑事辩护', '合同纠纷', '经济纠纷', '土地纠纷', '劳动工伤', '消费权益', '医疗纠纷', '行政诉讼', '公司事务', '知识产权', '保险理赔', '征地拆迁', '涉外海关', '工程建设', '综合咨询', ],
       role:'',
@@ -470,10 +475,23 @@ export default {
           this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
           const legal = Betools.storage.getStore(`system_${this.tablename}_item#${this.legal.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');
+
           if(!Betools.tools.isNull(id)){
+
             this.legal = await this.handleList(this.tablename , id);
             this.legal.firmID = this.legal.firmName;
+
+            (async()=>{
+              this.processLogList = await Betools.query.queryProcessLog();
+              if(this.role == 'workflow' || this.role == 'view'){
+                const process = this.processLogList.find(item => {return item.action_opinion == '发起流程' && item.process_name == '流程审批' && !Betools.tools.isNull(item.relate_data)});
+                this.approve_userlist = JSON.parse(process.relate_data);
+                this.release_userlist = JSON.parse(process.notify_data);
+              }
+            })(); 
+
           } else {
+
             try {
               if(legal){ //自动回显刚才填写的用户基础信息
                 this.legal.create_by = legal.create_by || this.legal.create_by;
@@ -492,7 +510,9 @@ export default {
             } catch (error) {
               console.log(error);
             }
+
           }
+
         } catch (error) {
           console.log(error);
         }
@@ -537,6 +557,52 @@ export default {
           this.$toast.fail(`${this.message[fieldName]}！` );
           return false;
         }
+      },
+
+      // 检测知会人员，并加入知会列表
+      async execValidNotify(){
+        const username = this.release_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.release_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.release_userlist = userlist; 
+        this.release_userlist.map((item,index) => { item.index = index;});
+      },
+
+      // 检测审批人员，并加入审批列表
+      async execValidApprove(){
+        const username = this.approve_userid;
+        let userlist = await Betools.manage.queryUserByNameVHRM(username, 1000);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        userlist = this.approve_userlist.concat(userlist);
+        userlist = userlist.filter( (item , index) => { const findex = userlist.findIndex( elem => { return item.cert == elem.cert });  return findex == index;});
+        this.approve_userlist = userlist; 
+        this.approve_userlist.map((item,index)=>{ item.index = index;});
+      },
+
+      // 移除第Index个审批人员
+      async execRemoveApprove(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除审批人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.approve_userlist.splice(index, 1);
+                this.approve_userlist.map((item,index) => { item.index = index;});
+              }
+        });
+      },
+
+      // 移除第Index个抄送人员
+      async execRemoveNotify(item,index){
+        this.$confirm({
+              title: "确认操作",
+              content: `您好，您确认删除抄送人员${item.name}(${item.loginid})吗?`,
+              onOk: async(result) => {
+                this.release_userlist.splice(index, 1);
+                this.release_userlist.map((item,index) => { item.index = index;});
+              }
+        });
       },
       
       // 用户提交入职登记表函数
@@ -676,6 +742,76 @@ export default {
                   await this.handleList(this.tablename , id);
                }
           });
+      },
+
+      // 提交自由流程
+      async handleSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 重新提交自由流程
+      async handleReSubmitWF(userinfo, wfUsers, nfUsers , approver , curTableName , curItemID , data , ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+        try {
+          const checkFlag = workflow.checkSubmitInfo( wfUsers,  nfUsers, approver, ); //校验提交信息是否准确
+          let vflag = await Betools.manage.queryApprovalExist(curTableName, curItemID); //提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
+          let vflag_ = Betools.storage.getStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`);
+          if ( Betools.tools.isNull(approver) || !checkFlag || vflag || vflag_ == "true") { //如果校验标识有误，则直接返回
+              return !checkFlag ? null : vant.Toast.fail("已提交过申请，无法再次提交审批！"); //数据库中已经存在此记录，提示用户无法提交审批
+          }
+          return await workprocess.handleReStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // 工作流程审批同意
+      async handleAgree(){ // 生成下一条流程记录 // 转移当前审批流程记录到历史记录中 // 通知下一位审批人员
+          let response = null;
+          if(Betools.tools.isNull(this.workflow.content)){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
+          }
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = workconfig.system.website;
+            response = await workprocess.handleAgreeWF(this.tablename, this.element.id, this.element, this.workflow.content, processID , '', domainURL);
+            this.$router.push(`/legal/${this.tablename.replace('bs_legal_','') + 'apply'}?id=${this.element.id}&type=1&tname=流程详情&apply=view&role=view`);
+            this.processLogList = await Betools.query.queryProcessLog();
+            this.role = this.apply = 'view';
+            vant.Toast.clear();
+          } catch (error) {
+            console.error(error);
+          }
+          return response;
+      },
+
+      // 工作流程审批驳回
+      async handleDisagree(){ // 流程审批状态改为驳回 // 转移当前审批流程记录到历史记录中 // 通知审批发起人员流程驳回
+          let response = null;
+          if(Betools.tools.isNull(this.workflow.content)){
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入审批意见！`,});
+          }
+          try {
+            const processID = Betools.tools.getUrlParam('processID');
+            const domainURL = workconfig.system.website;
+            response = await workprocess.handleRejectWF(this.tablename, this.element.id, this.element, this.workflow.content, processID, '', domainURL);
+            this.$router.push(`/legal/${this.tablename.replace('bs_legal_','') + 'apply'}?id=${this.element.id}&type=1&tname=流程详情&apply=view&role=view`);
+            this.processLogList = await Betools.query.queryProcessLog();
+            this.role = this.apply = 'view';
+            vant.Toast.clear();
+          } catch (error) {
+            console.error(error);
+          }
+          return response;
       },
 
   },
