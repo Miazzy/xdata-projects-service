@@ -856,6 +856,8 @@ export default {
         this.element.create_time = dayjs().format('YYYY-MM-DD');
         this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
 
+        debugger;
+
         // 验证数据是否已经填写
         const keys = Object.keys({ title: '' , brief:'', team_brief:'' })
 
@@ -880,8 +882,14 @@ export default {
 
                   const element = JSON.parse(JSON.stringify(this.element));
                   element.id = id;
-                  element.tags = JSON.stringify(element.tags); //进行序列化
-                  element.in_zone = JSON.stringify(element.in_zone); //进行序列化
+
+                  try {
+                    element.tags = Betools.tools.isNull(element.tags) ? '' : JSON.stringify(element.tags); //进行序列化
+                    element.in_zone = Betools.tools.isNull(element.in_zone) ? '' : JSON.stringify(element.in_zone); //进行序列化
+                    debugger;
+                  } catch (error) {
+                    console.error(error);
+                  }
 
                   const result = await Betools.manage.postTableData(this.tablename , this.element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
@@ -908,13 +916,6 @@ export default {
                     console.error(error);
                   }
 
-                  try {
-                    element.tags = JSON.parse(element.tags); //进行解析
-                    element.in_zone = JSON.parse(element.in_zone); //进行解析
-                  } catch (error) {
-                    console.error(error);
-                  }
-                  
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';
