@@ -1,5 +1,6 @@
 import * as manage from '@/request/manage';
 import * as workflow from '@/request/workflow';
+import * as workconfig from '@/request/workconfig';
 
 /**
  * @function 同意审批 wflowAddUsers , wflowNotifyUsers
@@ -476,7 +477,7 @@ export async function handleNotifyHR(user_group_ids, userinfo, value, receiveURL
 /**
  * @function 同意审批
  */
-export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message, processID , username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
+export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message, processID , username = '', domainURL = workconfig.system.website) {
 
     let result = '';
     let applyNode = '';
@@ -669,7 +670,7 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
 /**
  * @function 驳回审批
  */
-export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
+export async function handleRejectWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = workconfig.system.website) {
 
     let result = '';
     let applyNode = '';
@@ -1078,7 +1079,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 /**
  * @function 知会确认
  */
-export async function handleConfirmWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = 'https://legal.yunwisdom.club:30443') {
+export async function handleConfirmWF(tableName, bussinessCodeID, curRow, message, processID, username = '', domainURL = workconfig.system.website) {
 
     let result = '';
 
