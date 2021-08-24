@@ -759,7 +759,7 @@ export async function handleRejectWF(tableName, bussinessCodeID, curRow, message
 /**
  * @function 发起审批自由流程
  */
-export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL = workconfig.system.website) {
 
     let accounts = '';
     let employeeName = '';
@@ -911,7 +911,7 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 /**
  * @function 重新发起审批自由流程
  */
- export async function handleReStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL = `https://legal.yunwisdom.club:30443`) {
+ export async function handleReStartWF(userinfo, wfUsers, nfUsers, approver, curTableName, curItemID, data, ctime, domainURL = workconfig.system.website) {
 
     let accounts = '';
     let employeeName = '';
