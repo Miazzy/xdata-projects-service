@@ -222,7 +222,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>服务团队人数</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.firm_count"  placeholder="请输入此律所服务团队人数！" @blur="validFieldToast('firm_count')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                      <a-input v-model="element.firm_count" type="number" placeholder="请输入此律所服务团队人数！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
                     </a-col>
                   </a-row>
                 </div>
@@ -361,8 +361,8 @@
                       <a-textarea
                         v-model="element.brief"
                         placeholder="请输入此律所简要介绍！"
-                        :auto-size="{ minRows: 10, maxRows: 100 }"
-                        style="height:120px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 5, maxRows: 100 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
@@ -377,14 +377,14 @@
                       <a-textarea
                         v-model="element.team_brief"
                         placeholder="请输入此律所的服务团队介绍！"
-                        :auto-size="{ minRows: 10, maxRows: 100 }"
-                        style="height:120px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 5, maxRows: 100 }"
+                        style="height:80px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
                 </div>
 
-                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:0px;">
                   <a-divider></a-divider>
                 </div>
 
