@@ -355,6 +355,7 @@ export default {
         title: '录入法院流程申请',
         create_time: dayjs().format('YYYY-MM-DD'),
         create_by: '',
+        create_username:'',
         court_name: '',
         principal: '',
         judge: '',
@@ -451,8 +452,6 @@ export default {
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
           try {
-            this.element.apply_realname = userinfo.realname;
-            this.element.apply_username = userinfo.username;
             this.element.create_time = dayjs().format('YYYY-MM-DD');
             this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
             this.element.create_username =  (userinfo ? userinfo.username || userinfo.loginid : '');

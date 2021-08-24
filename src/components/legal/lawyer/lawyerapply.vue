@@ -443,6 +443,7 @@ export default {
         title: 'XX律师入库申请流程',
         create_time: dayjs().format('YYYY-MM-DD'),
         create_by :'', 
+        create_username:'',
         firmID: '', // varchar(36)  default ''  not null comment '所属律所ID',
         lawyer_name:'', // 律师姓名
         college: 'XX大学', // varchar(32)  default ''  not null comment '大学名称',
@@ -541,8 +542,14 @@ export default {
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.element.apply_realname = userinfo.realname;
-          this.element.apply_username = userinfo.username;
+          try {
+            this.element.create_time = dayjs().format('YYYY-MM-DD');
+            this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+            this.element.create_username =  (userinfo ? userinfo.username || userinfo.loginid : '');
+          } catch (error) {
+            console.error(error);
+          }
+
           this.firmlist = await Betools.manage.queryTableData('bs_law_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
           this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
           const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息

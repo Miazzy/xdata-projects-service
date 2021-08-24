@@ -593,6 +593,7 @@ export default {
         serialID:'', // varchar(16)  default ''  not null comment '律所序号',
         create_time: dayjs().format('YYYY-MM-DD'), // timestamp    default CURRENT_TIMESTAMP not null comment '填报日期',
         create_by :'', // varchar(32)  default '' not null comment '填报人员',
+        create_username:'',
         xid :'', // varchar(36) default '' not null comment '更新ID',
         in_zone:'', // varchar(32)  default ''  not null comment '入库区域',
         firm_name:'', // varchar(64)  default ''  not null comment '律所名称',
@@ -708,8 +709,13 @@ export default {
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.element.apply_realname = userinfo.realname;
-          this.element.apply_username = userinfo.username;
+          try {
+            this.element.create_time = dayjs().format('YYYY-MM-DD');
+            this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+            this.element.create_username =  (userinfo ? userinfo.username || userinfo.loginid : '');
+          } catch (error) {
+            console.error(error);
+          }
           
           const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');

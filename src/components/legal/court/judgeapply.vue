@@ -334,18 +334,19 @@ export default {
         content:'',
       },
       element:{
-        'id': '',
-        'title': '录入法官流程申请',
-        'create_time': dayjs().format('YYYY-MM-DD'),
-        'create_by': '',
-        'courtName': '',
-        'name': '',
-        'mobile': '',
-        'address': '',
-        'zone': '',
-        'brief':'',
-        'status': 'valid',
-        'bpm_status':'',
+        id: '',
+        title: '录入法官流程申请',
+        create_time: dayjs().format('YYYY-MM-DD'),
+        create_by: '',
+        create_username:'',
+        courtName: '',
+        name: '',
+        mobile: '',
+        address: '',
+        zone: '',
+        brief:'',
+        status: 'valid',
+        bpm_status:'',
       },
       firmlist:[],
       data: [],
@@ -430,8 +431,14 @@ export default {
           this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.element.apply_realname = userinfo.realname;
-          this.element.apply_username = userinfo.username;
+          try {
+            this.element.create_time = dayjs().format('YYYY-MM-DD');
+            this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+            this.element.create_username =  (userinfo ? userinfo.username || userinfo.loginid : '');
+          } catch (error) {
+            console.error(error);
+          }
+
           const element = Betools.storage.getStore(`system_${this.tablename}_item#${this.element.type}#@${userinfo.realname}`); //获取缓存信息
           const id = this.id = Betools.tools.getUrlParam('id');
 
