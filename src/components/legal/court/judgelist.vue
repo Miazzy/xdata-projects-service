@@ -102,7 +102,7 @@ export default {
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL:'',
-      tablename:'bs_company_legal_judicative',
+      tablename:'bs_legal_judge',
       size: 0,
       options:{},
       legal:{},
