@@ -839,7 +839,7 @@ export default {
             const processID = Betools.tools.getUrlParam('processID');
             const domainURL = 'https://legal.yunwisdom.club:30443';
             response = await workprocess.handleAgreeWF(this.tablename, this.element.id, this.element, this.workflow.content, processID , '', domainURL);
-            this.$router.push(`/legal/evidenceapply?id=${this.element.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.$router.push(`/legal/evidenceapply?id=${this.element.id}&type=1&tname=流程详情&apply=view&role=view`);
             this.processLogList = await Betools.query.queryProcessLog();
             this.role = this.apply = 'view';
             vant.Toast.clear();
@@ -859,7 +859,7 @@ export default {
             const processID = Betools.tools.getUrlParam('processID');
             const domainURL = 'https://legal.yunwisdom.club:30443';
             response = await workprocess.handleRejectWF(this.tablename, this.element.id, this.element, this.workflow.content, processID, '', domainURL);
-            this.$router.push(`/legal/evidenceapply?id=${this.element.id}&type=1&tname=案件详情&apply=view&role=view`);
+            this.$router.push(`/legal/evidenceapply?id=${this.element.id}&type=1&tname=流程详情&apply=view&role=view`);
             this.processLogList = await Betools.query.queryProcessLog();
             this.role = this.apply = 'view';
             vant.Toast.clear();
