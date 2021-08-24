@@ -763,13 +763,17 @@ export default {
         let list = await Betools.manage.queryTableData(tableName , `_where=(id,eq,${id})&_sort=-id&_p=0&_size=1`);
         list.map((item)=>{ 
           try {
+            
             item.create_time = dayjs(item.create_time).format('YYYY-MM-DD'); 
             item.establish_time = dayjs(item.establish_time).format('YYYY-MM-DD') == 'Invalid Date' ? dayjs().format('YYYY-MM-DD') : dayjs(item.establish_time).format('YYYY-MM-DD');
+            
             item.firm_count = parseInt(item.firm_count);
             item.coop_flag = 'YN'.includes(item.coop_flag) ? {'Y':'已合作','N':'未合作'}[item.coop_flag] : item.coop_flag;
             item.out_flag = 'YN'.includes(item.out_flag) ? {'Y':'已出库','N':'未出库'}[item.out_flag] : item.out_flag;
-            item.tags = JSON.parse(item.tags);
-            item.in_zone = JSON.parse(item.in_zone); //进行解析
+
+            item.tags = Betools.tools.isNull(item.tags) ? [] : item.tags.split(',');
+            item.in_zone = Betools.tools.isNull(item.in_zone) ? [] : item.in_zone.split(','); //进行解析
+
           } catch (error) {
             console.log(`error:`, error);
           }
@@ -951,15 +955,20 @@ export default {
             title: "确认操作",
             content: "是否确认修改此律所的信息?",
             onOk: async() => {
-                  const { element } = this;
-                  element.tags = JSON.stringify(element.tags); //进行序列化
-                  element.in_zone = JSON.stringify(element.in_zone); //进行序列化
-                  const result = await Betools.manage.patchTableData(this.tablename , id , this.element); // 向表单提交form对象数据
+                  const element = JSON.parse(JSON.stringify(this.element));
+
+                  try {
+                    element.tags = Betools.tools.isNull(element.tags) ? '' : element.tags.toString(); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
+                    element.in_zone = Betools.tools.isNull(element.in_zone) ? '' : element.in_zone.toString(); //进行序列化 // const encrypted = CryptoES.AES.encrypt("Message", "Secret Passphrase"); //const decrypted = CryptoES.AES.decrypt(encrypted, "Secret Passphrase");
+                  } catch (error) {
+                    console.error(error);
+                  }
+
+                  const result = await Betools.manage.patchTableData(this.tablename , id , element); // 向表单提交form对象数据
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
-                  element.tags = JSON.parse(element.tags); //进行解析
-                  element.in_zone = JSON.parse(element.in_zone); //进行解析
+                  
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';
