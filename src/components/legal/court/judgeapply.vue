@@ -207,6 +207,20 @@
                   </a-row> 
                 </div>  
 
+                <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '1' && role == 'workflow')" class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col :span="8">
+                    </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="4" style="margin-left:100px;">
+                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleReApply();"  >
+                        重新提交
+                      </a-button>
+                    </a-col>
+                    <a-col :span="8">
+                    </a-col>
+                   </a-row>
+                </div>
+
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col :span="8">
@@ -625,7 +639,7 @@ export default {
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
-                  
+
                   this.loading = false; //设置状态
                   this.readonly = true;
                   this.role = 'view';
