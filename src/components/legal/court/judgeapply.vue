@@ -270,6 +270,7 @@ export default {
         'zone': '',
         'brief':'',
         'status': 'valid',
+        'bpm_status':'',
       },
       firmlist:[],
       data: [],

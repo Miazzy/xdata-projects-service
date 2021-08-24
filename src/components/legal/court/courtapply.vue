@@ -290,6 +290,7 @@ export default {
         'pid': '',
         'pname': '',
         'status': 'valid',
+        'bpm_status':'',
       },
       firmlist:[],
       data: [],

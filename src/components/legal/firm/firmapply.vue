@@ -547,6 +547,7 @@ export default {
         coop_stime:'', // varchar(32)  default ''  not null comment '最近合作期间(开始时间)',
         coop_etime:'', // varchar(32)  default ''  not null comment '最近合作期间(结束时间)',
         out_flag:'未出库', // varchar(32)  default 'N' not null comment '是否出库',
+        bpm_status:'',
       },
       columns: workconfig.columns.reward.items,
       wfcolumns: workconfig.columns.reward.wfcolumns,

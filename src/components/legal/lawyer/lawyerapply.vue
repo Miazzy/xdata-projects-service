@@ -385,6 +385,7 @@ export default {
         out_flag: '未出库', // varchar(1)   default 'N' not null,
         out_reason: '无', // varchar(256) default ''  not null,
         territory:[], // 擅长领域
+        bpm_status:'',
       },
       columns: workconfig.columns.reward.items,
       wfcolumns: workconfig.columns.reward.wfcolumns,
