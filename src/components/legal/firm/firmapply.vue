@@ -589,7 +589,7 @@ export default {
       },
       element:{
         id:'', // varchar(36)  default ''  not null comment '律所编号' primary key,
-        title:'录入律师申请', // 申请流程标题,
+        title:'录入律师事务所申请', // 申请流程标题,
         serialID:'', // varchar(16)  default ''  not null comment '律所序号',
         create_time: dayjs().format('YYYY-MM-DD'), // timestamp    default CURRENT_TIMESTAMP not null comment '填报日期',
         create_by :'', // varchar(32)  default '' not null comment '填报人员',
@@ -605,7 +605,7 @@ export default {
         phone:'', // varchar(16)  default ''  not null comment '电话',
         scale:'1-10人', // varchar(16)  default ''  not null comment '律所规模（人数）',
         brief:'', // varchar(256) default ''  not null comment '律所简要介绍',
-        firm_count:'N人', // varchar(16)  default ''  not null comment '服务团队人数',
+        firm_count:'0', // varchar(16)  default ''  not null comment '服务团队人数',
         team_brief:'', // varchar(256) default ''  not null comment '团队介绍',
         fee:'￥N万/年', // varchar(64)  default ''  not null comment '费用',
         major_fee:'一事一议', // varchar(64)  default ''  not null comment '重大诉讼费用',
