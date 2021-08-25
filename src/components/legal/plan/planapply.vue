@@ -337,7 +337,7 @@ export default {
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
-      uploadURL:'https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload',
+      uploadURL: workconfig.system.uploadURL,
       tablename:'bs_legal_plan',
       size: 0,
       options:{
