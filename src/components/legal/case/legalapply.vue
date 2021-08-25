@@ -214,27 +214,11 @@
                     </a-col>
                     <a-col :span="8">
                       <a-select  v-model="legal.stage" default-value="一审阶段" @blur="validFieldToast('stage')"  placeholder="请选择当前案件程序阶段（一审/二审/执行/再审）！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
-                        <a-select-option value="劳动仲裁">
-                          劳动仲裁
-                        </a-select-option>
-                        <a-select-option value="一审阶段">
-                          一审阶段
-                        </a-select-option>
-                        <a-select-option value="二审阶段">
-                          二审阶段
-                        </a-select-option>
-                        <a-select-option value="执行阶段">
-                          执行阶段
-                        </a-select-option>
-                        <a-select-option value="再审阶段">
-                          再审阶段
-                        </a-select-option>
-                        <a-select-option value="行政复议">
-                          行政复议
-                        </a-select-option>
-                        <a-select-option value="归档闭单">
-                          归档闭单
-                        </a-select-option>
+                        <template v-for="(elem,index) in options.stageOptions" >
+                          <a-select-option :key="index" :value="elem" >
+                            {{elem}}
+                          </a-select-option>
+                        </template>
                       </a-select>
                     </a-col>
                   </a-row>
@@ -2022,6 +2006,7 @@ export default {
         stypeOptions:['民商事纠纷','刑事纠纷','行政纠纷'],
         caseSTypeOptions:['起诉案件','应诉案件'],
         legalTypeOptions:['一般案件','重大案件'],
+        stageOptions:['劳动仲裁','一审阶段','二审阶段','执行阶段','再审阶段','行政复议','归档闭单'],
         courtOptions:[],
       },
       workflow:{
