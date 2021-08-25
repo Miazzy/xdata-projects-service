@@ -420,17 +420,17 @@ export function checkSubmitInfo(wfUsers, nfUsers, approver, pageType = 'workflow
 export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, startFreeNode, nextWflowNode, bpmStatus) {
 
     //执行处理的结果
-    var result = null;
+    let result = null;
 
     //状态节点
-    var statusNode = {
+    let statusNode = {
         bpm_status: bpmStatus
     };
 
     //动态内容
-    var dynamicNode = {};
+    let dynamicNode = {};
 
-    try {
+    // try {
         //去掉undefined字符串
         // freeWFNode.notify_node = freeWFNode.notify_node.replace(/undefined/g, '')
 
@@ -443,9 +443,9 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
         // if (freeWFNode.notify_node.endsWith(',')) {
         //     freeWFNode.notify_node = freeWFNode.notify_node.substring(0, freeWFNode.notify_node.length - 1);
         // }
-    } catch (error) {
-        console.log(error);
-    }
+    // } catch (error) {
+    //     console.log(error);
+    // }
 
     //构造用户动态内容
     try {
@@ -489,51 +489,52 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
     //执行提交审批流程的业务操作
     try {
 
-        try {
-            // 将审批用户记录，知会用户记录，写入相应的自由流程表单中
-            // result = await Betools.manage.postProcessFreeNode(freeWFNode);
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     // 将审批用户记录，知会用户记录，写入相应的自由流程表单中
+        //     // result = await Betools.manage.postProcessFreeNode(freeWFNode);
+        // } catch (error) {
+        //     console.log(error);
+        // }
 
         try {
             //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
             result = await Betools.manage.postProcessLogHistory(startFreeNode);
         } catch (error) {
-            console.log(error);
+            result = await Betools.manage.postProcessLogHistory(startFreeNode);
+            console.error(error);
         }
 
         try {
             //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
             result = await Betools.manage.postProcessLog(nextWflowNode);
         } catch (error) {
-            console.log(error);
+            result = await Betools.manage.postProcessLog(nextWflowNode);
+            console.error(error);
         }
 
         try {
             //第四步，修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中 （1:待提交 2:处理中 3:审批中 4:已完成 5:已完成） //修改审批状态为处理中，并记录审批日志；将当前审批状态修改为处理中
             result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
         } catch (error) {
-            console.log(error);
+            result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
+            console.error(error);
         }
 
         //第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
-        try {
-            // 第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
-            // result = await Betools.manage.postTableData('bs_dynamic', dynamicNode);
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //    // 第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
+        //    // result = await Betools.manage.postTableData('bs_dynamic', dynamicNode);
+        // } catch (error) {
+        //    console.log(error);
+        // }
 
-        try {
-            //修改审批状态为审批中,第二次修改
+        //修改审批状态为审批中,第二次修改
+        (async()=>{
             result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
-        } catch (error) {
-            console.log(error);
-        }
+        })();
 
     } catch (error) {
-        console.log("处理自由流程发起提交审批操作异常：" + error)
+        console.error("处理自由流程发起提交审批操作异常：", error)
     }
 
     //返回执行结果
