@@ -432,17 +432,17 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
 
     try {
         //去掉undefined字符串
-        freeWFNode.notify_node = freeWFNode.notify_node.replace(/undefined/g, '')
+        // freeWFNode.notify_node = freeWFNode.notify_node.replace(/undefined/g, '')
 
-        //如果字符串以逗号开头，则去掉开头的逗号
-        if (freeWFNode.notify_node.startsWith(',')) {
-            freeWFNode.notify_node = freeWFNode.notify_node.substring(1);
-        }
+        // //如果字符串以逗号开头，则去掉开头的逗号
+        // if (freeWFNode.notify_node.startsWith(',')) {
+        //     freeWFNode.notify_node = freeWFNode.notify_node.substring(1);
+        // }
 
-        //如果字符串以逗号结束，则去掉结尾的逗号
-        if (freeWFNode.notify_node.endsWith(',')) {
-            freeWFNode.notify_node = freeWFNode.notify_node.substring(0, freeWFNode.notify_node.length - 1);
-        }
+        // //如果字符串以逗号结束，则去掉结尾的逗号
+        // if (freeWFNode.notify_node.endsWith(',')) {
+        //     freeWFNode.notify_node = freeWFNode.notify_node.substring(0, freeWFNode.notify_node.length - 1);
+        // }
     } catch (error) {
         console.log(error);
     }
@@ -451,36 +451,36 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
     try {
 
         //日期格式化
-        var timestamp = new Date().getTime();
+        // var timestamp = new Date().getTime();
 
-        //定义动态编码
-        var id = Betools.tools.queryUniqueID();
+        // //定义动态编码
+        // var id = Betools.tools.queryUniqueID();
 
-        //表单数据库数据
-        var mainData = await Betools.query.queryTableData(tableName, curRow.id);
+        // //表单数据库数据
+        // var mainData = await Betools.query.queryTableData(tableName, curRow.id);
 
-        //获取表单的中文名称
-        var tname = '';
+        // //获取表单的中文名称
+        // var tname = '';
 
-        //表单内容
-        var title = '<div><span>' + userInfo['realname'] + `</span> 发起了 <a href="/workflow/view?table_name=${tableName}&id=${curRow.id}&user=${userInfo.username}&type=notify">` + tname + `</a> 的 <a href="/workflow/view?table_name=${tableName}&id=${curRow.id}&user=${userInfo.username}&type=notify">流程申请</a> ` + '</div>';
+        // //表单内容
+        // var title = '<div><span>' + userInfo['realname'] + `</span> 发起了 <a href="/workflow/view?table_name=${tableName}&id=${curRow.id}&user=${userInfo.username}&type=notify">` + tname + `</a> 的 <a href="/workflow/view?table_name=${tableName}&id=${curRow.id}&user=${userInfo.username}&type=notify">流程申请</a> ` + '</div>';
 
-        //待发布动态节点内容
-        dynamicNode = {
-            id: id,
-            create_by: userInfo['username'],
-            create_time: Betools.tools.formatDate(timestamp, "yyyy-MM-dd hh:mm:ss"),
-            update_by: userInfo.username,
-            title: title,
-            content: title,
-            main_key: curRow.id,
-            main_table: tableName,
-            main_data: JSON.stringify(mainData),
-            relate_users: `${freeWFNode.audit_node},${freeWFNode.approve_node},${freeWFNode.notify_node},${userInfo.username},admin,`,
-        };
+        // //待发布动态节点内容
+        // dynamicNode = {
+        //     id: id,
+        //     create_by: userInfo['username'],
+        //     create_time: Betools.tools.formatDate(timestamp, "yyyy-MM-dd hh:mm:ss"),
+        //     update_by: userInfo.username,
+        //     title: title,
+        //     content: title,
+        //     main_key: curRow.id,
+        //     main_table: tableName,
+        //     main_data: JSON.stringify(mainData),
+        //     relate_users: `${freeWFNode.audit_node},${freeWFNode.approve_node},${freeWFNode.notify_node},${userInfo.username},admin,`,
+        // };
 
-        //设置自由流程的表单业务数据
-        freeWFNode['main_data'] = JSON.stringify(mainData);
+        // //设置自由流程的表单业务数据
+        // freeWFNode['main_data'] = JSON.stringify(mainData);
 
     } catch (error) {
         console.log(error);
@@ -490,8 +490,8 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
     try {
 
         try {
-            //将审批用户记录，知会用户记录，写入相应的自由流程表单中
-            result = await Betools.manage.postProcessFreeNode(freeWFNode);
+            // 将审批用户记录，知会用户记录，写入相应的自由流程表单中
+            // result = await Betools.manage.postProcessFreeNode(freeWFNode);
         } catch (error) {
             console.log(error);
         }
@@ -519,8 +519,8 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
 
         //第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
         try {
-            //第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
-            result = await Betools.manage.postTableData('bs_dynamic', dynamicNode);
+            // 第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
+            // result = await Betools.manage.postTableData('bs_dynamic', dynamicNode);
         } catch (error) {
             console.log(error);
         }
