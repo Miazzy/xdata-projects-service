@@ -135,16 +135,16 @@ export default {
         { width: '18%', title: '团队介绍', dataIndex: 'team_brief_min', key: 'team_brief_min', },
         { width: '5%', title: '合作', dataIndex: 'coop_flag', key: 'coop_flag', },
         { width: '5%', title: '出库', dataIndex: 'out_flag', key: 'out_flag', },
-        { width: '5%', title: '成立', dataIndex: 'establish_time', key: 'establish_time', }, 
-        // { width: '5%', title: '区域', dataIndex: 'in_zone', key: 'in_zone', }, // { width: '5%', title: '入库时间', dataIndex: 'in_time', key: 'in_time', }, // { width: '5%', title: '合作时间', dataIndex: 'start_time', key: 'start_time', }, // { width: '5%', title: '合作期间', dataIndex: 'coop_time', key: 'coop_time', },
+        { width: '5%', title: '成立', dataIndex: 'establish_time', key: 'establish_time', },  // { width: '5%', title: '区域', dataIndex: 'in_zone', key: 'in_zone', }, // { width: '5%', title: '入库时间', dataIndex: 'in_time', key: 'in_time', }, // { width: '5%', title: '合作时间', dataIndex: 'start_time', key: 'start_time', }, // { width: '5%', title: '合作期间', dataIndex: 'coop_time', key: 'coop_time', },
       ],
       data:[],
       breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'律所管理',path:'/legal/workspace'},{icon:'form',text:'律所管理',path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
-      zoneType:{'领地集团总部':'领地集团总部','成渝区域':'成渝区域','两湖区域':'两湖区域','川北区域':'川北区域','成渝区域':'成渝区域','乐眉区域':'乐眉区域','中原区域':'中原区域','攀西区域':'攀西区域','新疆区域':'新疆区域','大湾区域':'大湾区域','北京区域':'北京区域'},
+      zoneType: workconfig.system.options.zoneType,
     };
   },
   activated() {
+    
   },
   mounted() {
     this.queryInfo();
