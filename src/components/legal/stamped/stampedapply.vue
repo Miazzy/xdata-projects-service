@@ -679,6 +679,13 @@ export default {
             content: "是否确认提交此账户信息?",
             onOk: async() => {
                   const element  = JSON.parse(JSON.stringify(this.element));
+
+                  try {
+                    element.companyName = element.companyName.toString();
+                  } catch (error) {
+                    console.error(error);
+                  }
+
                   const result = await Betools.manage.postTableData(this.tablename , element); // 向表单提交form对象数据
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
@@ -726,11 +733,21 @@ export default {
             title: "确认操作",
             content: "是否确认修改此账户信息?",
             onOk: async() => {
+
                   const element  = JSON.parse(JSON.stringify(this.element));
+
+                  try {
+                    element.companyName = element.companyName.toString();
+                  } catch (error) {
+                    console.error(error);
+                  }
+
                   const result = await Betools.manage.patchTableData(this.tablename, id, element); // 向表单提交form对象数据
+                  
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
+                  
                   this.loading = false;
                   this.readonly = true;
                   this.role = 'view';
