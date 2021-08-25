@@ -340,7 +340,7 @@ export default {
       tablename:'bs_legal_judge',
       size: 0,
       options:{
-        create_time:moment(dayjs().format('YYYY-MM-DD'),'YYYY-MM-DD'),
+        create_time:workconfig.system.options.datetime,
       },
       id:'',
       pid:'',
