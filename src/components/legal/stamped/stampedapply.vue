@@ -108,7 +108,7 @@
                     <a-col :span="16">
                     </a-col>
                     <a-col :span="8">
-                      <div style="margin-left:0px; font-size: 12px; ">
+                      <div style="margin-left:0px; font-size: 12px; text-align:left;">
                         <template v-for="(item,index) in element.company" :style="paneflowcard">
                           <span :index="index" :key="index" style="margin-top:5px; margin-right:5px;"> {{ item }} </span>
                         </template>
@@ -539,6 +539,8 @@ export default {
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
+            this.companyName = this.element.company;
+            this.element.company = this.element.company.split(',');
           } else {
            
           }
