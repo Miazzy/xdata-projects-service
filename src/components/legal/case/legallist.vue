@@ -128,7 +128,7 @@
                               所有板块
                             </a-select-option>
                             <template v-for="(elem,index) in options.plateOptions">
-                              <a-select-option :key="index" value="elem">
+                              <a-select-option :key="index" :value="elem">
                                 {{ elem }}
                               </a-select-option>
                             </template>

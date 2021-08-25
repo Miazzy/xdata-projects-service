@@ -164,8 +164,8 @@
                     </a-col>
                     <a-col :span="8">
                       <a-select  v-model="legal.plate" default-value="地产板块" @blur="validFieldToast('plate')"  placeholder="请选择业务板块！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
-                        <template v-for="(elem,index) in options.plateOptions">
-                          <a-select-option :key="index" value="elem">
+                        <template v-for="(elem,index) in options.plateOptions" >
+                          <a-select-option :key="index" :value="elem" >
                             {{elem}}
                           </a-select-option>
                         </template>
