@@ -648,13 +648,9 @@ export async function handleAgreeWF(tableName, bussinessCodeID, curRow, message,
             }
 
             try {
-                const processLogList = await Betools.query.queryProcessLog();
                 const node = { relate_data: JSON.stringify(data), notify_data: JSON.stringify(notifyData) , }
-                processLogList.map(item => { 
-                    if(Betools.tools.isNull(item.relate_data)){
-                        Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
-                    }
-                });
+                const processLogList = await Betools.query.queryProcessLog();
+                processLogList.map(item => {  if(Betools.tools.isNull(item.relate_data)){  Betools.manage.patchTableData('pr_log_history', item.id, node); } });
             } catch (error) {
                 console.log(error);
             }
@@ -1029,21 +1025,25 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
          console.log(error);
        }
 
-       const node = { relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist), };
-       (async()=>{
-            try {
-                Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
-            } catch (error) {
-                Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
-            }
-       })();
-       (async()=>{
-           try {
-            process_loglist.map(item => {  if(Betools.tools.isNull(item.relate_data)){  Betools.manage.patchTableData('pr_log_history', item.id, node); } });
-           } catch (error) {
-            process_loglist.map(item => {  if(Betools.tools.isNull(item.relate_data)){  Betools.manage.patchTableData('pr_log_history', item.id, node); } });
-           }
-       })();
+       try {
+           const node = { relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist), };
+           (async()=>{
+                try {
+                    Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
+                } catch (error) {
+                    Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
+                }
+           })();
+           (async()=>{
+               try {
+                   process_loglist.map(item => {  if(Betools.tools.isNull(item.relate_data)){  Betools.manage.patchTableData('pr_log_history', item.id, node); } });
+               } catch (error) {
+                   process_loglist.map(item => {  if(Betools.tools.isNull(item.relate_data)){  Betools.manage.patchTableData('pr_log_history', item.id, node); } });
+               }
+           })();
+       } catch (error) {
+           console.error(error);
+       }
 
        // 操作完毕，返回结果
        return true;
