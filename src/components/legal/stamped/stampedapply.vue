@@ -650,7 +650,8 @@ export default {
 
       // 添加用印公司
       async execAddCompany(){
-
+        const companyName = this.companyName;
+        this.element.companyName.push(companyName);
       },
       
       // 用户提交入职登记表函数
