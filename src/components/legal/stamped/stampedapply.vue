@@ -382,11 +382,12 @@ export default {
           legal_title: '',
           create_time: dayjs().format('YYYY-MM-DD'),
           create_by: '',
-          create_username: '',
+          create_username: '', // 用户username
           filename: '', // 用印文件名称
           company: [], // 用印公司
-          content: '',
-          files: '',
+          content: '', // 申请内容
+          files: '',  // 附件信息
+          sfiles: '', // 用印附件
           remark: '暂无备注', //备注信息
           xid: '',
           pid: '',
