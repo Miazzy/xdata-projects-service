@@ -90,6 +90,24 @@
 
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>文件名称</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.filename" :readonly="false" placeholder="请输入申请用印文件名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>用印公司</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="companyNamelist" v-model="companyName" placeholder="请输入关联案件信息！" style="width:85%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                      <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.75rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execAddCompany()"> 添加 </a-tag>
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>申请内容</span>
                     </a-col>
@@ -359,18 +377,20 @@ export default {
           title:'',
       },
       element: {
-          id:'',
-          title:'',
-          legal_title:'',
+          id: '',
+          title: '',
+          legal_title: '',
           create_time: dayjs().format('YYYY-MM-DD'),
-          create_by:'',
-          create_username:'',
-          content:'',
-          files:'',
+          create_by: '',
+          create_username: '',
+          filename: '', // 用印文件名称
+          company: [], // 用印公司
+          content: '',
+          files: '',
           remark: '暂无备注', //备注信息
-          xid:'',
-          pid:'',
-          bpm_status:'',
+          xid: '',
+          pid: '',
+          bpm_status: '',
       },
       data: [],
       readonly: false,
@@ -389,6 +409,8 @@ export default {
       legalTitlelist:[],
       lawyerInnerList:[],
       lawyerInNamelist:[],
+      companyName:'',
+      companyNamelist:[],
       role:'',
       file:'',
       selectedSheet: null,
@@ -623,6 +645,11 @@ export default {
             window.open(url,'_blank');
           }
           vant.Toast.clear();
+      },
+
+      // 添加用印公司
+      async execAddCompany(){
+
       },
       
       // 用户提交入职登记表函数
