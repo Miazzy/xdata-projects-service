@@ -874,30 +874,19 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 
        await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, bpmStatus);  // 处理自由流程发起提交审批操作
        vant.Toast.success("提交流程审批成功！");  // 弹出审批完成提示框
-       Betools.storage.setStore(`start_free_process_@table_name#${curTableName}@id#${curItemID}`,  "true", 60 );  // 记录当前流程已经提交，短时间内无法再次提交
-
-       const curHost = window.location.protocol + '//' + window.location.host;
-       const pviewName = curTableName == 'bs_legal' ? 'legalapply' : curTableName.replace('bs_legal_','') + 'apply';
-       
+    
        // 此处推送消息至第一个审批处 
        try {
-          const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/${pviewName}?id=${data.id}&processID=${nextWflowNode.id}&tname=${curTableName}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
-          await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了流程申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+           const curHost = window.location.protocol + '//' + window.location.host;
+           const pviewName = curTableName == 'bs_legal' ? 'legalapply' : curTableName.replace('bs_legal_','') + 'apply';
+           try {
+              const receiveURL = encodeURIComponent(`${window.location.host.includes('localhost') ? domainURL : curHost }/#/legal/${pviewName}?id=${data.id}&processID=${nextWflowNode.id}&tname=${curTableName}&origin_username=${userinfo["username"]}&role=workflow&type=approve&bpm_status=2&proponents=${firstWflowUser}`);
+              await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${firstWflowUser}/您好，${userinfo['name']||userinfo['realname']}(${userinfo["username"]})提交了流程申请：${data["title"]}，请您及时进行审批处理！?type=legal&rurl=${receiveURL}`).set('accept', 'json');
+           } catch (error) {
+              console.error(error);
+           }
        } catch (error) {
-         console.log(error);
-       }
-
-       try {
-        const processLogList = await Betools.query.queryProcessLog();
-        const node = { relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist), }
-        processLogList.map(item => { 
-            if(Betools.tools.isNull(item.relate_data)){
-                Betools.manage.patchTableData('pr_log_history', item.id, node); //修改为驳回后的状态
-            }
-        });
-        // Betools.manage.patchTableData('pr_log_apply', data.id, node); //修改为驳回后的状态
-       } catch (error) {
-        console.log(error);
+           console.error(error);
        }
 
        // 操作完毕，返回结果

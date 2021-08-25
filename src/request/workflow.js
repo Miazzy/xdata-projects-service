@@ -512,13 +512,14 @@ export async function postWorkflowFree(userInfo, tableName, curRow, freeWFNode, 
             console.error(error);
         }
 
-        try {
-            //第四步，修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中 （1:待提交 2:处理中 3:审批中 4:已完成 5:已完成） //修改审批状态为处理中，并记录审批日志；将当前审批状态修改为处理中
-            result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
-        } catch (error) {
-            result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
-            console.error(error);
-        }
+        //第四步，修改审批状态为审批中，并记录审批日志；将当前审批状态修改为处理中 （1:待提交 2:处理中 3:审批中 4:已完成 5:已完成） //修改审批状态为处理中，并记录审批日志；将当前审批状态修改为处理中
+        (async()=>{
+            try {
+                result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
+            } catch (error) {
+                result = await Betools.manage.patchTableData(tableName, curRow["id"], statusNode);
+            }
+        })();
 
         //第五步，新增动态数据，内容：XXX 发起了 XX 业务的流程申请。
         // try {
