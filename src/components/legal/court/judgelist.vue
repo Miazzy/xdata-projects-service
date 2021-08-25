@@ -130,6 +130,7 @@ export default {
     };
   },
   activated() {
+    
   },
   mounted() {
     this.queryInfo();
