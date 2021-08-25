@@ -964,29 +964,19 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
             console.error(error);
        }
 
-        try {
-            const applyNode = JSON.parse(JSON.stringify(node)); // 发起节点，审批信息，写入我的申请审批表中
-            applyNode.id = data.id;
-            applyNode.action = '申请';
-            applyNode.action_opinion = '我的申请';
-            applyNode.bpm_status = bpmStatus;
-            await Betools.manage.postProcessLogHistory(applyNode, 'pr_log_apply'); //向流程审批日志表PR_LOG和审批处理表BS_APPROVE添加数据 , 并获取审批处理返回信息
-        } catch (error) {
-            console.log(error);
-        }
-
-        try { // 将 pr_log_apply 的 申请记录，状态修改为 bpm_status = 1;
-            await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus , relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}); //修改为驳回后的状态
+        // 将 pr_log_apply 的 申请记录，状态修改为 bpm_status = N;
+        try { 
             await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus , relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}); //修改为驳回后的状态
         } catch (error) {
+            await Betools.manage.patchTableData('pr_log_apply', data.id, {bpm_status: bpmStatus , relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist),}); //修改为驳回后的状态
             console.error(error);
         }
 
-        try { // 修改发起节点对应的审批人员数据，抄送人员数据
-            process_loglist.map(async (item) =>{
-                await Betools.manage.patchTableData('pr_log_history', item.id, {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist)}); //修改为驳回后的状态
-            });
+        // 修改发起节点对应的审批人员数据，抄送人员数据
+        try { 
+            process_loglist.map(async (item) =>{ await Betools.manage.patchTableData('pr_log_history', item.id, {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist)}); });
         } catch (error) {
+            process_loglist.map(async (item) =>{ await Betools.manage.patchTableData('pr_log_history', item.id, {relate_data: JSON.stringify(approve_userlist), notify_data: JSON.stringify(release_userlist)}); });
             console.error(error);
         }
        
@@ -1023,11 +1013,6 @@ export async function handleStartWF(userinfo, wfUsers, nfUsers, approver, curTab
 
        // 保存审批相关处理信息
        const nextWflowNode = JSON.parse(JSON.stringify(node));
-
-       // 提交审批前，先检测同一业务表名下，是否有同一业务数据主键值，如果存在，则提示用户，此记录，已经提交审批
-       if (await Betools.manage.queryApprovalExist(curTableName,  curItemID)) {
-         return vant.Toast.fail("已提交过申请，无法再次提交审批！");
-       }
 
        await workflow.postWorkflowFree(userinfo, curTableName, data, freeWFNode, startFreeNode, nextWflowNode, bpmStatus);  // 处理自由流程发起提交审批操作
        vant.Toast.success("提交流程审批成功！");  // 弹出审批完成提示框
