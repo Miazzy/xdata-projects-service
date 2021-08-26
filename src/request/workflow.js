@@ -39,24 +39,8 @@ export async function queryPRLogHistoryByDataID(business_data_id) {
 export async function queryPRLogByDataID(business_data_id) {
     //提交URL
     var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time&_p=0&_size=1000`;
-
-    //获取缓存中的数据
-    // var cache = Betools.storage.getStore(`sys_workflow_cache@$now&id${business_data_id}`);
-
-    // //返回缓存值
-    // if (typeof cache != 'undefined' && cache != null && cache != '') {
-    //     return cache;
-    // }
-
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
-
-        console.log(res);
-
-        if (res.body != null && res.body.length > 0) {
-            Betools.storage.setStore(`sys_workflow_cache@$now&id${business_data_id}`, res.body, 0); //此处不能使用缓存，因为如果还存在审批日志，会将流程状态修改为审批中
-        }
-
         return res.body;
     } catch (err) {
         console.log(err);
@@ -69,24 +53,8 @@ export async function queryPRLogByDataID(business_data_id) {
 export async function queryPRLogInformedByDataID(business_data_id) {
     //提交URL
     var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/pr_log_informed?_where=(business_data_id,eq,${business_data_id})&_sort=operate_time&_p=0&_size=1000`;
-
-    //获取缓存中的数据
-    var cache = Betools.storage.getStore(`sys_workflow_cache@$informed&id${business_data_id}`);
-
-    //返回缓存值
-    if (typeof cache != 'undefined' && cache != null && cache != '') {
-        return cache;
-    }
-
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
-
-        console.log(res);
-
-        if (res.body != null && res.body.length > 0) {
-            Betools.storage.setStore(`sys_workflow_cache@$informed&id${business_data_id}`, res.body, 60);
-        }
-
         return res.body;
     } catch (err) {
         console.log(err);
@@ -99,24 +67,8 @@ export async function queryPRLogInformedByDataID(business_data_id) {
 export async function queryPRLogUserByPage(page, size) {
     //提交URL
     var queryURL = `${window.BECONFIG['xmysqlAPI']}/api/v_uname?_p=${page}&_size=${size}&_sort=username`;
-
-    //获取缓存中的数据
-    var cache = Betools.storage.getStore(`sys_workflow_username@$all&p=${page}&size=${size}`);
-
-    //返回缓存值
-    if (typeof cache != 'undefined' && cache != null && cache != '') {
-        return cache;
-    }
-
     try {
         var res = await superagent.get(queryURL).set('accept', 'json');
-
-        console.log(res);
-
-        if (res.body != null && res.body.length > 0) {
-            Betools.storage.setStore(`sys_workflow_username@$all&p=${page}&size=${size}`, res.body, 3600);
-        }
-
         return res.body;
     } catch (err) {
         console.log(err);
