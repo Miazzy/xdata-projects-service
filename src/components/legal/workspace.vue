@@ -189,8 +189,7 @@ export default {
               this.role = this.deNull(this.role,'');
             }
             if(!this.role.includes('LEGAL_ADMIN')){
-              this.paneflows.map(item=>{ item.title == '任务面板' ? item.display = true : item.display=false; });
-              // vant.Dialog.alert({  title: '温馨提示',  message: `您没有法务诉讼系统的操作权限！`, });
+              this.paneflows.map(item=>{ item.title == '任务面板' ? item.display = true : item.display=false; }); // vant.Dialog.alert({  title: '温馨提示',  message: `您没有法务诉讼系统的操作权限！`, });
               console.log(`query permission no rights...`);
             } 
             this.status = 'complete';
