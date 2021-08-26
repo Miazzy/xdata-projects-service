@@ -181,16 +181,16 @@ export default {
             if(!this.role.includes('LEGAL_ADMIN')){
               Betools.storage.clearStore('system_role_rights_v1');
               this.role = await Betools.query.queryRoleInfo();
+              this.role = Betools.tools.deNull(this.role,'');
+            }
+            if(!this.role.includes('LEGAL_ADMIN')){
+              const pname = Betools.tools.deNull(this.userinfo.systemuserinfo.textfield1,'');
+              pname.includes('法务') ? this.role += 'LEGAL_ADMIN' : '';
               this.role = this.deNull(this.role,'');
             }
             if(!this.role.includes('LEGAL_ADMIN')){
-              const pname = this.userinfo.systemuserinfo.textfield1;
-              pname.includes('法务') ? this.role += 'LEGAL_ADMIN' : null;
-              this.role = this.deNull(this.role,'');
-            }
-            if(!this.role.includes('LEGAL_ADMIN')){
-              this.paneflows.map(item=>{ item.display=false; });
-              vant.Dialog.alert({  title: '温馨提示',  message: `您没有法务诉讼系统的操作权限！`, });
+              this.paneflows.map(item=>{ item.title == '任务面板' ? item.display = true : item.display=false; });
+              // vant.Dialog.alert({  title: '温馨提示',  message: `您没有法务诉讼系统的操作权限！`, });
               console.log(`query permission no rights...`);
             } 
             this.status = 'complete';
