@@ -246,8 +246,9 @@ export default {
 
     // 跳转到登录界面
     async redirectLogin(usertitle = ''){
+      const { $router } = this;
       if(usertitle == '登录'){ // 如果页面显示为登录，则跳转到登录界面
-
+        $router.push('/login');
       }
     },
 
