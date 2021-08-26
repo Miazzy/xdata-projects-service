@@ -5,8 +5,8 @@
         <a-sub-menu>
             <span slot="title" class="submenu-title-wrapper" >
               <a-avatar :src="userinfo.avatar" style="margin-left:0.25rem; margin-right:0.55rem;" />
-              {{ usertitle }} 
-              </span>
+              <span @click="redirectLogin(usertitle)"> {{ usertitle }} </span>
+            </span>
             <a-menu-item-group title="应用中心">
             <a-menu-item key="setting:1" :to="`/legal/message`"  @click="redirectView('/legal/message')" >
                 审批
@@ -242,6 +242,13 @@ export default {
           2. account请替换为登录人的account，注意account需要使用window.btoa('args')函数处理一下。
          */
         return await Betools.query.weworkLogin(codeType, systemType, version);
+    },
+
+    // 跳转到登录界面
+    async redirectLogin(usertitle = ''){
+      if(usertitle == '登录'){ // 如果页面显示为登录，则跳转到登录界面
+
+      }
     },
 
     // 执行页面跳转
