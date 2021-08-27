@@ -186,6 +186,7 @@
                     </a-col>
                     <a-col :span="21" >
                       <a-table :columns="subColumns" :data-source="subData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                        <a slot="sfilename" slot-scope="text,record" @click="downloadSFiles(record)">{{ text }}</a>
                       </a-table>
                     </a-col>
                     <a-col :span="1" >
@@ -521,6 +522,14 @@ export default {
       async downloadFiles(record){
         vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
         const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.files.split('@')[1]}@/download?name=${record.files.split('###')[0]}`;
+        window.open(url,'_blank');
+        vant.Toast.clear();
+      },
+
+      // 下载附件
+      async downloadSFiles(record){
+        vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
+        const url = `https://api.yunwisdom.club:30443/gateway-xmysql/@${record.sfiles.split('@')[1]}@/download?name=${record.sfiles.split('###')[0]}`;
         window.open(url,'_blank');
         vant.Toast.clear();
       },
