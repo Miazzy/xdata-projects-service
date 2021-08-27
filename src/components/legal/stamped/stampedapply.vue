@@ -148,7 +148,7 @@
                    </a-row>
                 </div>
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>文件名称</span>
@@ -187,6 +187,19 @@
                           <span :index="index" :key="index" style="margin-top:5px; margin-right:5px;"> {{ item }} </span>
                         </template>
                       </div>
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show="(role == 'view' || role == 'add' || role == 'edit' || role == 'workflow') && subData && subData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px; margin-left:-30px;">
+                  <a-row>
+                    <a-col :span="2" >
+                    </a-col>
+                    <a-col :span="21" >
+                      <a-table :columns="subColumns" :data-source="subData" :bordered="false" :pagination="{hideOnSinglePage:true,}">
+                      </a-table>
+                    </a-col>
+                    <a-col :span="1" >
                     </a-col>
                   </a-row>
                 </div>
@@ -432,6 +445,7 @@ export default {
       },
       data: [],
       subData:[],
+      subColumns: workconfig.subColumns.subColumns,
       readonly: false,
       userList:[],
       firmlist:[],

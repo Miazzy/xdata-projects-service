@@ -342,6 +342,31 @@ export const excelTableLabels = {
         scopedSlots: { customRender: 'evd_name' },
         width: 480,
     }],
+    subColumns:[{
+        title: '文件名称',
+        dataIndex: 'filename',
+        key: 'filename',
+        scopedSlots: { customRender: 'filename' },
+        width: 120,
+    },{
+        title: '用印公司',
+        dataIndex: 'company',
+        key: 'company',
+        scopedSlots: { customRender: 'company' },
+        width: 120,
+    },{
+        title: '用印份数',
+        dataIndex: 'count',
+        key: 'count',
+        scopedSlots: { customRender: 'count' },
+        width: 480,
+    },{
+        title: '用印附件',
+        dataIndex: 'sfileName',
+        key: 'sfileName',
+        scopedSlots: { customRender: 'sfileName' },
+        width: 480,
+    }],
     stampedColumns:[{
             title: '填报时间',
             dataIndex: 'create_time',
