@@ -683,7 +683,9 @@ export const getRewardQuickTag = ($router) => {
     }, {
         name: '退出系统',
         color: 'purple',
-        click: () => {
+        click: async () => {
+            vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '退出系统...', });
+            await Betools.tools.sleep(1500);
             $router.push(`/login`, '_blank');
         },
     }, ];
