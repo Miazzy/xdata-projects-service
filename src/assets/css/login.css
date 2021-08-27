@@ -171,7 +171,7 @@ input{
      border: none;
      color: #323333;
 }
-#yonghu{
+#yonghu,#account,#password{
 	border-bottom:1px solid #347ebc;
 	height: 41px;
 	line-height: 41px;

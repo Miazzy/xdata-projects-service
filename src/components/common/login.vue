@@ -16,11 +16,11 @@
 		<div class="bg">
 			<div class="wel">用户登录</div>			
 	        <div class="user">
-	       	    <div id="yonghu" style="">用户名/电话</div>
+	       	    <div id="account" style="">用户名/电话</div>
 	       	    <input  type="text" name="用户"  value="admin" />
 	        </div>
 	        <div class="password" >
-	        	<div id="yonghu" >密码/验证码</div>
+	        	<div id="password" >密码/验证码</div>
 	       	    <input class="" type="password" name="密码" value="......" />
 	        </div>
 	        <div class="rem" >
@@ -31,7 +31,7 @@
 	        </div>
 	        <div class="fg" >
 	       	    <div style="font-size: 11px;margin-top: 11px;">
-	       	    	<a style="font-size: 11px;" href="#">忘记密码？</a>
+	       	    	<a style="font-size: 11px;" href="#">忘记密码/发送验证码？</a>
 	       	    </div>
 	        </div>
 	        <input class="btn" type="button" name="登录" value="登录" />
@@ -108,6 +108,16 @@ export default {
     async redirectView(path) {
         Betools.tools.isNull(path) ? null: this.$router.push(path);
     },
+
+    // 发送验证码
+    async redirectPassCode(){
+
+    },
+
+    // 验证登录
+    async redirectValidLogin(){
+
+    }
     
   },
 };
