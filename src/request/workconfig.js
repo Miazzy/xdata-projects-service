@@ -359,13 +359,13 @@ export const excelTableLabels = {
         dataIndex: 'count',
         key: 'count',
         scopedSlots: { customRender: 'count' },
-        width: 480,
+        width: 120,
     },{
         title: '用印附件',
-        dataIndex: 'sfileName',
-        key: 'sfileName',
-        scopedSlots: { customRender: 'sfileName' },
-        width: 480,
+        dataIndex: 'sfilename',
+        key: 'sfilename',
+        scopedSlots: { customRender: 'sfilename' },
+        width: 200,
     }],
     stampedColumns:[{
             title: '填报时间',

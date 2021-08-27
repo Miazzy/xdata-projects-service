@@ -169,23 +169,12 @@
                       <a-input v-model="element.count" :readonly="false" type="number" placeholder="请输入用印份数！" style="width:90%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" />
                     </a-col>
                     <a-col :span="4">
-                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:auto; float:left; margin-right:10px; " >
+                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadSFile" style="width:auto; float:left; margin-right:10px; " >
                         <a-button> <a-icon type="upload" /> 上传附件 </a-button>
                       </a-upload>
                       <a-tag color="#33d0f8" style="position: relative; float:left; right:0.00rem; margin-top:0.25rem; margin-bottom:0.75rem; margin-left:0.00rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(1.00);" @click="execAddCompany()"> 添加 </a-tag>
                       <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(element)" >
                         <span>{{ element.fileName }}</span>
-                      </div>
-                    </a-col>
-                  </a-row>
-                  <a-row>
-                    <a-col :span="16">
-                    </a-col>
-                    <a-col :span="8">
-                      <div style="margin-left:0px; font-size: 12px; text-align:left;">
-                        <template v-for="(item,index) in element.company" :style="paneflowcard">
-                          <span :index="index" :key="index" style="margin-top:5px; margin-right:5px;"> {{ item }} </span>
-                        </template>
                       </div>
                     </a-col>
                   </a-row>
@@ -517,6 +506,17 @@ export default {
         }
       },
 
+      // 执行上传操作
+      uploadSFile(info) {
+        if (info.file.status === 'done') {
+          const tempfile = info.file.response.name + `###${info.file.name}`;
+          this.element.sfiles = Betools.tools.isNull(this.element.sfiles) ? tempfile : this.element.sfiles + ',' + tempfile ;
+          this.$message.success(`${info.file.name} file uploaded successfully`);
+        } else if (info.file.status === 'error') {
+          this.$message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+
       // 下载附件
       async downloadFiles(record){
         vant.Toast.loading({ duration: 1000,  forbidClick: false,  message: '刷新中...', });
@@ -719,12 +719,17 @@ export default {
         if(!(this.element.company && this.element.filename && this.element.count)){
           return vant.Dialog.alert({  title: '温馨提示',  message: `请填写完整的用印信息，再进行保存！`, });
         }
+        vant.Toast.loading({ duration: 1500,  forbidClick: false,  message: '刷新中...', });
         const create_time = dayjs().format('YYYY-MM-DD HH:mm:ss');
         const company = this.element.company;
         const filename = this.element.filename;
         const count = this.element.count;
         const sfiles = this.element.sfiles;
-        this.subData.push({id, create_time , company , filename , count , sfiles});
+        const sfilename = this.element.sfiles.split('###')[1];
+        this.subData.push({id, create_time , company , filename , count , sfiles , sfilename});
+        await Betools.tools.sleep(1000);
+        vant.Toast.clear();
+        this.element.sfiles = this.element.company = this.element.filename = this.element.count = '';
       },
       
       // 用户提交入职登记表函数
