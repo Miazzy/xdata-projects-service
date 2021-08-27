@@ -17,11 +17,11 @@
 			<div class="wel">用户登录</div>			
 	        <div class="user">
 	       	    <div id="account" style="">用户名/电话</div>
-	       	    <input type="text" v-model="element.account" name="用户"  value="" />
+	       	    <input type="text" v-model="element.account" name="用户" />
 	        </div>
 	        <div class="password" >
 	        	<div id="password" >密码/验证码</div>
-	       	    <input type="password" v-model="element.passsword" name="密码" value="" />
+	       	    <input type="password" v-model="element.password" name="密码" />
 	        </div>
 	        <div class="rem" style="display:none;">
 	       	  <input type="checkbox" name="" id="" value="" />
@@ -34,7 +34,7 @@
 	       	    	<a style="font-size: 11px;" href="#">忘记密码/发送验证码？</a>
 	       	    </div>
 	        </div>
-	        <input class="btn" type="button" name="登录" value="登录" />
+	        <input class="btn" type="button" name="登录" value="登录" @click="redirectValidLogin()"/>
 		</div>
     </div>
   </div>
@@ -119,23 +119,47 @@ export default {
         const { element } = this;
         element.validcode = (Math.random() * 100000000 ).toString().slice(0,4);
         
-        // 检查审批人员列表
+        // 检查是否输入账号或电话
         if(Betools.tools.isNull(element.account)){
           return await vant.Dialog.alert({ title: '温馨提示', message: `请先输入您的用户名或者手机号，才能发送验证码！`,});
         }
 
+        vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '发送验证码...', });
         try {
             await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
         } catch (error) {
             await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
         } finally {
-            vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '正在发送验证码，请注意查收...', });
+            vant.Toast.clear();
         }
     },
 
     // 验证登录
     async redirectValidLogin(){
 
+        vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
+        const { element } = this; // 获取账户信息
+        debugger;
+        // 检查是否输入账号或电话
+        if(Betools.tools.isNull(element.account)){
+            vant.Toast.clear();
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入您的用户名或者手机号！`,});
+        }
+        // 检查是否输入密码或验证码
+        if(Betools.tools.isNull(element.password)){
+            vant.Toast.clear();
+            return await vant.Dialog.alert({ title: '温馨提示', message: `请输入您的密码或验证码！`,});
+        }
+        // 检查验证码是否正确
+        if(!Betools.tools.isNull(element.validcode) && element.validcode != element.password){
+            vant.Toast.clear();
+            return await vant.Dialog.alert({ title: '温馨提示', message: `您输入的验证码有误，请重新发送验证码！`,});
+        }
+        // 验证码正确，进行登录操作
+        if(!Betools.tools.isNull(element.validcode) && element.validcode == element.password){
+            vant.Toast.clear();
+            vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '验证成功...', });
+        }
     }
     
   },
