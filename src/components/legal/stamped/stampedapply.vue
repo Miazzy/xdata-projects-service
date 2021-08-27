@@ -90,35 +90,6 @@
 
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>文件名称</span>
-                    </a-col>
-                    <a-col :span="8">
-                      <a-input v-model="element.filename" :readonly="false" placeholder="请输入申请用印文件名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                    </a-col>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>用印公司</span>
-                    </a-col>
-                    <a-col :span="8">
-                      <a-auto-complete :data-source="companyNamelist" v-model="companyName" placeholder="请输入关联案件信息！" style="width:85%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
-                      <a-tag color="#33d0f8" style="position: relative; float:right; right:0.05rem; margin-top:0.25rem; margin-bottom:0.75rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execAddCompany()"> 添加 </a-tag>
-                    </a-col>
-                  </a-row>
-                  <a-row>
-                    <a-col :span="16">
-                    </a-col>
-                    <a-col :span="8">
-                      <div style="margin-left:0px; font-size: 12px; text-align:left;">
-                        <template v-for="(item,index) in element.company" :style="paneflowcard">
-                          <span :index="index" :key="index" style="margin-top:5px; margin-right:5px;"> {{ item }} </span>
-                        </template>
-                      </div>
-                    </a-col>
-                  </a-row>
-                </div>
-
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                  <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>申请内容</span>
                     </a-col>
@@ -142,8 +113,8 @@
                       <a-textarea
                         v-model="element.remark"
                         placeholder="请输入备注信息！"
-                        :auto-size="{ minRows: 4, maxRows: 100 }"
-                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 2, maxRows: 100 }"
+                        style="height:40px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
@@ -160,6 +131,61 @@
                       </a-upload>
                       <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(element)" >
                         <span>{{ element.fileName }}</span>
+                      </div>
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-show=" role == 'add' || role == 'edit' " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                  <a-divider></a-divider>
+                </div>
+
+                <div class="reward-apply-content-item reward-apply-content-title" style="margin-top:5px; padding-top:15px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      用印信息
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>文件名称</span>
+                    </a-col>
+                    <a-col :span="4">
+                      <a-input v-model="element.filename" :readonly="false" placeholder="请输入申请用印文件名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                    <a-col :span="2" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>用印公司</span>
+                    </a-col>
+                    <a-col :span="4">
+                      <a-input v-model="element.company" :readonly="false" placeholder="请输入用印公司！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" />
+                    </a-col>
+                    <a-col :span="2" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>用印份数</span>
+                    </a-col>
+                    <a-col :span="4">
+                      <a-input v-model="element.count" :readonly="false" type="number" placeholder="请输入用印份数！" style="width:90%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" />
+                    </a-col>
+                    <a-col :span="4">
+                      <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadComplete" style="width:auto; float:left; margin-right:10px; " >
+                        <a-button> <a-icon type="upload" /> 上传附件 </a-button>
+                      </a-upload>
+                      <a-tag color="#33d0f8" style="position: relative; float:left; right:0.00rem; margin-top:0.25rem; margin-bottom:0.75rem; margin-left:0.00rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(1.00);" @click="execAddCompany()"> 添加 </a-tag>
+                      <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(element)" >
+                        <span>{{ element.fileName }}</span>
+                      </div>
+                    </a-col>
+                  </a-row>
+                  <a-row>
+                    <a-col :span="16">
+                    </a-col>
+                    <a-col :span="8">
+                      <div style="margin-left:0px; font-size: 12px; text-align:left;">
+                        <template v-for="(item,index) in element.company" :style="paneflowcard">
+                          <span :index="index" :key="index" style="margin-top:5px; margin-right:5px;"> {{ item }} </span>
+                        </template>
                       </div>
                     </a-col>
                   </a-row>
