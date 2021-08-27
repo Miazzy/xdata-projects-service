@@ -654,25 +654,25 @@ export const getRewardQuickTag = ($router) => {
         name: '我的待办',
         color: 'purple',
         click: () => {
-
+            $router.push(`/legal/message?panename=mytodolist&type=7&back=/legal/workspace`, '_blank');
         },
     }, {
         name: '我的已办',
         color: 'cyan',
         click: () => {
-
+            $router.push(`/legal/message?panename=mydonelist&type=7&back=/legal/workspace`, '_blank');
         },
     }, {
         name: '我的申请',
         color: 'cyan',
         click: () => {
-
+            $router.push(`/legal/message?panename=myapplylist&type=7&back=/legal/workspace`, '_blank');
         },
     }, {
         name: '我的知会',
         color: 'pink',
         click: () => {
-
+            $router.push(`/legal/message?panename=mynotifylist&type=7&back=/legal/workspace`, '_blank');
         },
     }, {
         name: '统计分析',
