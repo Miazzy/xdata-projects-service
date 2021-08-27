@@ -22,6 +22,13 @@ const routes = [{
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/common/login.vue"], resolve)
     }
+},{
+    path: '/workspace',
+    name: "工作台",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/workspace.vue"], resolve)
+    }
 }, {
     path: '/legal/workspace',
     name: "工作台",

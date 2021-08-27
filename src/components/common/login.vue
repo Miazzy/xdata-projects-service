@@ -123,7 +123,7 @@ export default {
         if(Betools.tools.isNull(element.account)){
           return await vant.Dialog.alert({ title: '温馨提示', message: `请先输入您的用户名或者手机号，才能发送验证码！`,});
         }
-
+        element.account = element.account.trim();
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '发送验证码...', });
         try {
             await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
@@ -138,7 +138,7 @@ export default {
     async redirectValidLogin(){
 
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
-        const { element } = this; // 获取账户信息
+        const { element , $router} = this; // 获取账户信息
         debugger;
         // 检查是否输入账号或电话
         if(Betools.tools.isNull(element.account)){
@@ -159,6 +159,39 @@ export default {
         if(!Betools.tools.isNull(element.validcode) && element.validcode == element.password){
             vant.Toast.clear();
             vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '验证成功...', });
+            element.account = element.account.trim();
+            const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,like,${element.account}~)&_sort=id&_p=0&_size=1`);
+            if(!Betools.tools.isNull(list) && list.length > 0){
+                const userinfo = (!Betools.tools.isNull(list) && list.length > 0) ? list[0] : '';
+                const node = {
+                    avatar: userinfo.avatar,
+                    company: { name:userinfo.company },
+                    department: { name:userinfo.departname},
+                    parent_company:{ name:userinfo.topname + '>' + userinfo.departname + `(${userinfo.position})`},
+                    email:userinfo.email,
+                    gender: userinfo.gender,
+                    mobile:userinfo.mobile,
+                    name:userinfo.name,
+                    openid: '',
+                    phone:userinfo.mobile,
+                    orgin_userid:userinfo.userid,
+                    realname:userinfo.name,
+                    position:userinfo.position,
+                    status: 1,
+                    systemuserinfo:userinfo,
+                    telephone:userinfo.mobile,
+                    thumb_avatar:userinfo.avatar,
+                    userid:userinfo.userid,
+                    username:userinfo.loginid,
+                    loginid:userinfo.loginid,
+                };
+                vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
+                await Betools.storage.setStore('system_userinfo', node);
+                await Betools.tools.sleep(1000);
+                $router.push(`/workspace`);
+            } else {
+                return await vant.Dialog.alert({ title: '温馨提示', message: `您好，未获取到您的用户信息，请稍后重试或联系管理员协助处理！`,});
+            }
         }
     }
     
