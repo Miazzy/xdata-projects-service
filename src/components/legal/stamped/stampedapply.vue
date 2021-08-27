@@ -751,6 +751,10 @@ export default {
           console.error(error);
         }
 
+        if(Betools.tools.isNull(this.subData) || this.subData.length == 0){
+          return await vant.Dialog.alert({ title: '温馨提示', message: `请添加用印信息(文件名称、用印公司、用印份数等)！`,});
+        }
+
         // 是否确认提交此自由流程?
         this.$confirm({
             title: "确认操作",
@@ -759,6 +763,7 @@ export default {
                   const element  = JSON.parse(JSON.stringify(this.element));
 
                   try {
+                    element.id = id;
                     element.companyName = element.companyName.toString();
                   } catch (error) {
                     console.error(error);
@@ -768,6 +773,17 @@ export default {
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
+                  }
+
+                  try {
+                    this.subData.map(item=>{
+                      item.pid = id;
+                      item.status = 'valid';
+                      item.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+                      Betools.manage.postTableData('bs_legal_stamped_subitem',item);
+                    });
+                  } catch (error) {
+                    console.error(error);
                   }
 
                   // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
