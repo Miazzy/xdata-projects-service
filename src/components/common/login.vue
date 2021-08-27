@@ -23,7 +23,7 @@
 	        	<div id="password" >密码/验证码</div>
 	       	    <input class="" type="password" name="密码" value="......" />
 	        </div>
-	        <div class="rem" >
+	        <div class="rem" style="display:none;">
 	       	  <input type="checkbox" name="" id="" value="" />
 	        	 <div id="reb">
 	        	 	记住密码
