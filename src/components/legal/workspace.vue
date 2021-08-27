@@ -168,7 +168,7 @@ export default {
 
         if(!Betools.tools.isNull(weworkinfo.usertitle) && weworkinfo.usertitle == '登录'){
           this.$confirm({
-            title: "确认操作",
+            title: "温馨提示",
             content: "您好，未检测到您的登录信息，请先登录！",
             onOk: async(result) => {
               $router.push('/login');
