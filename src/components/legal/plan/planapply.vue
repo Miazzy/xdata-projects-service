@@ -459,6 +459,14 @@ export default {
            */
           return await Betools.query.weworkLogin(codeType, systemType, version);
       },
+
+      // 跳转到登录界面
+      async redirectLogin(usertitle = ''){
+        const { $router } = this;
+        if(usertitle == '登录'){ // 如果页面显示为登录，则跳转到登录界面
+          $router.push('/login');
+        }
+      },
       
       // 执行页面跳转
       async redirectView(path) {
