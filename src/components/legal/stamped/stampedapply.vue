@@ -576,6 +576,9 @@ export default {
             this.element.fileName = this.element.files.split('###')[1];
             this.companyName = this.element.company;
             this.element.company = this.element.company.split(',');
+
+            this.subData = await Betools.manage.queryTableDataDB('bs_legal_stamped_subitem' , `_where=(pid,eq,${id})&_sort=-id&_p=0&_size=10000`);
+            this.subData.map(elem=>{elem.create_time = dayjs(elem.create_time).format('YYYY-MM-DD HH:mm:ss');}); 
           } else {
            
           }
@@ -702,11 +705,12 @@ export default {
         if(!(this.element.company && this.element.filename && this.element.count)){
           return vant.Dialog.alert({  title: '温馨提示',  message: `请填写完整的用印信息，再进行保存！`, });
         }
+        const create_time = dayjs().format('YYYY-MM-DD HH:mm:ss');
         const company = this.element.company;
         const filename = this.element.filename;
         const count = this.element.count;
         const sfiles = this.element.sfiles;
-        this.subData.push({id, company , filename , count , sfiles});
+        this.subData.push({id, create_time , company , filename , count , sfiles});
       },
       
       // 用户提交入职登记表函数

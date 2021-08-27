@@ -180,7 +180,7 @@
                   </a-row>
                 </div>
 
-                <div v-show="(role == 'view' || role == 'add' || role == 'edit') && evdData && evdData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px; margin-left:-30px;">
+                <div v-show="(role == 'view' || role == 'add' || role == 'edit' || role == 'workflow') && evdData && evdData.length > 0" id="legal-progress-table-content" class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px; margin-left:-30px;">
                   <a-row>
                     <a-col :span="2" >
                     </a-col>
