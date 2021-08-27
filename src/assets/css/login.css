@@ -28,7 +28,7 @@ html,body{
 	width: 100%;
 	position: fixed;
 	top: 15%;
-	transition: all 60s linear;
+	transition: all 15s linear;
 	transform: rotate(90deg);
 }
 
@@ -37,7 +37,7 @@ html,body{
 	position: fixed;
 	top: 68%;
 	left: 23%;
-	transition: all 60s linear;
+	transition: all 15s linear;
 	transform: rotate(90deg);
 }
 
@@ -46,7 +46,7 @@ html,body{
 	position: fixed;
 	top: 70%;
 	left: 25%;
-	transition: all 60s linear;
+	transition: all 15s linear;
 	transform: rotate(-90deg);
 }
 
@@ -54,7 +54,7 @@ html,body{
 	width: 100%;
 	position: fixed;
 	top: 27%;
-	transition: all 60s linear;
+	transition: all 15s linear;
 	transform: rotate(90deg);
 }
 
