@@ -69,7 +69,7 @@
               </template>
             </div>
 
-            <div v-show="role.includes('LEGAL_ADMIN')" style="position:absolute; left:1000px; width: 300px;">
+            <div v-show="role.includes('LEGAL_ADMIN') || true " style="position:absolute; left:1000px; width: 300px;">
                 <a-card title="便捷导航" style="margin-bottom: 10px" :bordered="false" :body-style="{padding: 0}" >
                   <div class="item-group">
                     <div class="pane-right-item-group" >
