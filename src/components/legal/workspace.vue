@@ -166,6 +166,16 @@ export default {
         this.usertitle = weworkinfo.usertitle;
         const userinfo = await Betools.storage.getStore('system_userinfo');
 
+        if(!Betools.tools.isNull(weworkinfo.usertitle) && weworkinfo.usertitle == '登录'){
+          this.$confirm({
+            title: "确认操作",
+            content: "您好，未检测到您的登录信息，请先登录！",
+            onOk: async(result) => {
+              $router.push('/login');
+            },
+          });
+        }
+
         (async() => {
           try {
             gwm.creation({ txt:userinfo.realname + ' ' + userinfo.username + ' ' + dayjs().format('YY-MM-DD'), width: 128, height: 80, x: 10, y: 70, fontSize: 10, color: '#ff99aa' });
