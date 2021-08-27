@@ -17,11 +17,11 @@
 			<div class="wel">用户登录</div>			
 	        <div class="user">
 	       	    <div id="account" style="">用户名/电话</div>
-	       	    <input  type="text" name="用户"  value="admin" />
+	       	    <input type="text" v-model="element.account" name="用户"  value="" />
 	        </div>
 	        <div class="password" >
 	        	<div id="password" >密码/验证码</div>
-	       	    <input class="" type="password" name="密码" value="......" />
+	       	    <input type="password" v-model="element.passsword" name="密码" value="" />
 	        </div>
 	        <div class="rem" style="display:none;">
 	       	  <input type="checkbox" name="" id="" value="" />
@@ -30,7 +30,7 @@
 	        	 </div>
 	        </div>
 	        <div class="fg" >
-	       	    <div style="font-size: 11px;margin-top: 11px;">
+	       	    <div style="font-size: 11px;margin-top: 11px;" @click="redirectPassCode()">
 	       	    	<a style="font-size: 11px;" href="#">忘记密码/发送验证码？</a>
 	       	    </div>
 	        </div>
@@ -57,7 +57,11 @@ export default {
       iswechat:'',
       userinfo: '',
       usertitle:'',
-      lawyerlist:[],
+      element:{
+          account:'',
+          password:'',
+          validcode:'',
+      },
       role:'',
       status: true,
       breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
@@ -111,7 +115,17 @@ export default {
 
     // 发送验证码
     async redirectPassCode(){
-
+        const { element } = this;
+        element.validcode = (Math.random() * 100000000 ).toString().slice(0,4);
+        // 检查审批人员列表
+        if(Betools.tools.isNull(element.account)){
+          return await vant.Dialog.alert({ title: '温馨提示', message: `请先输入您的用户名或者手机号，才能发送验证码！`,});
+        }
+        try {
+            await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
+        } catch (error) {
+            await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
+        }
     },
 
     // 验证登录
