@@ -664,7 +664,7 @@ export const getRewardQuickTag = ($router) => {
         },
     }, {
         name: '我的申请',
-        color: 'cyan',
+        color: 'blue',
         click: () => {
             $router.push(`/legal/message?panename=myapplylist&type=7&back=/legal/workspace`, '_blank');
         },
@@ -679,6 +679,12 @@ export const getRewardQuickTag = ($router) => {
         color: 'blue',
         click: () => {
 
+        },
+    }, {
+        name: '退出系统',
+        color: 'purple',
+        click: () => {
+            $router.push(`/login`, '_blank');
         },
     }, ];
 };
