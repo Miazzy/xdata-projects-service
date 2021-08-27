@@ -115,16 +115,21 @@ export default {
 
     // 发送验证码
     async redirectPassCode(){
+
         const { element } = this;
         element.validcode = (Math.random() * 100000000 ).toString().slice(0,4);
+        
         // 检查审批人员列表
         if(Betools.tools.isNull(element.account)){
           return await vant.Dialog.alert({ title: '温馨提示', message: `请先输入您的用户名或者手机号，才能发送验证码！`,});
         }
+
         try {
             await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
         } catch (error) {
             await superagent.get(`${window.BECONFIG['restAPI']}/api/v1/weappms/${element.account}/您好，您的登录验证码：${element.validcode}。?type=legal&rurl=`).set('accept', 'json');
+        } finally {
+            vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '正在发送验证码，请注意查收...', });
         }
     },
 
