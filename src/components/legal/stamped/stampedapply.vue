@@ -431,6 +431,7 @@ export default {
           bpm_status: '',
       },
       data: [],
+      subData:[],
       readonly: false,
       userList:[],
       firmlist:[],
@@ -695,10 +696,17 @@ export default {
           vant.Toast.clear();
       },
 
-      // 添加用印公司
+      // 添加用印信息
       async execAddCompany(){
-        const companyName = this.companyName;
-        this.element.company.push(companyName);
+        const id = Betools.tools.queryUniqueID(); // 表单ID
+        if(!(this.element.company && this.element.filename && this.element.count)){
+          return vant.Dialog.alert({  title: '温馨提示',  message: `请填写完整的用印信息，再进行保存！`, });
+        }
+        const company = this.element.company;
+        const filename = this.element.filename;
+        const count = this.element.count;
+        const sfiles = this.element.sfiles;
+        this.subData.push({id, company , filename , count , sfiles});
       },
       
       // 用户提交入职登记表函数
