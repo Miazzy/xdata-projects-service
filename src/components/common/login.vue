@@ -16,11 +16,11 @@
 		<div class="bg">
 			<div class="wel">用户登录</div>			
 	        <div class="user">
-	       	    <div id="yonghu" style="">用户名</div>
+	       	    <div id="yonghu" style="">用户名/电话</div>
 	       	    <input  type="text" name="用户"  value="admin" />
 	        </div>
 	        <div class="password" >
-	        	<div id="yonghu" >密&nbsp;&nbsp;&nbsp;码</div>
+	        	<div id="yonghu" >密码/验证码</div>
 	       	    <input class="" type="password" name="密码" value="......" />
 	        </div>
 	        <div class="rem" >

@@ -109,16 +109,16 @@ html,body{
 .password{
      position: absolute;
      top: 9.5rem;
-     right: 2.5rem;
+     right: 1.5rem;
      display: flex;
 }
 .btn{
      position: absolute;
      top: 16rem;
-     right: 2.5rem;
+     right: 1.5rem;
      border: none;
      color: #fff;
-     width: 18.825rem;
+     width: 20.025rem;
      text-align: center;
      background-color: #347ebc;
      text-indent: 0rem;
@@ -150,7 +150,7 @@ input{
 .user{
 	 position: absolute;
      top: 6rem;
-     right: 2.5rem;
+     right: 1.5rem;
      display: flex;
 	
 }
@@ -167,7 +167,7 @@ input{
 .fg{
 	 position: absolute;
      top: 12.5rem;
-     right: 2.5rem;
+     right: 1.5rem;
      border: none;
      color: #323333;
 }
