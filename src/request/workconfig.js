@@ -22,7 +22,7 @@ export const system = {
             mobile: '',
         }
     },
-    website: 'https://stock.yunwisdom.club:30443', // 系统网站地址
+    website: 'https://legal.yunwisdom.club:30443', // 系统网站地址
     uploadURL:'https://api.yunwisdom.club:30443/gateway-xmysql/@172.18.1.45@/upload',
     secretkey: "secret_key",
     crypto: new SimpleCrypto("secret_key"),
