@@ -80,6 +80,7 @@ export const compcolumns = {
     diplomaTypeColumns: ['博士', '硕士', '本科', '专科', '高中', '初中', '小学'],
     acceptType: ['*/*'],
     approveColumns: ['OA系统', 'ERP系统', '费控系统', '创达OA系统', 'CRM系统', 'EHR系统', '资金系统', '领地HR', '宝瑞商管'],
+    zoneOptions:JSON.parse(`[{"label":"融量集团","value":"融量集团"},{"label":"地产板块","value":"地产板块","children":[{"label":"集团总部","value":"集团总部"},{"label":"成渝区域","value":"成渝区域"},{"label":"两湖区域","value":"两湖区域"},{"label":"川北区域","value":"川北区域"},{"label":"川南区域","value":"川南区域"},{"label":"中原区域","value":"中原区域"},{"label":"攀西区域","value":"攀西区域"},{"label":"新疆区域","value":"新疆区域"},{"label":"大湾区域","value":"大湾区域"},{"label":"直营项目","value":"直营项目"}]},{"label":"金融板块","value":"金融板块"},{"label":"物业板块","value":"物业板块"},{"label":"医疗健康板块","value":"医疗健康板块"},{"label":"商业板块","value":"商业板块"},{"label":"合作方财务公司","value":"合作方财务公司"}]`),
 }
 
 /**
