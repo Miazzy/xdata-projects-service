@@ -108,7 +108,7 @@
                           </a>
                         </a-list-item-meta>
                         <div slot="actions">
-                          <a @click="querylegalview(item.id , panename , item , item.bpm_status , item.proponents , item.pid , item)">查看</a>
+                          <a @click="querySystemView(item.id , panename , item , item.bpm_status , item.proponents , item.pid , item)">查看</a>
                         </div>
                         <div class="list-content">
                           <div v-show="item.reward_period" class="list-content-item">
@@ -158,10 +158,6 @@
 </template>
 <script>
 import * as workconfig from "@/request/workconfig";
-import * as task from '@/request/task';
-import * as manageAPI from '@/request/manage';
-//import * as query from '@/request/query';
-import * as contact from '@/vuex/contacts';
 
 export default {
   mixins: [window.mixin],
@@ -460,7 +456,7 @@ export default {
     },
 
     // 跳转到详情页面
-    async querylegalview(id = '', panename = '', element = '', bpm_status = 1 , proponents = '' , pid){
+    async querySystemView(id = '', panename = '', element = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
         const pviewName = element.table_name == 'bs_legal' ? 'legalapply' : element.table_name.replace('bs_legal_','') + 'apply';
