@@ -23,7 +23,7 @@
         <keep-alive>
           <a-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24" style="background-color:#f0f0f0;">
 
-            <div id="" class="" style="padding-left:2.75rem;padding-top:0.25rem;padding-bottom:0.25rem;background-color:#fefefe;" >
+            <div id="" class="" :style="`padding-left:2.75rem;padding-top:0.25rem;padding-bottom:0.25rem;background-color:#fefefe; ${iswechat ? `width:180%;` : '' }`"  >
               <a-breadcrumb>
                 <template v-for="(elem,index) in breadcrumb">
                   <a-breadcrumb-item :key="elem.icon" :index="index" >
