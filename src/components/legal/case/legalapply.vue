@@ -41,7 +41,7 @@
 
               <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
 
-                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; width:1000px; left: 1.75rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
+                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; width:1000px; left: 1.25rem; float:left; height:30px; transform:scale(0.725); transform-origin: left center;  margin-right:0.025rem;" >
                   <a-tag color="#87d068" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPatch(legal)"> 修改案件申请 </a-tag>
                   <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execStage(legal)"> 修改案件阶段 </a-tag>
                   <a-tag color="#8a39f0" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execProcess(legal)"> 录入案件进展 </a-tag>
@@ -60,7 +60,7 @@
                   <a-tag color="#ae8930" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execStageDone('arbJudge', '劳动仲裁')"> 进入仲裁阶段 </a-tag>
                 </div>
 
-                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; color:red; width:1000px; left: 5.0rem; top: 3.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem; ">
+                <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; color:red; width:1000px; left: 5.0rem; top: 3.750rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem; ">
                   注：“发起情况说明”指“发起撤诉/和解/调解申请/情况说明”
                 </div>
 
