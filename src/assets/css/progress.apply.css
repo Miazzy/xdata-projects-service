@@ -7,3 +7,9 @@
     width: auto;
     height: 100%;
 }
+
+.reward-apply-content-title-text .ant-btn-danger {
+    color: #f0f2fd;
+    background-color: #f5222d;
+    border-color: #d9d9d9;
+}
