@@ -281,10 +281,10 @@
 
                 <div v-show="role != 'view' && isNull(id) " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col :span="8">
+                    <a-col :span="iswechat ? 6 : 8">
                     </a-col>
                     <a-col class="reward-apply-content-title-text" :span="4" style="">
-                      <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleSave();"  >
+                      <a-button type="primary" style="width: 120px; margin-right:0.24rem; color:c0c0c0;" @click="handleSave();"  >
                         保存
                       </a-button>
                     </a-col>
@@ -293,7 +293,7 @@
                         提交
                       </a-button>
                     </a-col>
-                    <a-col :span="8">
+                    <a-col :span="iswechat ? 6 : 8">
                     </a-col>
                    </a-row>
                 </div>
@@ -353,7 +353,7 @@
 
                 <div v-show="role == 'workflow' && !isNull(id) && (element.bpm_status == '2' || element.bpm_status == '3' ) && !(element.bpm_status == '1' && role == 'workflow') " class="reward-apply-content-item" style="margin-top:35px;margin-bottom:5px; margin-right:10px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
-                    <a-col :span="8">
+                    <a-col :span="iswechat ? 6 : 8">
                     </a-col>
                     <a-col class="reward-apply-content-title-text" :span="4" style="">
                       <a-button type="primary" style="width: 120px;color:c0c0c0;" @click="handleAgree();"  >
@@ -361,11 +361,11 @@
                       </a-button>
                     </a-col>
                     <a-col class="reward-apply-content-title-text" :span="4" style="">
-                      <a-button type="primary" style="width: 120px;" @click="handleDisagree();"  >
+                      <a-button type="danger" style="width: 120px;" @click="handleDisagree();"  >
                         驳回
                       </a-button>
                     </a-col>
-                    <a-col :span="8">
+                    <a-col :span="iswechat ? 6 : 8">
                     </a-col>
                    </a-row>
                 </div>
