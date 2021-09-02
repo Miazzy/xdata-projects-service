@@ -538,16 +538,25 @@ export default {
       // 获取基础信息
       async queryInfo() {
         try {
-          this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
-          this.iswework = Betools.tools.isWework(); //查询是否为企业微信
-          const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
-          this.userinfo = weworkinfo.userinfo;
-          this.usertitle = weworkinfo.usertitle;
 
-          this.role = Betools.tools.getUrlParam('role');
-          this.stage = Betools.tools.getUrlParam('stage');
-          this.apply = Betools.tools.getUrlParam('apply') || 'view';
-          this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+          try {
+            this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
+            this.iswework = Betools.tools.isWework(); //查询是否为企业微信
+            const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+            this.userinfo = weworkinfo.userinfo;
+            this.usertitle = weworkinfo.usertitle;
+          } catch (error) {
+            console.error(error);
+          }
+
+          try {
+            this.role = Betools.tools.getUrlParam('role');
+            this.stage = Betools.tools.getUrlParam('stage');
+            this.apply = Betools.tools.getUrlParam('apply') || 'view';
+            this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+          } catch (error) {
+            console.error(error);
+          }
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
           try {
