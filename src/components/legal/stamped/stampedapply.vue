@@ -25,7 +25,7 @@
         <keep-alive>
           <a-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
 
-            <div id="" class="" style="padding-left:2.75rem;padding-top:0.25rem;padding-bottom:0.25rem;background-color:#fefefe;" >
+            <div id="" class="" :style="`padding-left:2.75rem;padding-top:0.25rem;padding-bottom:0.25rem;background-color:#fefefe; ${iswechat ? `width:180%;` : '' }`" >
               <a-breadcrumb>
                 <template v-for="(elem,index) in breadcrumb">
                   <a-breadcrumb-item :key="elem.icon" :index="index" >
@@ -39,7 +39,7 @@
             <!-- 发起文书盖章申请 -->
             <div style="background-color:#f0f0f0;">
 
-              <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
+              <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
                   发起文书盖章申请
@@ -560,8 +560,10 @@ export default {
       // 获取基础信息
       async queryInfo() {
         try {
+
           this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
           this.iswework = Betools.tools.isWework(); //查询是否为企业微信
+
           const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
           this.userinfo = weworkinfo.userinfo;
           this.usertitle = weworkinfo.usertitle;

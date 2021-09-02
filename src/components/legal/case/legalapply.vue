@@ -39,7 +39,7 @@
             <!-- 案件申请 -->
             <div style="background-color:#f0f0f0;">
 
-              <div id="legal-apply-content" class="reward-apply-content" style="height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem;" >
+              <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
                 <div v-if=" (role == 'view' || role == 'delete') && legal.close_flag != '是' " style="position:absolute; width:1000px; left: 1.25rem; float:left; height:30px; transform:scale(0.725); transform-origin: left center;  margin-right:0.025rem;" >
                   <a-tag color="#87d068" style="position: relative; float:right; right:7.5rem; margin-top:0.75rem; margin-left:0.25rem; transform-origin: left center;" @click="execPatch(legal)"> 修改案件申请 </a-tag>
