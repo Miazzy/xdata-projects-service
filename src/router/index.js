@@ -309,6 +309,13 @@ const routes = [{
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/evidence/evidenceapply.vue"], resolve)
     }
+}, {
+    path: '/legal/perserveapply',
+    name: "发起保全申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/perserve/perserveapply.vue"], resolve)
+    }
 }];
 
 // 设置路由信息
