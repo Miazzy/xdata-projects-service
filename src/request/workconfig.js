@@ -597,6 +597,14 @@ export const reward = ($router) => {
             click: () => {
                 $router.push(`/legal/planapply?type=1&tname=发起诉讼预案&apply=new&role=add`, '_blank');
             }
+        }, {
+            name: "发起保全申请",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_app_report_.png`,
+            href: "/account/todolist",
+            description: '发起保全申请',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=发起保全申请&apply=new&role=add`, '_blank');
+            }
         }],
     }, {
         id: 'common-pane',

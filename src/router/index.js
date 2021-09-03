@@ -314,7 +314,7 @@ const routes = [{
     name: "发起保全申请",
     components: {
         "default": resolve => require(["../components/legal/home.vue"], resolve),
-        "subPage": resolve => require(["../components/legal/perserve/perserveapply.vue"], resolve)
+        "subPage": resolve => require(["../components/legal/preserve/perserveapply.vue"], resolve)
     }
 }];
 
