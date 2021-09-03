@@ -597,13 +597,79 @@ export const reward = ($router) => {
             click: () => {
                 $router.push(`/legal/planapply?type=1&tname=发起诉讼预案&apply=new&role=add`, '_blank');
             }
-        }, {
-            name: "发起保全申请",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_app_report_.png`,
+        }],
+    }, {
+        id: 'process-pane',
+        title: '费用流程',
+        display: true,
+        taskflows: [{
+            name: "律师费付费情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/tousujianyi.png`,
             href: "/account/todolist",
-            description: '发起保全申请',
+            description: '录律师费付费情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=发起保全申请&apply=new&role=add`, '_blank');
+                $router.push(`/legal/preserveapply?type=1&tname=录入律师费付费情况&apply=new&role=add`, '_blank');
+            }
+        },{
+            name: "诉讼费支付情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/jiaofeizhongxin.png`,
+            href: "/account/todolist",
+            description: '诉讼费支付情况',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=诉讼费支付情况&apply=new&role=add`, '_blank');
+            }
+        },{
+            name: "录入回款情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/chuqianguan.png`,
+            href: "/account/todolist",
+            description: '录入回款情况',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=录入回款情况&apply=new&role=add`, '_blank');
+            }
+        }, {
+            name: "录入已付款项",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/shenqingnvshen.png`,
+            href: "/account/todolist",
+            description: '录入已付款项',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=录入已付款项&apply=new&role=add`, '_blank');
+            }
+        },{
+            name: "录入保全情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liwumingxi.png`,
+            href: "/account/todolist",
+            description: '录入保全情况',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=录入保全情况&apply=new&role=add`, '_blank');
+            }
+        }],
+    }, {
+        id: 'process-pane',
+        title: '文书流程',
+        display: true,
+        taskflows: [{
+            name: "法律文书收取情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/wodejiangyi.png`,
+            href: "/account/todolist",
+            description: '法律文书收取情况',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=法律文书收取情况&apply=new&role=add`, '_blank');
+            }
+        }, {
+            name: "裁判书收取情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/wodedingdan copy.png`,
+            href: "/account/todolist",
+            description: '裁判书收取情况',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=裁判书收取情况&apply=new&role=add`, '_blank');
+            }
+        }, {
+            name: "判决书收取情况",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/wodedingdan copy 2.png`,
+            href: "/account/todolist",
+            description: '判决书收取情况',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=判决书收取情况&apply=new&role=add`, '_blank');
             }
         }],
     }, {
