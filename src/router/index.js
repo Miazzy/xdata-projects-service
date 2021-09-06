@@ -316,6 +316,55 @@ const routes = [{
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/preserve/preserveapply.vue"], resolve)
     }
+}, {
+    path: '/legal/attorneyfeeapply',
+    name: "律师费付费情况",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/attorneyfee/attorneyfeeapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/costsapply',
+    name: "诉讼费支付情况",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/costs/costsapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/retmoneyapply',
+    name: "录入回款情况",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/retmoney/retmoneyapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/paidfeeapply',
+    name: "录入已付款项",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/paidfee/paidfeeapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/instrumentapply',
+    name: "法律文书收取情况",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/instrument/instrumentapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/judgementapply',
+    name: "判决书收取情况",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/judgement/judgementapply.vue"], resolve)
+    }
+}, {
+    path: '/legal/rulingapply',
+    name: "裁判书收取情况",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/ruling/rulingapply.vue"], resolve)
+    }
 }];
 
 // 设置路由信息
