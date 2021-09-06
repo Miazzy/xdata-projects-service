@@ -481,18 +481,17 @@ export default {
       },
       element: {
         id:'',
-        create_by:'',
-        create_username:'',
-        create_time:'',
-        title:'',
-        content:'',
-        invoice_time:'',
-        total_amount:'',
-        paid_amount:'',
-        paid_time:'',
-        unpaid_amount:'',
-        unpaid_time:'',
-        case_stage:'',
+        create_by:'', //填报人员
+        create_username:'', //填报人员username
+        create_time:'', //填报日期
+        title:'', //流程标题
+        content:'', //流程收取内容
+        invoice_time:'', //发票领取时间
+        total_amount:'', //律师费总金额
+        paid_amount:'', //已付金额
+        paid_time:'', //付款时间
+        unpaid_amount:'', //未付金额
+        unpaid_time:'', //应付时间
         legal_title:'',
         remark:'',
         bpm_status:'',
