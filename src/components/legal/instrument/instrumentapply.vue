@@ -386,9 +386,9 @@ export default {
           id:'',
           title:'',
           create_time: dayjs().format('YYYY-MM-DD'),
+          ruling_time:'',
           create_by:'',
           create_username:'',
-          case_type:'',
           appeal_flag:'',
           appeal_time:'',
           status:'',
@@ -397,6 +397,7 @@ export default {
           content:'',
           files:'',
           remark: '暂无备注', //备注信息
+          suggestion:'', //下一步处理意见
           xid:'',
           pid:'',
       },
