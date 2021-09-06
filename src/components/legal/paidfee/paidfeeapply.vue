@@ -36,13 +36,13 @@
               </a-breadcrumb>
             </div>
 
-            <!-- 发起保全申请 -->
+            <!-- 录入已付款项 -->
             <div style="background-color:#f0f0f0;">
 
               <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  发起保全申请
+                  录入已付款项
                 </div>
 
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
@@ -453,7 +453,7 @@ export default {
     return {
       iswechat:false,
       iswework:false,
-      pageName: "发起委外申请",
+      pageName: "录入已付款项",
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
@@ -544,7 +544,7 @@ export default {
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
-      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管理',path:'/legal/workspace'},{icon:'form',text:'发起委外申请',path:''}],
+      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'费用流程',path:'/legal/workspace'},{icon:'form',text:'录入已付款项',path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
       zoneType: workconfig.system.options.zoneType,
     };
