@@ -485,6 +485,7 @@ export default {
         create_username:'', //填报人员username
         create_time:'', //填报日期
         title:'', //流程标题
+        legal_title:'', //关联案件标题
         content:'', //流程收取内容
         invoice_time:'', //发票领取时间
         total_amount:'', //律师费总金额
@@ -492,8 +493,7 @@ export default {
         paid_time:'', //付款时间
         unpaid_amount:'', //未付金额
         unpaid_time:'', //应付时间
-        legal_title:'',
-        remark:'',
+        remark:'', //备注信息
         bpm_status:'',
         bpm_code:'',
         xid:'',
