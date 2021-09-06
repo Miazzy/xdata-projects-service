@@ -36,13 +36,13 @@
               </a-breadcrumb>
             </div>
 
-            <!-- 发起保全申请 -->
+            <!-- 发起委外申请 -->
             <div style="background-color:#f0f0f0;">
 
               <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  发起保全申请
+                  发起委外申请
                 </div>
 
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
@@ -83,12 +83,29 @@
                     </a-col>
                     <a-col :span="8">
                       <a-auto-complete :data-source="legalTitlelist" v-model="element.legal_title" placeholder="请输入关联案件信息！" style="width:85%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
-                      <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.75rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execView(element)"> 查看 </a-tag>
+                      <a-tag color="#87d068" style="position: relative; float:right; right:0.05rem; margin-top:0.75rem; margin-bottom:0.075rem; margin-left:0.025rem;padding-bottom:0.5rem; transform-origin: left center; transform:scale(0.75);" @click="execView(element)"> 查看 </a-tag>
                     </a-col>
                   </a-row>
                 </div>
 
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>外部律所</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="firmNamelist" v-model="element.firm" placeholder="请输入外部律所名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>外聘律师</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="lawyerNamelist" v-model="element.lawyer" placeholder="请输入外聘律师！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:none;">
                   <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>申请内容</span>
@@ -113,8 +130,8 @@
                       <a-textarea
                         v-model="element.remark"
                         placeholder="请输入备注信息！"
-                        :auto-size="{ minRows: 1, maxRows: 100 }"
-                        style="height:35px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 4, maxRows: 100 }"
+                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
@@ -333,12 +350,12 @@ export default {
     return {
       iswechat:false,
       iswework:false,
-      pageName: "发起诉讼预案",
+      pageName: "发起委外申请",
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL: workconfig.system.uploadURL,
-      tablename:'bs_legal_plan',
+      tablename:'bs_legal_outsource',
       size: 0,
       options:{
         create_time:workconfig.system.options.datetime,
@@ -361,6 +378,8 @@ export default {
       element: {
           id:'',
           title:'',
+          firm:'',
+          lawyer:'',
           legal_title:'',
           create_time: dayjs().format('YYYY-MM-DD'),
           create_by:'',
@@ -370,13 +389,14 @@ export default {
           remark: '暂无备注', //备注信息
           xid:'',
           pid:'',
-          bpm_status:'',
       },
       data: [],
       readonly: false,
       userList:[],
       firmlist:[],
       firmNamelist:[],
+      lawyerlist:[],
+      lawyerNamelist:[],
       processLogList:[],
       release_userid:'',
       release_userlist:[],
@@ -408,7 +428,7 @@ export default {
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
-      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管理',path:'/legal/workspace'},{icon:'form',text:'发起诉讼预案',path:''}],
+      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管理',path:'/legal/workspace'},{icon:'form',text:'发起委外申请',path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
       zoneType: workconfig.system.options.zoneType,
     };
@@ -499,16 +519,19 @@ export default {
           const id = this.id = Betools.tools.getUrlParam('id');
           const pid = this.pid = Betools.tools.getUrlParam('pid');
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
-
           if(!Betools.tools.isNull(id)){
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
           } else {
-           
+          
           }
 
           try {
+            this.firmlist = await Betools.manage.queryTableData('bs_legal_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
+            this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
+            this.lawyerlist = await Betools.manage.queryTableData('bs_legal_lawyer' , `_where=(status,ne,0)&_fields=id,lawyer_name,mobile&_sort=-id&_p=0&_size=10000`);
+            this.lawyerNamelist = this.lawyerlist.map(item => { return item.lawyer_name });
             this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,已删除)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
             this.legalTitlelist = this.legallist.map(item => { return item.title });
           } catch (error) {
@@ -525,7 +548,6 @@ export default {
 
           this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.legal.title;
           this.element.pid = pid;
-          debugger;
 
           (async()=>{
             this.processLogList = await Betools.query.queryProcessLog();
@@ -645,6 +667,7 @@ export default {
         try {
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
+          this.element.content = `外聘律所：${Betools.tools.deNull(this.element.firm,'')}，外聘律师：${Betools.tools.deNull(this.element.lawyer,'')}`;
         } catch (error) {
           console.error(error);
         }
@@ -652,15 +675,16 @@ export default {
         // 是否确认提交此自由流程?
         this.$confirm({
             title: "确认操作",
-            content: "是否确认提交此流程申请信息?",
+            content: "是否确认提交此账户信息?",
             onOk: async() => {
                   const element  = JSON.parse(JSON.stringify(this.element));
                   const result = await Betools.manage.postTableData(this.tablename , element); // 向表单提交form对象数据
+                  debugger;
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
                   }
-
+                  
                   // 提交审批记录, 记录审批日志, 向第一个审批人发送一条审批待办
                   try {
                     const users = this.approve_userlist.map(item=>item.loginid);
