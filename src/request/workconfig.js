@@ -597,6 +597,14 @@ export const reward = ($router) => {
             click: () => {
                 $router.push(`/legal/planapply?type=1&tname=发起诉讼预案&apply=new&role=add`, '_blank');
             }
+        },{
+            name: "发起保全申请",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liwumingxi.png`,
+            href: "/account/todolist",
+            description: '发起保全申请',
+            click: () => {
+                $router.push(`/legal/preserveapply?type=1&tname=发起保全申请&apply=new&role=add`, '_blank');
+            }
         }],
     }, {
         id: 'process-pane',
@@ -633,14 +641,6 @@ export const reward = ($router) => {
             description: '录入已付款项',
             click: () => {
                 $router.push(`/legal/preserveapply?type=1&tname=录入已付款项&apply=new&role=add`, '_blank');
-            }
-        },{
-            name: "录入保全情况",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liwumingxi.png`,
-            href: "/account/todolist",
-            description: '录入保全情况',
-            click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=录入保全情况&apply=new&role=add`, '_blank');
             }
         }],
     }, {
