@@ -458,7 +458,7 @@ export default {
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL: workconfig.system.uploadURL,
-      tablename:'bs_legal_outsource',
+      tablename:'bs_legal_attorney_fee',
       size: 0,
       options:{
         create_time:workconfig.system.options.datetime,
@@ -544,7 +544,7 @@ export default {
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
-      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'案件管理',path:'/legal/workspace'},{icon:'form',text:'发起委外申请',path:''}],
+      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'费用流程',path:'/legal/workspace'},{icon:'form',text:'律师费付费情况',path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
       zoneType: workconfig.system.options.zoneType,
     };
