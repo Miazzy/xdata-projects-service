@@ -73,7 +73,7 @@
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>标题</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>流程标题</span>
                     </a-col>
                     <a-col :span="8">
                       <a-input v-model="element.title" :readonly="false" placeholder="请输入标题内容！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
@@ -91,10 +91,16 @@
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>外部律所</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>起诉/应诉</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-auto-complete :data-source="firmNamelist" v-model="element.firm" placeholder="请输入外部律所名称！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                      <a-select  v-model="legal.case_type" default-value="起诉案件" @blur="validFieldToast('caseSType')"  placeholder="请选择案件(起诉/应诉)类别！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                        <template v-for="(elem,index) in options.caseSTypeOptions" >
+                          <a-select-option :key="index" :value="elem" >
+                            {{elem}}
+                          </a-select-option>
+                        </template>
+                      </a-select>
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>外聘律师</span>
@@ -365,6 +371,7 @@ export default {
         coop_time:workconfig.system.options.datetime,
         out_time:workconfig.system.options.datetime,
         datetime:workconfig.system.options.datetime,
+        caseSTypeOptions: workconfig.system.options.caseSTypeOptions, 
         zoneOptions: workconfig.system.options.zoneOptions, 
       },
       id:'',
@@ -378,12 +385,24 @@ export default {
       element: {
           id:'',
           title:'',
-          firm:'',
-          lawyer:'',
-          legal_title:'',
           create_time: dayjs().format('YYYY-MM-DD'),
           create_by:'',
           create_username:'',
+          case_type:'',
+          preserve:'',
+          preserved:'',
+          pretype:'',
+          prestage:'',
+          progess:'',
+          account_type:'',
+          excess:'',
+          excess_money:'',
+          court:'',
+          thaw_time:'',
+          thaw_amount:'',
+          status:'',
+          bpm_status:'',
+          bpm_code:'',
           content:'',
           files:'',
           remark: '暂无备注', //备注信息
