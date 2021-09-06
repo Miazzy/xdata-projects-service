@@ -616,7 +616,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '录律师费付费情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=录入律师费付费情况&apply=new&role=add`, '_blank');
+                $router.push(`/legal/attorneyfeeapply?type=1&tname=录入律师费付费情况&apply=new&role=add`, '_blank');
             }
         },{
             name: "诉讼费支付情况",
@@ -624,7 +624,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '诉讼费支付情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=诉讼费支付情况&apply=new&role=add`, '_blank');
+                $router.push(`/legal/costsapply?type=1&tname=诉讼费支付情况&apply=new&role=add`, '_blank');
             }
         },{
             name: "录入回款情况",
@@ -632,7 +632,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '录入回款情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=录入回款情况&apply=new&role=add`, '_blank');
+                $router.push(`/legal/retmoneyapply?type=1&tname=录入回款情况&apply=new&role=add`, '_blank');
             }
         }, {
             name: "录入已付款项",
@@ -640,7 +640,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '录入已付款项',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=录入已付款项&apply=new&role=add`, '_blank');
+                $router.push(`/legal/paidfeeapply?type=1&tname=录入已付款项&apply=new&role=add`, '_blank');
             }
         }],
     }, {
@@ -653,7 +653,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '法律文书收取情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=法律文书收取情况&apply=new&role=add`, '_blank');
+                $router.push(`/legal/instrumentapply?type=1&tname=法律文书收取情况&apply=new&role=add`, '_blank');
             }
         }, {
             name: "裁判书收取情况",
@@ -661,7 +661,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '裁判书收取情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=裁判书收取情况&apply=new&role=add`, '_blank');
+                $router.push(`/legal/rulingapply?type=1&tname=裁判书收取情况&apply=new&role=add`, '_blank');
             }
         }, {
             name: "判决书收取情况",
@@ -669,7 +669,7 @@ export const reward = ($router) => {
             href: "/account/todolist",
             description: '判决书收取情况',
             click: () => {
-                $router.push(`/legal/preserveapply?type=1&tname=判决书收取情况&apply=new&role=add`, '_blank');
+                $router.push(`/legal/judgementapply?type=1&tname=判决书收取情况&apply=new&role=add`, '_blank');
             }
         }],
     }, {
