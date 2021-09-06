@@ -458,7 +458,7 @@ export default {
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL: workconfig.system.uploadURL,
-      tablename:'bs_legal_outsource',
+      tablename:'bs_legal_preserve',
       size: 0,
       options:{
         create_time:workconfig.system.options.datetime,
