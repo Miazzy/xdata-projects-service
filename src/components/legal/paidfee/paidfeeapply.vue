@@ -94,7 +94,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>付款时间</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="element.paid_time" :readonly="false" placeholder="请输入付款时间！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-date-picker v-model="element.paid_time" :readonly="false" placeholder="请输入付款时间！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>应付款总金额</span>
