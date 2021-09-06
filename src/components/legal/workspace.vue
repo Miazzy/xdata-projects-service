@@ -1,6 +1,6 @@
 <template>
   <div id="reward-home" style="background-color:#f0f0f0;width:100%;height:auto;">
-      <div style="background-color:#f0f0f0;width:100%;height:1200px;">
+      <div style="background-color:#f0f0f0;width:100%;height:1500px;">
       <a-menu mode="horizontal">
         <a-sub-menu>
             <span slot="title" class="submenu-title-wrapper" >
@@ -142,7 +142,7 @@ export default {
       lawyerlist:[],
       role:'',
       status:'loading',
-      breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
+      breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'} ,{icon:'',text:'关联流程',path:'/legal/workspace'} ,{icon:'',text:'费用流程',path:'/legal/workspace'} ,{icon:'',text:'文书流程',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
     };
   },
   activated() {
