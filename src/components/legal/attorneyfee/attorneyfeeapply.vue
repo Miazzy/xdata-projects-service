@@ -482,7 +482,7 @@ export default {
       element: {
         id:'',
         create_by:'', //填报人员
-        create_username:'', //填报人员username
+        create_username:'', //填报人员 username
         create_time:'', //填报日期
         title:'', //流程标题
         legal_title:'', //关联案件标题
