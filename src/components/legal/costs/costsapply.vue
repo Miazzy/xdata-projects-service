@@ -485,7 +485,8 @@ export default {
         create_username:'',
         create_time:'',
         title:'',
-        content:'',
+        legal_title:'', // 关联案件标题
+        content:'', // 流程申请内容
         total_amount:'', // 支付金额
         paid_time:'', // 支付时间
         paid_name:'',  // 支付对象
@@ -494,8 +495,7 @@ export default {
         back_time:'', // 退费时间
         back_court:'', // 退费法院
         judge_name:'', // 法官姓名
-        legal_title:'',
-        remark:'',
+        remark:'', // 备注
         bpm_status:'',
         bpm_code:'',
         pid:'',
