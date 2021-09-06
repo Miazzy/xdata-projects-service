@@ -486,9 +486,14 @@ export default {
         create_time:'',
         title:'',
         content:'',
-        total_amount:'',
-        paid_time:'',
-        paid_name:'',
+        total_amount:'', // 支付金额
+        paid_time:'', // 支付时间
+        paid_name:'',  // 支付对象
+        back_flag:'', // 是否应退诉讼费
+        back_amount:'', // 退费金额
+        back_time:'', // 退费时间
+        back_court:'', // 退费法院
+        judge_name:'', // 法官姓名
         legal_title:'',
         remark:'',
         bpm_status:'',
