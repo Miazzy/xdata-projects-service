@@ -607,7 +607,7 @@ export const reward = ($router) => {
             }
         },{
             name: "发起结案申请",
-            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liwumingxi.png`,
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/shenpi_jy.png`,
             href: "/legal/settleapply",
             description: '发起结案申请',
             click: () => {
