@@ -94,7 +94,7 @@
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>回款时间</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-input v-model="element.return_time" :readonly="false" placeholder="请输入标题内容！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-date-picker v-model="element.return_time" :readonly="false" placeholder="请输入标题内容！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>回款金额</span>
@@ -392,7 +392,7 @@ export default {
         legal_title:'',
         content:'',
         files:'',
-        return_time:'',
+        return_time:null,
         amount:'',
         paid_name:'',
         remark: '暂无备注', //备注信息
