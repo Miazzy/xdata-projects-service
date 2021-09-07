@@ -529,6 +529,14 @@ export default {
             console.error(error);
           }
 
+          try {
+            this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,已删除)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
+            this.legalTitlelist = this.legallist.map(item => { return item.title });
+            debugger;
+          } catch (error) {
+            console.error(error);
+          }
+
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
           try {
             this.element.create_time = dayjs().format('YYYY-MM-DD');
@@ -547,25 +555,6 @@ export default {
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
           } 
-
-          try {
-            this.firmlist = await Betools.manage.queryTableData('bs_legal_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
-            this.firmNamelist = this.firmlist.map(item => { return item.firm_name });
-            this.lawyerlist = await Betools.manage.queryTableData('bs_legal_lawyer' , `_where=(status,ne,0)&_fields=id,lawyer_name,mobile&_sort=-id&_p=0&_size=10000`);
-            this.lawyerNamelist = this.lawyerlist.map(item => { return item.lawyer_name });
-            this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,已删除)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
-            this.legalTitlelist = this.legallist.map(item => { return item.title });
-          } catch (error) {
-            console.error(error);
-          }
-
-          try {
-            this.lawyerInnerList = await Betools.query.queryLawyerList();
-            const lawyerInnerList = this.lawyerInnerList.map(item => {return item.name });
-            this.lawyerInNamelist = [...new Set(lawyerInnerList)];
-          } catch (error) {
-            console.error(error);
-          }
 
           this.element.legal_title = Betools.tools.isNull(this.legal.title) ? this.element.legal_title : this.legal.title;
           this.element.pid = pid;
