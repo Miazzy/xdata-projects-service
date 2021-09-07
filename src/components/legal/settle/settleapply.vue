@@ -106,7 +106,7 @@
                 </div>
 
 
-                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:none;">
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:block;">
                   <a-row>
                     <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>结案意见</span>
@@ -115,8 +115,8 @@
                       <a-textarea
                         v-model="element.settle_content"
                         placeholder="请输入结案意见内容！"
-                        :auto-size="{ minRows: 3, maxRows: 100 }"
-                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                        :auto-size="{ minRows: 5, maxRows: 100 }"
+                        style="height:100px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
                       />
                     </a-col>
                   </a-row>
