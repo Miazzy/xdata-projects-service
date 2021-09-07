@@ -532,7 +532,6 @@ export default {
           try {
             this.legallist = await Betools.manage.queryTableData('bs_legal' , `_where=(status,ne,已删除)&_fields=id,title&_sort=-id&_p=0&_size=10000`);
             this.legalTitlelist = this.legallist.map(item => { return item.title });
-            debugger;
           } catch (error) {
             console.error(error);
           }
@@ -677,7 +676,7 @@ export default {
         try {
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-          this.element.content = `外聘律所：${Betools.tools.deNull(this.element.firm,'')}，外聘律师：${Betools.tools.deNull(this.element.lawyer,'')}`;
+          this.element.content = this.element.title;
         } catch (error) {
           console.error(error);
         }
