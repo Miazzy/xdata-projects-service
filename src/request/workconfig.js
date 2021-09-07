@@ -454,7 +454,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "我的知会",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liebiao_jy.png`,
-            href: "/account/mynotifylist",
+            href: "/legal/message",
             description: '查看我的案件知会信息',
             click: () => {
                 $router.push(`/legal/message?panename=mynotifylist&type=7&back=/legal/workspace`, '_blank');
@@ -462,7 +462,7 @@ export const reward = ($router) => {
         }, {
             name: "我的待办",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/yunwisdom_cdn@v1.0.0/images/time_00.png`,
-            href: "/account/todolist",
+            href: "/legal/message",
             description: '查看待处理的案件审批流程',
             click: () => {
                 $router.push(`/legal/message?panename=mytodolist&type=7&back=/legal/workspace`, '_blank');
@@ -470,7 +470,7 @@ export const reward = ($router) => {
         }, {
             name: "我的已办",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/yunwisdom_cdn@v1.0.0/images/home_00.png`,
-            href: "/account/donelist",
+            href: "/legal/message",
             description: '查看已处理的案件审批流程',
             click: () => {
                 $router.push(`/legal/message?panename=mydonelist&type=7&back=/legal/workspace`, '_blank');
@@ -478,7 +478,7 @@ export const reward = ($router) => {
         }, {
             name: "我的申请",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/yunwisdom_cdn@v1.0.0/images/hire.png`,
-            href: "/account/donelist",
+            href: "/legal/message",
             description: '查看我发起的案件审批流程',
             click: () => {
                 $router.push(`/legal/message?panename=myapplylist&type=7&back=/legal/workspace`, '_blank');
@@ -491,7 +491,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "起诉案件发起",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/qiandao_jy.png`,
-            href: "/account/todolist",
+            href: "/legal/case/legalapply",
             description: '公司主动起诉案件发起申请',
             click: () => {
                 $router.push(`/legal/case/legalapply?type=0&legalTname=起诉&role=add&apply=add`, '_blank');
@@ -499,7 +499,7 @@ export const reward = ($router) => {
         }, {
             name: "应诉案件发起",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/qiandaohuizong_jy.png`,
-            href: "/account/donelist",
+            href: "/legal/case/legalapply",
             description: '公司应诉案件发起申请',
             click: () => {
                 $router.push(`/legal/case/legalapply?type=1&legalTname=应诉&role=add&apply=add`, '_blank');
@@ -507,7 +507,7 @@ export const reward = ($router) => {
         }, {
             name: "一审管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/fenbufenxiang_jy.png`,
-            href: "/account/myrewards",
+            href: "/legal/case/firstlist",
             description: '对案件进展处于一审阶段的案件进行管理',
             click: () => {
                 $router.push(`/legal/case/firstlist?type=99&&status=all&legalTname=all&stage=一审阶段`, '_blank');
@@ -515,7 +515,7 @@ export const reward = ($router) => {
         }, {
             name: "二审管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/laodongnenglijianding.png`,
-            href: "/account/myanalyse",
+            href: "/legal/case/secondlist",
             description: '对案件进展处于二审阶段的案件进行管理',
             click: () => {
                 $router.push(`/legal/case/secondlist?type=99&&status=all&legalTname=all&stage=二审阶段`, '_blank');
@@ -523,7 +523,7 @@ export const reward = ($router) => {
         }, {
             name: "再审管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/jungongyanshou_jy.png`,
-            href: "/account/myanalyse",
+            href: "/legal/case/thirdlist",
             description: '对案件进展处于再审阶段的案件进行管理',
             click: () => {
                 $router.push(`/legal/case/thirdlist?type=99&&status=all&legalTname=all&stage=再审阶段`, '_blank');
@@ -531,7 +531,7 @@ export const reward = ($router) => {
         }, {
             name: "执行管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/paimai.png`,
-            href: "/account/myanalyse",
+            href: "/legal/case/executelist",
             description: '对案件进展处于执行阶段的案件进行管理',
             click: () => {
                 $router.push(`/legal/case/executelist?type=99&&status=all&legalTname=all&stage=执行阶段`, '_blank');
@@ -539,7 +539,7 @@ export const reward = ($router) => {
         }, {
             name: "归档闭单",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/yunwisdom_cdn@v1.0.0/images/shenpi.png`,
-            href: "/account/myanalyse",
+            href: "/legal/course/lawsuitlist",
             description: '查看已结案案件列表信息',
             click: () => {
                 $router.push(`/legal/course/lawsuitlist?&type=99&status=finish&legalTname=all&stage=归档闭单`, '_blank');
@@ -547,7 +547,7 @@ export const reward = ($router) => {
         }, {
             name: "案件管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/yanglaodaiyuzigerenzheng.png`,
-            href: "/account/donelist",
+            href: "/legal/case/legallist",
             description: '查看/管理案件列表信息',
             click: () => {
                 $router.push(`/legal/case/legallist?type=99&&status=all&legalTname=all&stage=全部`, '_blank');
@@ -560,7 +560,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "发起委外申请",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_phone_workmate_.png`,
-            href: "/account/todolist",
+            href: "/legal/outsourceapply",
             description: '发起委外申请',
             click: () => {
                 $router.push(`/legal/outsourceapply?type=1&tname=发起委外申请&apply=new&role=add`, '_blank');
@@ -568,7 +568,7 @@ export const reward = ($router) => {
         }, {
             name: "发起文书盖章",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/laodongnenglijianding.png`,
-            href: "/account/todolist",
+            href: "/legal/stampedapply",
             description: '发起文书盖章',
             click: () => {
                 $router.push(`/legal/stampedapply?type=1&tname=发起文书盖章&apply=new&role=add`, '_blank');
@@ -576,7 +576,7 @@ export const reward = ($router) => {
         }, {
             name: "发起证据收集",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/shiyedengjishenqing.png`,
-            href: "/account/donelist",
+            href: "/legal/evidenceapply",
             description: '发起证据收集',
             click: () => {
                 $router.push(`/legal/evidenceapply?type=1&tname=发起证据收集&apply=new&role=add`, '_blank');
@@ -584,7 +584,7 @@ export const reward = ($router) => {
         }, {
             name: "发起情况说明",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_schedule_study_.png`,
-            href: "/account/todolist",
+            href: "/legal/representationapply",
             description: '发起情况说明',
             click: () => {
                 $router.push(`/legal/representationapply?type=1&tname=发起情况说明&apply=new&role=add`, '_blank');
@@ -592,7 +592,7 @@ export const reward = ($router) => {
         }, {
             name: "发起诉讼预案",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/icon_app_report_.png`,
-            href: "/account/todolist",
+            href: "/legal/planapply",
             description: '发起诉讼预案',
             click: () => {
                 $router.push(`/legal/planapply?type=1&tname=发起诉讼预案&apply=new&role=add`, '_blank');
@@ -600,10 +600,18 @@ export const reward = ($router) => {
         },{
             name: "发起保全申请",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liwumingxi.png`,
-            href: "/account/todolist",
+            href: "/legal/preserveapply",
             description: '发起保全申请',
             click: () => {
                 $router.push(`/legal/preserveapply?type=1&tname=发起保全申请&apply=new&role=add`, '_blank');
+            }
+        },{
+            name: "发起结案申请",
+            avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/liwumingxi.png`,
+            href: "/legal/settleapply",
+            description: '发起结案申请',
+            click: () => {
+                $router.push(`/legal/settleapply?type=1&tname=发起结案申请&apply=new&role=add`, '_blank');
             }
         }],
     }, {
@@ -613,7 +621,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "律师费付费情况",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/tousujianyi.png`,
-            href: "/account/todolist",
+            href: "/legal/attorneyfeeapply",
             description: '录律师费付费情况',
             click: () => {
                 $router.push(`/legal/attorneyfeeapply?type=1&tname=录入律师费付费情况&apply=new&role=add`, '_blank');
@@ -621,7 +629,7 @@ export const reward = ($router) => {
         },{
             name: "诉讼费支付情况",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/jiaofeizhongxin.png`,
-            href: "/account/todolist",
+            href: "/legal/costsapply",
             description: '诉讼费支付情况',
             click: () => {
                 $router.push(`/legal/costsapply?type=1&tname=诉讼费支付情况&apply=new&role=add`, '_blank');
@@ -629,7 +637,7 @@ export const reward = ($router) => {
         },{
             name: "录入回款情况",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/chuqianguan.png`,
-            href: "/account/todolist",
+            href: "/legal/retmoneyapply",
             description: '录入回款情况',
             click: () => {
                 $router.push(`/legal/retmoneyapply?type=1&tname=录入回款情况&apply=new&role=add`, '_blank');
@@ -637,7 +645,7 @@ export const reward = ($router) => {
         }, {
             name: "录入已付款项",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/shenqingnvshen.png`,
-            href: "/account/todolist",
+            href: "/legal/paidfeeapply",
             description: '录入已付款项',
             click: () => {
                 $router.push(`/legal/paidfeeapply?type=1&tname=录入已付款项&apply=new&role=add`, '_blank');
@@ -650,7 +658,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "法律文书收取情况",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/wodejiangyi.png`,
-            href: "/account/todolist",
+            href: "/legal/instrumentapply",
             description: '法律文书收取情况',
             click: () => {
                 $router.push(`/legal/instrumentapply?type=1&tname=法律文书收取情况&apply=new&role=add`, '_blank');
@@ -658,7 +666,7 @@ export const reward = ($router) => {
         }, {
             name: "裁判书收取情况",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/wodedingdan copy.png`,
-            href: "/account/todolist",
+            href: "/legal/rulingapply",
             description: '裁判书收取情况',
             click: () => {
                 $router.push(`/legal/rulingapply?type=1&tname=裁判书收取情况&apply=new&role=add`, '_blank');
@@ -666,7 +674,7 @@ export const reward = ($router) => {
         }, {
             name: "判决书收取情况",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/wodedingdan copy 2.png`,
-            href: "/account/todolist",
+            href: "/legal/judgementapply",
             description: '判决书收取情况',
             click: () => {
                 $router.push(`/legal/judgementapply?type=1&tname=判决书收取情况&apply=new&role=add`, '_blank');
@@ -679,7 +687,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "律所录入",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xinwen_jy.png`,
-            href: "/account/todolist",
+            href: "/legal/firm/firmapply",
             description: '律师事务所录入申请',
             click: () => {
                 $router.push(`/legal/firm/firmapply?type=1&tname=律所录入&apply=new&role=add`, '_blank');
@@ -687,7 +695,7 @@ export const reward = ($router) => {
         }, {
             name: "律师录入",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xiangmuxinxi_jy.png`,
-            href: "/account/donelist",
+            href: "/legal/lawyer/lawyerapply",
             description: '律师事务所下律师录入申请',
             click: () => {
                 $router.push(`/legal/lawyer/lawyerapply?type=1&tname=律师录入&apply=new&role=add`, '_blank');
@@ -695,7 +703,7 @@ export const reward = ($router) => {
         }, {
             name: "律所管理",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/xiezuowendangku_jy.png`,
-            href: "/account/todolist",
+            href: "/legal/firm/firmlist",
             description: '律师事务所管理',
             click: () => {
                 $router.push(`/legal/firm/firmlist?type=1&tname=律所管理&apply=管理`, '_blank');
@@ -703,7 +711,7 @@ export const reward = ($router) => {
         }, {
             name: "律师管理",
             avatar: `//cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/baomingfei.png`,
-            href: "/account/todolist",
+            href: "/legal/lawyer/lawyerlist",
             description: '律师管理',
             click: () => {
                 $router.push(`/legal/lawyer/lawyerlist?type=1&tname=律师管理&apply=管理`, '_blank');
@@ -716,7 +724,7 @@ export const reward = ($router) => {
         taskflows: [{
             name: "法院录入",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/anqiantiaojie.png`,
-            href: "/account/todolist",
+            href: "/legal/court/courtapply",
             description: '法院信息录入申请',
             click: () => {
                 $router.push(`/legal/court/courtapply?type=1&tname=法院录入&apply=new&role=add`, '_blank');
@@ -724,7 +732,7 @@ export const reward = ($router) => {
         }, {
             name: "法官录入",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/building-type-180000-18.png`,
-            href: "/account/donelist",
+            href: "/legal/court/judgeapply",
             description: '法官信息录入申请',
             click: () => {
                 $router.push(`/legal/court/judgeapply?type=1&tname=法官录入&apply=new&role=add`, '_blank');
@@ -732,7 +740,7 @@ export const reward = ($router) => {
         }, {
             name: "法院管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/qiyehaozujian_jy.png`,
-            href: "/account/todolist",
+            href: "/legal/court/courtlist",
             description: '法院信息数据管理',
             click: () => {
                 $router.push(`/legal/court/courtlist?type=1&tname=法院管理&apply=管理`, '_blank');
@@ -740,7 +748,7 @@ export const reward = ($router) => {
         }, {
             name: "法官管理",
             avatar: `https://cdn.jsdelivr.net/gh/Miazzy/xdata-stock-service@v1.0.5/src/assets/img/dushu_sn01.png`,
-            href: "/account/todolist",
+            href: "/legal/court/judgelist",
             description: '法官信息数据管理',
             click: () => {
                 $router.push(`/legal/court/judgelist?type=1&tname=法官管理&apply=管理`, '_blank');
