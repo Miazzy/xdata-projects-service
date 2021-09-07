@@ -490,6 +490,8 @@ export default {
           create_by:'',
           create_username:'',
           settle_time:null,
+          settle_stage:'',
+          settle_content:'',
           status:'',
           bpm_status:'',
           bpm_code:'',
