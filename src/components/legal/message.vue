@@ -459,7 +459,7 @@ export default {
     async querySystemView(id = '', panename = '', element = '', bpm_status = 1 , proponents = '' , pid){
       try {
         panename = Betools.tools.isNull(panename) ? this.panename : panename;
-        const pviewName = element.table_name == 'bs_legal' ? 'legalapply' : element.table_name.replace('bs_legal_','') + 'apply';
+        const pviewName = element.table_name == 'bs_legal' ? 'legalapply' : element.table_name.replace('bs_legal_','').replace(/_/g,'') + 'apply';
         const redirectURL = `${window.location.protocol}//${window.location.host}/#/legal/${pviewName}?id=${id}&processID=${pid}&tname=${this.tablename}&origin_username=&role=workflow&type=approve&bpm_status=${bpm_status}&proponents=${proponents}`;
         window.open(redirectURL,'_blank'); 
       } catch (error) {
