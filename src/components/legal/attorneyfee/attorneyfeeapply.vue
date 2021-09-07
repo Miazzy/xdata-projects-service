@@ -718,7 +718,7 @@ export default {
         try {
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-          this.element.content = `外聘律所：${Betools.tools.deNull(this.element.firm,'')}，外聘律师：${Betools.tools.deNull(this.element.lawyer,'')}`;
+          this.element.content = this.element.title;
         } catch (error) {
           console.error(error);
         }
