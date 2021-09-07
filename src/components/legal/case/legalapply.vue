@@ -2383,7 +2383,7 @@ export default {
           vant.Toast.clear();
 
           this.legal.create_by = this.legal.apply_realname = userinfo && userinfo.realname ? userinfo.realname : '';
-          this.legal.apply_username = userinfo && userinfo.username ? userinfo.username : '';
+          this.legal.create_username = this.legal.apply_username = userinfo && userinfo.username ? userinfo.username : '';
           this.options.courtOptions = await workconfig.courtList();
            
           if(!Betools.tools.isNull(id)){
