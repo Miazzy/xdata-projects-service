@@ -150,7 +150,9 @@
 
                 <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
-                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                    <a-col :span="1" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                    </a-col>
+                    <a-col :span="2" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>文件名称</span>
                     </a-col>
                     <a-col :span="4">
@@ -165,10 +167,10 @@
                     <a-col :span="2" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>用印份数</span>
                     </a-col>
-                    <a-col :span="4">
+                    <a-col :span="2">
                       <a-input v-model="element.count" :readonly="false" type="number" placeholder="请输入用印份数！" style="width:90%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" />
                     </a-col>
-                    <a-col :span="4">
+                    <a-col :span="7">
                       <a-upload name="file" :multiple="false" :action="uploadURL" @change="uploadSFile" style="width:auto; float:left; margin-right:10px; " >
                         <a-button> <a-icon type="upload" /> 上传附件 </a-button>
                       </a-upload>
@@ -176,6 +178,9 @@
                       <div style="position:absolute; display:inline; float:left; margin-top:10px; " @click="downloadFiles(element)" >
                         <span>{{ element.fileName }}</span>
                       </div>
+                    </a-col>
+                    <a-col :span="24" style="font-size:1.0rem; margin-top:5px; text-align: center; margin-bottom:5px;">
+                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：填报完用印信息后，请点击最右侧的点击按钮才能进行提交申请！</span>
                     </a-col>
                   </a-row>
                 </div>
