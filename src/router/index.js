@@ -317,6 +317,13 @@ const routes = [{
         "subPage": resolve => require(["../components/legal/preserve/preserveapply.vue"], resolve)
     }
 }, {
+    path: '/legal/settleapply',
+    name: "发起结案申请",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/settle/settleapply.vue"], resolve)
+    }
+}, {
     path: '/legal/attorneyfeeapply',
     name: "律师费付费情况",
     components: {

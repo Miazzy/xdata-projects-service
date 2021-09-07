@@ -36,13 +36,13 @@
               </a-breadcrumb>
             </div>
 
-            <!-- 法律文书收取情况 -->
+            <!-- 发起结案申请 -->
             <div style="background-color:#f0f0f0;">
 
               <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
                 <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  法律文书收取情况
+                  发起结案申请
                 </div>
 
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
@@ -91,10 +91,22 @@
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>文书收取日期    </span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>起诉/应诉</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="element.ruling_time" readonly placeholder="请选择文书收取日期！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                      <a-select  v-model="element.case_type" default-value="起诉案件" @blur="validFieldToast('caseSType')"  placeholder="请选择案件(起诉/应诉)类别！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;">
+                        <template v-for="(elem,index) in options.caseSTypeOptions" >
+                          <a-select-option :key="index" :value="elem" >
+                            {{elem}}
+                          </a-select-option>
+                        </template>
+                      </a-select>
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>{{ element.case_type == '应诉案件' ? '被' : '' }}保全状态</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="['是','否','待定']" v-model="element.preserve" placeholder="请输入保全/被保全状态！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
                     </a-col>
                   </a-row>
                 </div>
@@ -102,16 +114,104 @@
                 <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否上诉</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>保全类型</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-auto-complete :data-source="['是','否']" v-model="element.appeal_flag" placeholder="请输入是否上诉！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                      <a-auto-complete :data-source="['货币现金','银行账户','债券','土地使用权','房产','车辆','机器设备','债权','股权','股票','基金','知识产权','其他财产']" v-model="element.pretype" placeholder="请输入保全/被保全状态！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>保全阶段</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="['诉前','诉中']" v-model="element.prestage" placeholder="请输入保全阶段！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
                     </a-col>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>上诉日期</span>
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>保全进度</span>
                     </a-col>
                     <a-col :span="8">
-                      <a-date-picker v-model="element.appeal_time" placeholder="请输入上诉日期！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                      <a-auto-complete :data-source="['待提保全申请审批','保全申请已审批','已用印','待出具保函','已出具保函','保全申请','保函提交法院']" v-model="element.progess" placeholder="请输入保全进度！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>解冻时间</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-date-picker v-model="element.thaw_time" placeholder="请输入解冻时间！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>解冻金额</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.thaw_amount" placeholder="请输入解冻金额！" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div v-if="element && element.pretype && element.pretype.includes('银行账户')">
+                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                   <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                      账户信息
+                    </a-col>
+                   </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>账户类型</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="['基本账户','工资专户']" v-model="element.account_type" placeholder="请输入账户类型！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>是否超额</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-auto-complete :data-source="['是','否']" v-model="element.excess" placeholder="请输入是否超额！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0; width:100%; border-width: 0px 0px 1px; border-style: solid; border-color: rgb(254, 254, 254) rgb(254, 254, 254) rgb(240, 240, 240); border-image: initial;" :filter-option="filterOption" />
+                    </a-col>
+                  </a-row>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                  <a-row>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>超额金额</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.excess_money" readonly placeholder="请输入超额金额！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                    <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>保全法院</span>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-input v-model="element.court" readonly placeholder="请输入保全法院！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                    </a-col>
+                  </a-row>
+                </div>
+                </div>
+
+                <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px; display:none;">
+                  <a-row>
+                    <a-col :span="4" style="height:auto; font-size:1.0rem; margin-top:5px; text-align: center;">
+                      <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>申请内容</span>
+                    </a-col>
+                    <a-col :span="20">
+                      <a-textarea
+                        v-model="element.content"
+                        placeholder="请输入申请内容！"
+                        :auto-size="{ minRows: 3, maxRows: 100 }"
+                        style="height:60px; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"
+                      />
                     </a-col>
                   </a-row>
                 </div>
@@ -154,7 +254,7 @@
                       </div>
                     </a-col>
                     <a-col :span="24" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：请上传法律文书、判决书、裁判书、收取凭证等相关资料！</span>
+                      <span style="position:absolute; left:5.5rem; top:0.25rem; text-algin:left; color:red; font-size:12px; ">注：请上传保全相关资料（如：保函、文书、保全资料等）！</span>
                     </a-col>
                   </a-row>
                 </div>
@@ -356,12 +456,12 @@ export default {
     return {
       iswechat:false,
       iswework:false,
-      pageName: "法律文书收取情况",
+      pageName: "发起结案申请",
       momentNewMsg: true,
       activeTabKey: 3,
       acceptType:'*/*',
       uploadURL: workconfig.system.uploadURL,
-      tablename:'bs_legal_instrument',
+      tablename:'bs_legal_settle',
       size: 0,
       options:{
         create_time:workconfig.system.options.datetime,
@@ -385,19 +485,17 @@ export default {
       element: {
           id:'',
           title:'',
+          legal_title:'',
           create_time: dayjs().format('YYYY-MM-DD'),
-          ruling_time: null,
           create_by:'',
           create_username:'',
-          appeal_flag:'',
-          appeal_time: null,
+          settle_time:null,
           status:'',
           bpm_status:'',
           bpm_code:'',
           content:'',
           files:'',
           remark: '暂无备注', //备注信息
-          suggestion:'', //下一步处理意见
           xid:'',
           pid:'',
       },
@@ -439,7 +537,7 @@ export default {
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
-      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'文书流程',path:'/legal/workspace'},{icon:'form',text:'法律文书收取情况',path:''}],
+      breadcrumb:[{icon:'home',text:'首页',path:'/legal/workspace'},{icon:'user',text:'关联流程',path:'/legal/workspace'},{icon:'form',text:'发起结案申请',path:''}],
       statusType:{'valid':'有效','invalid':'删除'},
       zoneType: workconfig.system.options.zoneType,
     };
@@ -507,16 +605,21 @@ export default {
       // 获取基础信息
       async queryInfo() {
         try {
-          this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
-          this.iswework = Betools.tools.isWework(); //查询是否为企业微信
-          const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
-          this.userinfo = weworkinfo.userinfo;
-          this.usertitle = weworkinfo.usertitle;
 
-          this.role = Betools.tools.getUrlParam('role');
-          this.stage = Betools.tools.getUrlParam('stage');
-          this.apply = Betools.tools.getUrlParam('apply') || 'view';
-          this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+          try {
+            this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
+            this.iswework = Betools.tools.isWework(); //查询是否为企业微信
+            const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+            this.userinfo = weworkinfo.userinfo;
+            this.usertitle = weworkinfo.usertitle;
+  
+            this.role = Betools.tools.getUrlParam('role');
+            this.stage = Betools.tools.getUrlParam('stage');
+            this.apply = Betools.tools.getUrlParam('apply') || 'view';
+            this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+          } catch (error) {
+            console.error(error);
+          }
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
           try {
@@ -530,13 +633,12 @@ export default {
           const id = this.id = Betools.tools.getUrlParam('id');
           const pid = this.pid = Betools.tools.getUrlParam('pid');
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
+          
           if(!Betools.tools.isNull(id)){
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
-          } else {
-          
-          }
+          } 
 
           try {
             this.firmlist = await Betools.manage.queryTableData('bs_legal_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
@@ -678,7 +780,7 @@ export default {
         try {
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-          this.element.content = this.element.title;
+          this.element.content = `外聘律所：${Betools.tools.deNull(this.element.firm,'')}，外聘律师：${Betools.tools.deNull(this.element.lawyer,'')}`;
         } catch (error) {
           console.error(error);
         }
