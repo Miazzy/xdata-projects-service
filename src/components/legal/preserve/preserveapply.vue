@@ -787,10 +787,15 @@ export default {
         const userinfo = await Betools.storage.getStore('system_userinfo'); // 获取用户基础信息
         const id = Betools.tools.queryUniqueID(); // 表单ID
 
+        // 发起保全申请，请抄送财务人员
+        if(Betools.tools.isNull(this.release_userlist) || this.release_userlist.length == 0){
+          return await vant.Dialog.alert({ title: '温馨提示', message: `发起保全申请，必须抄送财务人员！`,});
+        }
+
         try {
           this.element.create_time = dayjs().format('YYYY-MM-DD');
           this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
-          this.element.content = `外聘律所：${Betools.tools.deNull(this.element.firm,'')}，外聘律师：${Betools.tools.deNull(this.element.lawyer,'')}`;
+          this.element.content = this.element.title;
         } catch (error) {
           console.error(error);
         }
@@ -802,7 +807,6 @@ export default {
             onOk: async() => {
                   const element  = JSON.parse(JSON.stringify(this.element));
                   const result = await Betools.manage.postTableData(this.tablename , element); // 向表单提交form对象数据
-                  debugger;
                   
                   if(result && result.error && result.error.errno){ //提交数据如果出现错误，请提示错误信息
                       return await vant.Dialog.alert({  title: '温馨提示',  message: `系统错误，请联系管理人员，错误编码：[${result.error.code}]. `, });
