@@ -1264,50 +1264,6 @@
 
                         <a-tab-pane v-if="(stage != 'evaluate' && role != 'process' && role != 'operate' && '|再审阶段|执行阶段|归档闭单|'.includes(legal.stage) ) || operate == 'execJudge'   " key="4" tab="执行管理" style="margin-left:0px;">
 
-                          <div v-show=" '|再审阶段|执行阶段|归档闭单|'.includes(legal.stage) ">
-                          <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
-                            <a-row style="border-top: 1px dash #f0f0f0;" >
-                              <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
-                                法院信息
-                              </a-col>
-                            </a-row>
-                          </div>
-
-                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px;margin-right:10px;">
-                            <a-row>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行法院</span>
-                              </a-col>
-                              <a-col :span="8">
-                                <a-input id="legal-apply-content-court-cascader"  v-model="legal.exCourt" :options="options.courtOptions" placeholder="请输入执行法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
-                              </a-col>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行立案时间</span>
-                              </a-col>
-                              <a-col :span="8">
-                                <a-date-picker v-model="legal.exHtime" placeholder="请输入执行立案时间！" @blur="validFieldToast('handledTime')" style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
-                              </a-col>
-                            </a-row>
-                          </div>
-
-                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
-                            <a-row>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行法官</span>
-                              </a-col>
-                              <a-col :span="8">
-                                <a-input v-model="legal.exJudge"  placeholder="请输入执行法官！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
-                              </a-col>
-                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
-                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法官联系方式</span>
-                              </a-col>
-                              <a-col :span="8">
-                                <a-input v-model="legal.exJudgeMobile"  placeholder="请输入承办法官联系方式！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
-                              </a-col>
-                            </a-row>
-                          </div>  
-                          </div>
-
                           <div v-show=" '|再审阶段|执行阶段|归档闭单|'.includes(legal.stage) " class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                             <a-row style="border-top: 1px dash #f0f0f0;" >
                               <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
@@ -1350,6 +1306,45 @@
                               </a-col>
                             </a-row>
                           </div>
+
+                          <div v-show=" legal.enforce == '是' ">
+                          <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                            <a-row style="border-top: 1px dash #f0f0f0;" >
+                              <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
+                                法院信息
+                              </a-col>
+                            </a-row>
+                          </div>
+
+                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px;margin-right:10px;">
+                            <a-row>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行法院</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input id="legal-apply-content-court-cascader"  v-model="legal.exCourt" :options="options.courtOptions" placeholder="请输入执行法院！" @blur="validFieldToast('court')"  style="width:100%; border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;"  />
+                              </a-col>
+                            </a-row>
+                          </div>
+
+                          <div class="reward-apply-content-item" style="margin-top:5px;margin-bottom:5px; margin-right:10px;">
+                            <a-row>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>执行法官</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-model="legal.exJudge"  placeholder="请输入执行法官！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                              </a-col>
+                              <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
+                                <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;"></span>法官联系方式</span>
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-model="legal.exJudgeMobile"  placeholder="请输入承办法官联系方式！" style="border: 0px solid #fefefe;  border-bottom: 1px solid #f0f0f0;" />
+                              </a-col>
+                            </a-row>
+                          </div>  
+                          </div>
+                          
                           </div>
 
                         </a-tab-pane>
