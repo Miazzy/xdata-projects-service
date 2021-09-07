@@ -2162,6 +2162,7 @@ export default {
         exJudge:'',
         exJudgeMobile:'',
 
+        isolation: '地产',
         files:'', // 起诉状/授权文书
       },
       columns: workconfig.columns.reward.items,
