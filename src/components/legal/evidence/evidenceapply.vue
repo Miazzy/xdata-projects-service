@@ -136,18 +136,22 @@
                   </a-row>
                 </div>
 
-                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
+                <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px; padding-bottom:0px; margin-bottom:0px;">
                   <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
                       证据信息
                     </a-col>
+                    <a-col class="reward-apply-content-title-text" :span="20" style="font-size:1.1rem;">
+                    </a-col>
                   </a-row>
-                  <div v-if=" ( role == 'add' || role == 'edit' ) " style="position:absolute; width:1000px; left: -26.50rem; float:left; height:30px; transform:scale(0.625); transform-origin: left center;  margin-right:0.025rem;" >
-                    <a-tag color="#87d068" style="position: relative; float:right; right:0.5rem; margin-top:0.25rem; margin-left:0.25rem; transform-origin: left center;" @click="execAddEvd(legal)"> 新增证据明细 </a-tag>
-                  </div>
+                  <a-row style="border-top: 1px dash #f0f0f0;" >
+                    <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem; text-algin:center; ">
+                        <a-tag  v-if=" ( role == 'add' || role == 'edit' ) " color="#87d068" style="position: relative; margin-left:24px; transform:scale(0.8); text-algin:center; margin-top:0.05rem; transform-origin: left center;" @click="execAddEvd(legal)"> 新增证据明细 </a-tag>
+                    </a-col>
+                  </a-row>
                 </div>
 
-                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:15px;margin-bottom:5px; margin-right:10px;">
+                <div v-if=" ( role == 'add' || role == 'edit' ) " class="reward-apply-content-item" style="margin-top:0px;margin-bottom:5px; margin-right:10px;">
                   <a-row>
                     <a-col :span="4" style="font-size:1.0rem; margin-top:5px; text-align: center;">
                       <span style="position:relative;" ><span style="color:red;margin-right:0px;position:absolute;left:-10px;top:0px;">*</span>证据提交日期</span>
