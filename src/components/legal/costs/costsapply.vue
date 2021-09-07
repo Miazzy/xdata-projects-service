@@ -458,7 +458,7 @@ export default {
         paid_name:'',  // 支付对象
         back_flag:'', // 是否应退诉讼费
         back_amount:'', // 退费金额
-        back_time:'', // 退费时间
+        back_time: null, // 退费时间
         back_court:'', // 退费法院
         judge_name:'', // 法官姓名
         remark:'', // 备注
