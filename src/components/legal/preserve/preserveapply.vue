@@ -156,7 +156,7 @@
                   </a-row>
                 </div>
 
-                <div v-if="element.pretype.includes('银行账户')">
+                <div v-if="element && element.pretype && element.pretype.includes('银行账户')">
                 <div class="reward-apply-content-item reward-apply-content-title" style="padding-top:5px;">
                    <a-row style="border-top: 1px dash #f0f0f0;" >
                     <a-col class="reward-apply-content-title-text" :span="4" style="font-size:1.1rem;">
@@ -615,16 +615,21 @@ export default {
       // 获取基础信息
       async queryInfo() {
         try {
-          this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
-          this.iswework = Betools.tools.isWework(); //查询是否为企业微信
-          const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
-          this.userinfo = weworkinfo.userinfo;
-          this.usertitle = weworkinfo.usertitle;
 
-          this.role = Betools.tools.getUrlParam('role');
-          this.stage = Betools.tools.getUrlParam('stage');
-          this.apply = Betools.tools.getUrlParam('apply') || 'view';
-          this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+          try {
+            this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
+            this.iswework = Betools.tools.isWework(); //查询是否为企业微信
+            const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+            this.userinfo = weworkinfo.userinfo;
+            this.usertitle = weworkinfo.usertitle;
+  
+            this.role = Betools.tools.getUrlParam('role');
+            this.stage = Betools.tools.getUrlParam('stage');
+            this.apply = Betools.tools.getUrlParam('apply') || 'view';
+            this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+          } catch (error) {
+            console.error(error);
+          }
 
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
           try {
@@ -638,13 +643,12 @@ export default {
           const id = this.id = Betools.tools.getUrlParam('id');
           const pid = this.pid = Betools.tools.getUrlParam('pid');
           this.legal = !Betools.tools.isNull(pid) ? await Betools.query.queryTableDataDB('bs_legal' , pid) : { title: '', };
+          
           if(!Betools.tools.isNull(id)){
             this.element = await Betools.query.queryTableData(this.tablename , id);
             this.element.create_time = dayjs(this.element.create_time).format('YYYY-MM-DD');
             this.element.fileName = this.element.files.split('###')[1];
-          } else {
-          
-          }
+          } 
 
           try {
             this.firmlist = await Betools.manage.queryTableData('bs_legal_firm' , `_where=(status,ne,0)&_fields=id,firm_name&_sort=-id&_p=0&_size=10000`);
