@@ -91,7 +91,7 @@
                 </div>
 
                 <div id="nav-content-law-sum-count" style="margin-top:10px;">
-                    <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                    <dv-border-box-7 style="height:270px;width:350px;background:#000000;">
                       <div style="background:#000000;">
                         <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">数量比率：</div>
                         <dv-active-ring-chart :config="caseNumRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
@@ -99,7 +99,7 @@
                     </dv-border-box-7>
                 </div>
 
-                <div id="nav-content-law-sum-count" style="margin-top:20px;">
+                <div id="nav-content-law-sum-count" style="margin-top:10px;">
                     <dv-border-box-7 style="height:220px;width:350px;background:#000000;">
                       <div style="background:#000000;">
                         <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段统计：</div>
@@ -109,7 +109,7 @@
                 </div>
 
                 <div id="nav-content-law-sum-count" style="margin-top:10px;">
-                    <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                    <dv-border-box-7 style="height:270px;width:350px;background:#000000;">
                       <div style="background:#000000;">
                         <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段比率：</div>
                         <dv-active-ring-chart :config="caseNumStageRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
@@ -117,7 +117,7 @@
                     </dv-border-box-7>
                 </div>
 
-                <div id="nav-content-law" style="margin-top:20px;">
+                <div id="nav-content-law" style="margin-top:10px;">
                   <a-card :loading="loading" title="法律网站" :bordered="false" style="margin-top:10px;">
                     <a-tag color="blue" style="margin-bottom:0px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
                     <div class="members" >
