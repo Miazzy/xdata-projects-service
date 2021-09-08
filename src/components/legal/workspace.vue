@@ -1,6 +1,6 @@
 <template>
   <div id="reward-home" style="background-color:#f0f0f0;width:100%;height:auto;">
-      <div style="background-color:#f0f0f0;width:100%;height:1500px;">
+      <div style="background-color:#f0f0f0;width:100%;height:1800px;">
       <a-menu mode="horizontal">
         <a-sub-menu>
             <span slot="title" class="submenu-title-wrapper" >
@@ -96,11 +96,31 @@
                   </a-card>
                 </div>
 
-                <div id="nav-content-law-num-count" style="">
+                <div id="nav-content-law-num-count" style="margin-top:10px;">
+                    <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <dv-decoration-1 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-1 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-1 style="width:115px;height:15px;float:left;" />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
+                <div id="nav-content-law-num-count" style="margin-top:10px;">
                     <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
                       <div style="background:#000000;">
                         <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:25px; margin-left:10px; ">数量统计：</div>
                         <dv-conical-column-chart :config="caseNumConfig" style="width:350px;height:180px;" />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
+                <div id="nav-content-law-num-count" style="margin-top:10px;">
+                    <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
                       </div>
                     </dv-border-box-7>
                 </div>
@@ -114,11 +134,31 @@
                     </dv-border-box-7>
                 </div>
 
+                <div id="nav-content-law-num-count" style="margin-top:10px;">
+                    <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
                 <div id="nav-content-law-sum-count" style="margin-top:10px;">
                     <dv-border-box-7 style="height:220px;width:350px;background:#000000;">
                       <div style="background:#000000;">
                         <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段统计：</div>
                         <dv-capsule-chart :config="caseNumStageConfig" style="width:350px;height:auto;margin-top:30px; " />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
+                <div id="nav-content-law-num-count" style="margin-top:10px;">
+                    <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                        <dv-decoration-3 style="width:115px;height:15px;float:left;" />
                       </div>
                     </dv-border-box-7>
                 </div>
