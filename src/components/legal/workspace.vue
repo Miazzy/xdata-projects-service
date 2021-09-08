@@ -99,23 +99,25 @@
                     </dv-border-box-7>
                 </div>
 
-                <div id="nav-content-process" style="display:none;">
-                  <a-card :loading="loading" title="诉讼案件流程" :bordered="false" style="margin-top:10px;">
-                    <a-tag color="blue" style="margin-bottom:10px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
-                    <div class="members">
-                      <a-row>
-                        <a-col :span="12" v-for="item in wflows" :key="item.href">
-                          <a @click="item.click">
-                            <a-avatar class="pane-right-avatar" size="small" :src="item.avatar" />
-                            <span class="member">{{ item.name }}</span>
-                          </a>
-                        </a-col>
-                      </a-row>
-                    </div>
-                  </a-card>
+                <div id="nav-content-law-sum-count" style="margin-top:20px;">
+                    <dv-border-box-7 style="height:220px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段统计：</div>
+                        <dv-capsule-chart :config="caseNumStageConfig" style="width:350px;height:auto;margin-top:30px; " />
+                      </div>
+                    </dv-border-box-7>
                 </div>
 
-                <div id="nav-content-law" style="">
+                <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                    <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段比率：</div>
+                        <dv-active-ring-chart :config="caseNumStageRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
+                <div id="nav-content-law" style="margin-top:20px;">
                   <a-card :loading="loading" title="法律网站" :bordered="false" style="margin-top:10px;">
                     <a-tag color="blue" style="margin-bottom:0px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
                     <div class="members" >
@@ -203,6 +205,72 @@ export default {
           fontSize: 12
         },
         lineWidth: 15,
+        color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],
+      },
+      caseNumStageConfig:{
+        data: [
+          {
+            name: '仲裁阶段',
+            value: 167
+          },
+          {
+            name: '一审阶段',
+            value: 67
+          },
+          {
+            name: '二审阶段',
+            value: 123
+          },
+          {
+            name: '再审阶段',
+            value: 55
+          },
+          {
+            name: '执行阶段',
+            value: 98
+          },
+          {
+            name: '结案阶段',
+            value: 98
+          }
+        ],
+        unit: '单位',
+        showValue: true,
+      },
+      caseNumStageRatioConfig:{
+        radius: '40%',
+        activeRadius: '45%',
+        data: [
+          {
+            name: '仲裁阶段',
+            value: 167
+          },
+          {
+            name: '一审阶段',
+            value: 67
+          },
+          {
+            name: '二审阶段',
+            value: 123
+          },
+          {
+            name: '再审阶段',
+            value: 55
+          },
+          {
+            name: '执行阶段',
+            value: 98
+          },
+          {
+            name: '结案阶段',
+            value: 98
+          }
+        ],
+        digitalFlopStyle: {
+          fontSize: 12
+        },
+        lineWidth: 15,
+        color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],
       },
       breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'} ,{icon:'',text:'关联流程',path:'/legal/workspace'} ,{icon:'',text:'费用流程',path:'/legal/workspace'} ,{icon:'',text:'文书流程',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
     };
