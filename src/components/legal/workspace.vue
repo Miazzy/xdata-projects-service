@@ -274,11 +274,9 @@ export default {
         if(Betools.tools.isNull(numStageList)){
           numStageList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,地产)~and(type,eq,阶段)&_sort=type,value&_p=0&_size=10`);
           let stageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
-          stageData.map(item=>{
-            const stageElement = item;
-            const index = numStageList.findIndex(item => {  return item.value == stageMap[stageElement.name];});
-            const element = numStageList[index];
-            item.value = Betools.tools.isNull(element) ? 0 : element.num;
+          stageData.map(stageElement=>{
+            const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
+            stageElement.value = Betools.tools.isNull(element) ? 0 : element.num;
           });
           Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 1.5);
         }
