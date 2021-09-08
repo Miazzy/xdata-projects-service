@@ -268,6 +268,12 @@ export default {
         let numList = Betools.storage.getStore(`system_case_num`);
         if(Betools.tools.isNull(numList)){
           numList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,地产)~and(type,eq,类别)&_sort=type,value&_p=0&_size=10`);
+          const numData = Betools.tools.isNull(numList) || numList.length < 2 ? []:[{ name: '所有案件', value: numList[0].num + numList[1].num }, { name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
+          const numRatioData = Betools.tools.isNull(numList) || numList.length < 2 ? []: [{ name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
+          const caseNumConfig = { data: numData, img: [ 'https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, };
+          this.caseNumConfig = { ...caseNumConfig };
+          const caseNumRatioConfig = { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], };
+          this.caseNumRatioConfig = { ...caseNumRatioConfig };
           Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 1.5);
         }
 
@@ -278,6 +284,10 @@ export default {
             const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
             stageElement.value = Betools.tools.isNull(element) ? 0 : element.num;
           });
+          const caseNumStageConfig = { data: stageData, unit: '单位', showValue: true, };
+          this.caseNumStageConfig = { ...caseNumStageConfig };
+          const caseNumStageRatioConfig = { radius: '40%', activeRadius: '45%', data: stageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
+          this.caseNumStageRatioConfig = { ...caseNumStageRatioConfig };
           Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 1.5);
         }
 
