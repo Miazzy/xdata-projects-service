@@ -210,40 +210,10 @@ export default {
       lawyerlist:[],
       role:'',
       status:'loading',
-      caseNumConfig:{
-        data: numData,
-        img: [
-          'https://wechat.yunwisdom.club:30443/static/img/1st.png',
-          'https://wechat.yunwisdom.club:30443/static/img/2st.png',
-          'https://wechat.yunwisdom.club:30443/static/img/5st.png',
-        ],
-        showValue: true,
-      },
-      caseNumRatioConfig: {
-        radius: '40%',
-        activeRadius: '45%',
-        data: numRatioData,
-        digitalFlopStyle: {
-          fontSize: 12
-        },
-        lineWidth: 15,
-        color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],
-      },
-      caseNumStageConfig:{
-        data: numStageData,
-        unit: '单位',
-        showValue: true,
-      },
-      caseNumStageRatioConfig:{
-        radius: '40%',
-        activeRadius: '45%',
-        data: numStageData,
-        digitalFlopStyle: {
-          fontSize: 12
-        },
-        lineWidth: 15,
-        color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],
-      },
+      caseNumConfig:{ data: numData, img: ['https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, },
+      caseNumRatioConfig: { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
+      caseNumStageConfig:{ data: numStageData, unit: '单位', showValue: true, },
+      caseNumStageRatioConfig:{ radius: '40%', activeRadius: '45%', data: numStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],},
       breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'} ,{icon:'',text:'关联流程',path:'/legal/workspace'} ,{icon:'',text:'费用流程',path:'/legal/workspace'} ,{icon:'',text:'文书流程',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
     };
   },
