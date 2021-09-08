@@ -69,7 +69,8 @@
               </template>
             </div>
 
-            <div v-show="role.includes('LEGAL_ADMIN') || true " style="position:absolute; left:1000px; width: 300px;">
+            <div v-show="role.includes('LEGAL_ADMIN') || true " style="position:absolute; left:1000px; width: 350px;">
+                
                 <a-card title="便捷导航" style="margin-bottom: 10px" :bordered="false" :body-style="{padding: 0}" >
                   <div class="item-group">
                     <div class="pane-right-item-group" >
@@ -79,6 +80,25 @@
                     </div>
                   </div>
                 </a-card>
+
+                <div id="nav-content-law-num-count" style="">
+                    <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:25px; margin-left:10px; ">数量统计：</div>
+                        <dv-conical-column-chart :config="caseNumConfig" style="width:350px;height:180px;" />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
+                <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                    <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                      <div style="background:#000000;">
+                        <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">数量比率：</div>
+                        <dv-active-ring-chart :config="caseNumRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
+                      </div>
+                    </dv-border-box-7>
+                </div>
+
                 <div id="nav-content-process" style="display:none;">
                   <a-card :loading="loading" title="诉讼案件流程" :bordered="false" style="margin-top:10px;">
                     <a-tag color="blue" style="margin-bottom:10px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
@@ -94,6 +114,7 @@
                     </div>
                   </a-card>
                 </div>
+
                 <div id="nav-content-law" style="">
                   <a-card :loading="loading" title="法律网站" :bordered="false" style="margin-top:10px;">
                     <a-tag color="blue" style="margin-bottom:0px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
@@ -108,6 +129,7 @@
                     </div>
                   </a-card>
                 </div>
+
             </div>
             
           </a-col>
@@ -142,6 +164,45 @@ export default {
       lawyerlist:[],
       role:'',
       status:'loading',
+      caseNumConfig:{
+        data: [
+          {
+            name: '所有案件',
+            value: 126
+          },
+          {
+            name: '起诉案件',
+            value: 55
+          },
+          {
+            name: '应诉案件',
+            value: 71
+          },
+        ],
+        img: [
+          'http://datav.jiaminghi.com/img/conicalColumnChart/1st.png',
+          'http://datav.jiaminghi.com/img/conicalColumnChart/2st.png',
+          'http://datav.jiaminghi.com/img/conicalColumnChart/5st.png',
+        ],
+        showValue: true,
+      },
+      caseNumRatioConfig: {
+        radius: '40%',
+        activeRadius: '45%',
+        data: [
+          {
+            name: '起诉案件',
+            value: 55
+          },
+          {
+            name: '应诉案件',
+            value: 71
+          },
+        ],
+        digitalFlopStyle: {
+          fontSize: 12
+        }
+      },
       breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'} ,{icon:'',text:'关联流程',path:'/legal/workspace'} ,{icon:'',text:'费用流程',path:'/legal/workspace'} ,{icon:'',text:'文书流程',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
     };
   },
