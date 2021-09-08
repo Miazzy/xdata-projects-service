@@ -213,9 +213,9 @@ export default {
       caseNumConfig:{
         data: numData,
         img: [
-          'http://datav.jiaminghi.com/img/conicalColumnChart/1st.png',
-          'http://datav.jiaminghi.com/img/conicalColumnChart/2st.png',
-          'http://datav.jiaminghi.com/img/conicalColumnChart/5st.png',
+          'https://wechat.yunwisdom.club:30443/static/img/1st.png',
+          'https://wechat.yunwisdom.club:30443/static/img/2st.png',
+          'https://wechat.yunwisdom.club:30443/static/img/5st.png',
         ],
         showValue: true,
       },
