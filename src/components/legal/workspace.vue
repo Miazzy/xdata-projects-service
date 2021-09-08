@@ -192,6 +192,9 @@ export default {
   },
   data() {
     const { $router } = this;
+    const numList = Betools.storage.getStore(`system_case_num`);
+    const numData = [{ name: '所有案件', value: numList[0].num + numList[1].num }, { name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
+    const numStageData = [{ name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
     return {
       pageName: "案件管理",
       momentNewMsg: true,
@@ -207,20 +210,7 @@ export default {
       role:'',
       status:'loading',
       caseNumConfig:{
-        data: [
-          {
-            name: '所有案件',
-            value: 126
-          },
-          {
-            name: '起诉案件',
-            value: 55
-          },
-          {
-            name: '应诉案件',
-            value: 71
-          },
-        ],
+        data: numData,
         img: [
           'http://datav.jiaminghi.com/img/conicalColumnChart/1st.png',
           'http://datav.jiaminghi.com/img/conicalColumnChart/2st.png',
@@ -231,16 +221,7 @@ export default {
       caseNumRatioConfig: {
         radius: '40%',
         activeRadius: '45%',
-        data: [
-          {
-            name: '起诉案件',
-            value: 55
-          },
-          {
-            name: '应诉案件',
-            value: 71
-          },
-        ],
+        data: numStageData,
         digitalFlopStyle: {
           fontSize: 12
         },
@@ -330,6 +311,30 @@ export default {
       try {
         const { $router } = this;
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '加载中...', });
+
+        let numList = Betools.storage.getStore(`system_case_num`);
+        if(Betools.tools.isNull(numList)){
+          numList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,地产)~and(type,eq,类别)&_sort=type,value&_p=0&_size=10`);
+          Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 1.5);
+        }
+        
+        this.caseNumConfig.data.map(item=>{
+          if(item.name == '所有案件') {
+            item.value = numList[0].num + numList[1].num;
+          } else if(item.name == '起诉案件'){
+            item.value = numList[1].num;
+          } else if(item.name == '应诉案件'){
+            item.value = numList[0].num;
+          }
+        });
+        this.caseNumRatioConfig.data.map(item=>{
+          if(item.name == '起诉案件'){
+            item.value = numList[1].num;
+          } else if(item.name == '应诉案件'){
+            item.value = numList[0].num;
+          }
+        });
+
         this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
         const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
         this.userinfo = weworkinfo.userinfo;
