@@ -81,6 +81,21 @@
                   </div>
                 </a-card>
 
+                <div id="nav-content-law" style="margin-top:10px;">
+                  <a-card :loading="loading" title="法律网站" :bordered="false" style="margin-top:10px;">
+                    <a-tag color="blue" style="margin-bottom:0px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
+                    <div class="members" >
+                      <a-row>
+                        <a-col :span="item.span" v-for="item in lawsites" :key="item.href" style="padding-bottom:10px;">
+                          <a @click="item.click" style="margin-top:0px;margin-bottom:5px;padding-bottom:5px;">
+                            <span class="member" style="margin-top:0px;margin-bottom:5px;padding-bottom:5px;" >{{ item.name }}</span>
+                          </a>
+                        </a-col>
+                      </a-row>
+                    </div>
+                  </a-card>
+                </div>
+
                 <div id="nav-content-law-num-count" style="">
                     <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
                       <div style="background:#000000;">
@@ -115,21 +130,6 @@
                         <dv-active-ring-chart :config="caseNumStageRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
                       </div>
                     </dv-border-box-7>
-                </div>
-
-                <div id="nav-content-law" style="margin-top:10px;">
-                  <a-card :loading="loading" title="法律网站" :bordered="false" style="margin-top:10px;">
-                    <a-tag color="blue" style="margin-bottom:0px;position:absolute;top:18px;right:20px;display:none;" ></a-tag>
-                    <div class="members" >
-                      <a-row>
-                        <a-col :span="item.span" v-for="item in lawsites" :key="item.href" style="padding-bottom:10px;">
-                          <a @click="item.click" style="margin-top:0px;margin-bottom:5px;padding-bottom:5px;">
-                            <span class="member" style="margin-top:0px;margin-bottom:5px;padding-bottom:5px;" >{{ item.name }}</span>
-                          </a>
-                        </a-col>
-                      </a-row>
-                    </div>
-                  </a-card>
                 </div>
 
             </div>
