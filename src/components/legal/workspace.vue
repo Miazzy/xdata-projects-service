@@ -194,8 +194,8 @@ export default {
     const { $router } = this;
     const numList = Betools.storage.getStore(`system_case_num`);
     const numStageData = Betools.storage.getStore(`system_case_num_stage`);
-    const numData = [{ name: '所有案件', value: numList[0].num + numList[1].num }, { name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
-    const numRatioData = [{ name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
+    const numData = Betools.tools.isNull(numList) || numList.length < 2 ? []:[{ name: '所有案件', value: numList[0].num + numList[1].num }, { name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
+    const numRatioData = Betools.tools.isNull(numList) || numList.length < 2 ? []: [{ name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
     return {
       pageName: "案件管理",
       momentNewMsg: true,
