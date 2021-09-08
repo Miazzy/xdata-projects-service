@@ -201,7 +201,8 @@ export default {
         ],
         digitalFlopStyle: {
           fontSize: 12
-        }
+        },
+        lineWidth: 15,
       },
       breadcrumb:[{icon:'',text:'所有功能',path:'/legal/workspace'},{icon:'',text:'任务面板',path:'/legal/workspace'},{icon:'',text:'案件管控',path:'/legal/workspace'} ,{icon:'',text:'关联流程',path:'/legal/workspace'} ,{icon:'',text:'费用流程',path:'/legal/workspace'} ,{icon:'',text:'文书流程',path:'/legal/workspace'},{icon:'',text:'律所律师',path:'/legal/workspace'},{icon:'',text:'法院法官',path:'/legal/workspace'}],
     };
