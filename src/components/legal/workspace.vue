@@ -261,6 +261,7 @@ export default {
     async queryInfo() {
       try {
         const { $router } = this;
+        const stageMap = { '仲裁阶段':'仲裁阶段', '一审阶段':'一审阶段', '二审阶段':'二审阶段', '再审阶段':'再审阶段', '执行阶段':'执行阶段', '结案阶段':'归档闭单',};
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '加载中...', });
 
         let numList = Betools.storage.getStore(`system_case_num`);
@@ -275,10 +276,7 @@ export default {
           let stageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
           stageData.map(item=>{
             const stageElement = item;
-            const stageMap = { '仲裁阶段':'仲裁阶段', '一审阶段':'一审阶段', '二审阶段':'二审阶段', '再审阶段':'再审阶段', '执行阶段':'执行阶段', '结案阶段':'归档闭单',};
-            const index = numStageList.findIndex(item => { 
-              return item.value == stageMap[stageElement.name];
-            });
+            const index = numStageList.findIndex(item => {  return item.value == stageMap[stageElement.name];});
             const element = numStageList[index];
             item.value = Betools.tools.isNull(element) ? 0 : element.num;
           });
