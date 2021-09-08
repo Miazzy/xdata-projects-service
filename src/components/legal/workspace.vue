@@ -274,7 +274,7 @@ export default {
           this.caseNumConfig = { ...caseNumConfig };
           const caseNumRatioConfig = { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], };
           this.caseNumRatioConfig = { ...caseNumRatioConfig };
-          Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 1.5);
+          Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 0.5);
         }
 
         let numStageList = Betools.storage.getStore(`system_case_num_stage`);
@@ -288,7 +288,7 @@ export default {
           this.caseNumStageConfig = { ...caseNumStageConfig };
           const caseNumStageRatioConfig = { radius: '40%', activeRadius: '45%', data: stageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
           this.caseNumStageRatioConfig = { ...caseNumStageRatioConfig };
-          Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 1.5);
+          Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 0.5);
         }
 
         this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
