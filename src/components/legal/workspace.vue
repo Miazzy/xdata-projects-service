@@ -193,8 +193,9 @@ export default {
   data() {
     const { $router } = this;
     const numList = Betools.storage.getStore(`system_case_num`);
+    const numStageData = Betools.storage.getStore(`system_case_num_stage`);
     const numData = [{ name: '所有案件', value: numList[0].num + numList[1].num }, { name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
-    const numStageData = [{ name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
+    const numRatioData = [{ name: '起诉案件', value: numList[1].num  }, { name: '应诉案件', value: numList[0].num  },];
     return {
       pageName: "案件管理",
       momentNewMsg: true,
@@ -221,7 +222,7 @@ export default {
       caseNumRatioConfig: {
         radius: '40%',
         activeRadius: '45%',
-        data: numStageData,
+        data: numRatioData,
         digitalFlopStyle: {
           fontSize: 12
         },
@@ -229,64 +230,14 @@ export default {
         color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],
       },
       caseNumStageConfig:{
-        data: [
-          {
-            name: '仲裁阶段',
-            value: 167
-          },
-          {
-            name: '一审阶段',
-            value: 67
-          },
-          {
-            name: '二审阶段',
-            value: 123
-          },
-          {
-            name: '再审阶段',
-            value: 55
-          },
-          {
-            name: '执行阶段',
-            value: 98
-          },
-          {
-            name: '结案阶段',
-            value: 98
-          }
-        ],
+        data: numStageData,
         unit: '单位',
         showValue: true,
       },
       caseNumStageRatioConfig:{
         radius: '40%',
         activeRadius: '45%',
-        data: [
-          {
-            name: '仲裁阶段',
-            value: 167
-          },
-          {
-            name: '一审阶段',
-            value: 67
-          },
-          {
-            name: '二审阶段',
-            value: 123
-          },
-          {
-            name: '再审阶段',
-            value: 55
-          },
-          {
-            name: '执行阶段',
-            value: 98
-          },
-          {
-            name: '结案阶段',
-            value: 98
-          }
-        ],
+        data: numStageData,
         digitalFlopStyle: {
           fontSize: 12
         },
@@ -317,23 +268,22 @@ export default {
           numList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,地产)~and(type,eq,类别)&_sort=type,value&_p=0&_size=10`);
           Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 1.5);
         }
-        
-        this.caseNumConfig.data.map(item=>{
-          if(item.name == '所有案件') {
-            item.value = numList[0].num + numList[1].num;
-          } else if(item.name == '起诉案件'){
-            item.value = numList[1].num;
-          } else if(item.name == '应诉案件'){
-            item.value = numList[0].num;
-          }
-        });
-        this.caseNumRatioConfig.data.map(item=>{
-          if(item.name == '起诉案件'){
-            item.value = numList[1].num;
-          } else if(item.name == '应诉案件'){
-            item.value = numList[0].num;
-          }
-        });
+
+        let numStageList = Betools.storage.getStore(`system_case_num_stage`);
+        if(Betools.tools.isNull(numStageList)){
+          numStageList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,地产)~and(type,eq,阶段)&_sort=type,value&_p=0&_size=10`);
+          let stageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
+          stageData.map(item=>{
+            const stageElement = item;
+            const stageMap = { '仲裁阶段':'仲裁阶段', '一审阶段':'一审阶段', '二审阶段':'二审阶段', '再审阶段':'再审阶段', '执行阶段':'执行阶段', '结案阶段':'归档闭单',};
+            const index = numStageList.findIndex(item => { 
+              return item.value == stageMap[stageElement.name];
+            });
+            const element = numStageList[index];
+            item.value = Betools.tools.isNull(element) ? 0 : element.num;
+          });
+          Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 1.5);
+        }
 
         this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
         const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
