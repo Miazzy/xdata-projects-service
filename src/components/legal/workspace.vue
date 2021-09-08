@@ -262,6 +262,7 @@ export default {
       try {
         const { $router } = this;
         const stageMap = { '仲裁阶段':'仲裁阶段', '一审阶段':'一审阶段', '二审阶段':'二审阶段', '再审阶段':'再审阶段', '执行阶段':'执行阶段', '结案阶段':'归档闭单',};
+        const stageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '加载中...', });
 
         let numList = Betools.storage.getStore(`system_case_num`);
@@ -273,7 +274,6 @@ export default {
         let numStageList = Betools.storage.getStore(`system_case_num_stage`);
         if(Betools.tools.isNull(numStageList)){
           numStageList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,地产)~and(type,eq,阶段)&_sort=type,value&_p=0&_size=10`);
-          let stageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
           stageData.map(stageElement=>{
             const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
             stageElement.value = Betools.tools.isNull(element) ? 0 : element.num;
