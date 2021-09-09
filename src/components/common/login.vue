@@ -155,7 +155,7 @@ export default {
         if(!Betools.tools.isNull(element.validcode) && element.validcode != element.password){
             // 如果密码不等于验证码，则校验密码是否为数据库密码
             element.md5_password = md5(element.password);
-            const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,eq,${element.account})~and(password,eq,${element.(mobile,eq,${element.account})})&_sort=id&_p=0&_size=1`);
+            const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,eq,${element.account})~and(password,eq,${element.md5_password})&_sort=id&_p=0&_size=1`);
             vant.Toast.clear();
             if(!(!Betools.tools.isNull(list) && list.length > 0)){
               return await vant.Dialog.alert({ title: '温馨提示', message: `您输入的验证码或密码有误，请重新发送验证码或重新输入密码！`,});
