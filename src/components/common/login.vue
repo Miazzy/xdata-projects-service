@@ -195,7 +195,7 @@ export default {
                 avatar: userinfo.avatar,
                 company: { name:userinfo.company },
                 department: { name:userinfo.departname},
-                parent_company:{ name:userinfo.topname + '>' + userinfo.departname + `(${userinfo.position})`},
+                parent_company:{ name: Betools.tools.deNull(userinfo.topname,'') + (Betools.tools.isNull(userinfo.topname) ? '' : '>') + Betools.tools.deNull(userinfo.departname,'') + (Betools.tools.isNull(userinfo.departname,'') ?  `${userinfo.position}` : `(${userinfo.position})`)},
                 email:userinfo.email,
                 gender: userinfo.gender,
                 mobile:userinfo.mobile,
