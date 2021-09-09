@@ -173,9 +173,9 @@ export default {
 
     // 验证登录
     async redirectWorkspace(element, $router){
-      vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '验证成功...', });
+        vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '验证成功...', });
         element.account = element.account.trim();
-        const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,like,${element.account}~)&_sort=id&_p=0&_size=1`);
+        const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,like,${element.account})&_sort=id&_p=0&_size=1`);
         if(!Betools.tools.isNull(list) && list.length > 0){
             const userinfo = (!Betools.tools.isNull(list) && list.length > 0) ? list[0] : '';
             const node = {
