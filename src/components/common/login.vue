@@ -60,6 +60,7 @@ export default {
       element:{
           account:'',
           password:'',
+          md5_password:'',
           validcode:'',
       },
       role:'',
@@ -152,46 +153,61 @@ export default {
         }
         // 检查验证码是否正确
         if(!Betools.tools.isNull(element.validcode) && element.validcode != element.password){
+            // 如果密码不等于验证码，则校验密码是否为数据库密码
+            element.md5_password = md5(element.password);
+            const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,eq,${element.account})~and(password,eq,${element.(mobile,eq,${element.account})})&_sort=id&_p=0&_size=1`);
             vant.Toast.clear();
-            return await vant.Dialog.alert({ title: '温馨提示', message: `您输入的验证码有误，请重新发送验证码！`,});
+            if(!(!Betools.tools.isNull(list) && list.length > 0)){
+              return await vant.Dialog.alert({ title: '温馨提示', message: `您输入的验证码或密码有误，请重新发送验证码或重新输入密码！`,});
+            } else {
+              this.redirectWorkspace(element, $router);
+            }
         }
+
         // 验证码正确，进行登录操作
         if(!Betools.tools.isNull(element.validcode) && element.validcode == element.password){
+            this.redirectWorkspace(element, $router);
+        }
+        
+    },
+
+    // 验证登录
+    async redirectWorkspace(element, $router){
+      vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '验证成功...', });
+        element.account = element.account.trim();
+        const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,like,${element.account}~)&_sort=id&_p=0&_size=1`);
+        if(!Betools.tools.isNull(list) && list.length > 0){
+            const userinfo = (!Betools.tools.isNull(list) && list.length > 0) ? list[0] : '';
+            const node = {
+                avatar: userinfo.avatar,
+                company: { name:userinfo.company },
+                department: { name:userinfo.departname},
+                parent_company:{ name:userinfo.topname + '>' + userinfo.departname + `(${userinfo.position})`},
+                email:userinfo.email,
+                gender: userinfo.gender,
+                mobile:userinfo.mobile,
+                name:userinfo.name,
+                openid: '',
+                phone:userinfo.mobile,
+                orgin_userid:userinfo.userid,
+                realname:userinfo.name,
+                position:userinfo.position,
+                status: 1,
+                systemuserinfo:userinfo,
+                telephone:userinfo.mobile,
+                thumb_avatar:userinfo.avatar,
+                userid:userinfo.userid,
+                username:userinfo.loginid,
+                loginid:userinfo.loginid,
+            };
+            vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
+            await Betools.storage.setStore('system_userinfo', node);
+            await Betools.tools.sleep(1000);
             vant.Toast.clear();
-            vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '验证成功...', });
-            element.account = element.account.trim();
-            const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,like,${element.account}~)&_sort=id&_p=0&_size=1`);
-            if(!Betools.tools.isNull(list) && list.length > 0){
-                const userinfo = (!Betools.tools.isNull(list) && list.length > 0) ? list[0] : '';
-                const node = {
-                    avatar: userinfo.avatar,
-                    company: { name:userinfo.company },
-                    department: { name:userinfo.departname},
-                    parent_company:{ name:userinfo.topname + '>' + userinfo.departname + `(${userinfo.position})`},
-                    email:userinfo.email,
-                    gender: userinfo.gender,
-                    mobile:userinfo.mobile,
-                    name:userinfo.name,
-                    openid: '',
-                    phone:userinfo.mobile,
-                    orgin_userid:userinfo.userid,
-                    realname:userinfo.name,
-                    position:userinfo.position,
-                    status: 1,
-                    systemuserinfo:userinfo,
-                    telephone:userinfo.mobile,
-                    thumb_avatar:userinfo.avatar,
-                    userid:userinfo.userid,
-                    username:userinfo.loginid,
-                    loginid:userinfo.loginid,
-                };
-                vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
-                await Betools.storage.setStore('system_userinfo', node);
-                await Betools.tools.sleep(1000);
-                $router.push(`/workspace`);
-            } else {
-                return await vant.Dialog.alert({ title: '温馨提示', message: `您好，未获取到您的用户信息，请稍后重试或联系管理员协助处理！`,});
-            }
+            $router.push(`/workspace`);
+        } else {
+            vant.Toast.clear();
+            return await vant.Dialog.alert({ title: '温馨提示', message: `您好，未获取到您的用户信息，请稍后重试或联系管理员协助处理！`,});
         }
     }
     
