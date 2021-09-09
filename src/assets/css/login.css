@@ -152,7 +152,7 @@ html,body{
 	 border-bottom:0.0625rem solid #347ebc;
      height: 2.5625rem;
      width: 15.8125rem;
-     /* text-indent: 3.125rem; */
+     text-indent: 1.125rem;
      outline:none;
 }
 
