@@ -140,7 +140,7 @@ export default {
 
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
         const { element , $router} = this; // 获取账户信息
-
+        debugger;
         // 检查是否输入账号或电话
         if(Betools.tools.isNull(element.account)){
             vant.Toast.clear();
@@ -159,6 +159,19 @@ export default {
             vant.Toast.clear();
             if(!(!Betools.tools.isNull(list) && list.length > 0)){
               return await vant.Dialog.alert({ title: '温馨提示', message: `您输入的验证码或密码有误，请重新发送验证码或重新输入密码！`,});
+            } else {
+              this.redirectWorkspace(element, $router);
+            }
+        }
+
+        // 检验密码是否正确
+        if(Betools.tools.isNull(element.validcode) && element.validcode != element.password){
+            // 如果密码不等于验证码，则校验密码是否为数据库密码
+            element.md5_password = md5(element.password);
+            const list = await Betools.manage.queryTableData('v_hrmresource', `_where=(mobile,eq,${element.account})~and(password,eq,${element.md5_password})&_sort=id&_p=0&_size=1`);
+            vant.Toast.clear();
+            if(!(!Betools.tools.isNull(list) && list.length > 0)){
+              return await vant.Dialog.alert({ title: '温馨提示', message: `您输入的密码有误，请重新输入密码！`,});
             } else {
               this.redirectWorkspace(element, $router);
             }
