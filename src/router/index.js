@@ -372,6 +372,13 @@ const routes = [{
         "default": resolve => require(["../components/legal/home.vue"], resolve),
         "subPage": resolve => require(["../components/legal/ruling/rulingapply.vue"], resolve)
     }
+}, {
+    path: '/legal/statistics',
+    name: "统计分析",
+    components: {
+        "default": resolve => require(["../components/legal/home.vue"], resolve),
+        "subPage": resolve => require(["../components/legal/statistics/statistics.vue"], resolve)
+    }
 }];
 
 // 设置路由信息
