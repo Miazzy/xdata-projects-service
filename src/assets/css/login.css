@@ -14,17 +14,17 @@ html,body{
     width:100%;
 }
 
-#home {
+#home-system-login {
     background:url(../images/login.jpeg) no-repeat;
     background-size: 100%;
 }
 
-.content {
+#home-system-login .content {
     background:url(../images/login.jpeg) repeat;
     background-size: 100%;
 }
 
-.circle .bgCircle {
+#home-system-login .circle .bgCircle {
 	width: 100%;
 	position: fixed;
 	top: 15%;
@@ -32,7 +32,7 @@ html,body{
 	transform: rotate(90deg);
 }
 
-.circle .bgCircle2 {
+#home-system-login .circle .bgCircle2 {
 	width: 55%;
 	position: fixed;
 	top: 68%;
@@ -41,7 +41,7 @@ html,body{
 	transform: rotate(90deg);
 }
 
-.circle .bgCircle3 {
+#home-system-login .circle .bgCircle3 {
 	width: 50%;
 	position: fixed;
 	top: 70%;
@@ -50,7 +50,7 @@ html,body{
 	transform: rotate(-90deg);
 }
 
-.circle .bgCircle4 {
+#home-system-login .circle .bgCircle4 {
 	width: 100%;
 	position: fixed;
 	top: 27%;
@@ -58,7 +58,7 @@ html,body{
 	transform: rotate(90deg);
 }
 
-.bg1{
+#home-system-login .bg1{
 	width:100%;
 	height: 237px;
 	background: #347ebc;
@@ -72,7 +72,8 @@ html,body{
     bottom:0px;
     margin:auto;
 }
-.gyl{
+
+#home-system-login .gyl{
 	width:510px;
 	height: 237px;
 	color: #FFFFFF;
@@ -84,14 +85,16 @@ html,body{
     bottom:0px;
     margin:auto;
 }
-.gy2{
+
+#home-system-login .gy2{
 	color: #fff;
 	margin-left: 6px;
 	font-size: 18px;
 	text-align: center;
 	margin-top: 10px;
 }
-.bg{
+
+#home-system-login .bg{
 	width: 375px;
 	height: 337px;
 	background: #fff;
@@ -106,13 +109,15 @@ html,body{
     box-shadow:0px 0px 50px rgba(0, 0, 0, 0.4);
     border-radius: 5px;
 }
-.password{
+
+#home-system-login .password{
      position: absolute;
      top: 9.5rem;
      right: 1.5rem;
      display: flex;
 }
-.btn{
+
+#home-system-login .btn{
      position: absolute;
      top: 16rem;
      right: 1.5rem;
@@ -123,7 +128,8 @@ html,body{
      background-color: #347ebc;
      text-indent: 0rem;
 }
-.img{
+
+#home-system-login .img{
 	width: 100%;
 	position: absolute;
     left: 0;
@@ -131,7 +137,8 @@ html,body{
 	margin: 0 auto;
     z-index: -1;
 }
-.wel{
+
+#home-system-login .wel{
 	width: 375px;
 	height: 35px;
 	color: #347ebc;
@@ -140,42 +147,49 @@ html,body{
     top: 2rem;
     text-align: center;
 }
-input{
+
+#home-system-login input{
 	 border-bottom:0.0625rem solid #347ebc;
      height: 2.5625rem;
      width: 15.8125rem;
      text-indent: 3.125rem;
      outline:none;
 }
-.user{
+
+#home-system-login .user{
 	 position: absolute;
      top: 6rem;
      right: 1.5rem;
      display: flex;
 	
 }
-.rem{
+
+#home-system-login .rem{
 	 position: absolute;
      top: 12.5rem;
      right: 17.2rem;
      border: none;
      color: #323333;
 }
-.rem input{
+
+#home-system-login .rem input{
 	width: 0.8125rem;
 }
-.fg{
+
+#home-system-login .fg{
 	 position: absolute;
      top: 12.5rem;
      right: 1.5rem;
      border: none;
      color: #323333;
 }
-#yonghu,#account,#password{
+
+#yonghu, #account, #password{
 	border-bottom:1px solid #347ebc;
 	height: 41px;
 	line-height: 41px;
 }
+
 #reb{
 	margin-top: -33px;
 	margin-left: 20px;
@@ -183,48 +197,45 @@ input{
 }
 
 @media (min-width:1201px) and (max-width:1500px){
-	.gyl{
+	#home-system-login .gyl{
 		width: 420px;
     	font-size: 60px;
     	top: 16%;
     }
 }
 @media (min-width:800px) and (max-width:1200px)
-
 {
-   .bg{
+    #home-system-login .bg{
         width: 355px;
 	    height: 300px;
     }
-    .gyl{
+    #home-system-login .gyl{
     	font-size: 50px;
     }
-   .wel{
+    #home-system-login .wel{
    	   width: 355px;
-   } 
-    .user{
+    } 
+    #home-system-login .user{
     	top: 5rem;
         right: 3.5rem;
     }
-    .password{
+    #home-system-login .password{
     	top: 8rem;
         right: 3.5rem;
     }
-    input{
-    	
+    #home-system-login input{
         width: 12rem;
     }   
-    .rem{
+    #home-system-login .rem{
 	    top: 11rem;
         right: 14.3rem;
     }
-    .fg{
+    #home-system-login .fg{
 	    top: 11rem;
         right: 3.5rem;
     }
-    .btn{
+    #home-system-login .btn{
     	top: 14rem;
         width: 15rem;
-    }
-   
+    }  
 }
