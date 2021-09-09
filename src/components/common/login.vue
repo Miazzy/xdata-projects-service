@@ -140,7 +140,7 @@ export default {
 
         vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '登录中...', });
         const { element , $router} = this; // 获取账户信息
-        debugger;
+
         // 检查是否输入账号或电话
         if(Betools.tools.isNull(element.account)){
             vant.Toast.clear();
