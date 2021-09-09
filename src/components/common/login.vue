@@ -206,6 +206,7 @@ export default {
                 realname:userinfo.name,
                 position:userinfo.position,
                 status: 1,
+                isolation:userinfo.isolation,
                 systemuserinfo:userinfo,
                 telephone:userinfo.mobile,
                 thumb_avatar:userinfo.avatar,
