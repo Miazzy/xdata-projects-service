@@ -191,21 +191,23 @@ export default {
       header
   },
   data() {
-    
+
     const { $router } = this;
     const numList = Betools.storage.getStore(`system_case_num`);
     const numStageData = Betools.storage.getStore(`system_case_num_stage`);
     const numData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
     const numRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
-    numData.map(numDataElement=>{
-      const element = numList.find(item => {  return item.value == numDataElement.name;});
-      numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
-    });
-    numData[0].value = numList[0].num + numList[1].num;
-    numRatioData.map(numDataElement=>{
-      const element = numList.find(item => {  return item.value == numDataElement.name;});
-      numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
-    });
+    if(!Betools.tools.isNull(numList) && numList.length > 0){
+      numData.map(numDataElement=>{
+        const element = numList.find(item => {  return item.value == numDataElement.name;});
+        numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+      });
+      numData[0].value = numList[0].num + numList[1].num;
+      numRatioData.map(numDataElement=>{
+        const element = numList.find(item => {  return item.value == numDataElement.name;});
+        numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+      });
+    }
 
     return {
       pageName: "案件管理",
@@ -265,17 +267,17 @@ export default {
           let numList = Betools.storage.getStore(`system_case_num`);
           if(Betools.tools.isNull(numList)){
             numList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,${isolation})~and(type,eq,类别)&_sort=type,value&_p=0&_size=10`);
-
-            numData.map(numDataElement=>{
-              const element = numList.find(item => {  return item.value == numDataElement.name;});
-              numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
-            });
-            numData[0].value = numList[0].num + numList[1].num;
-            numRatioData.map(numDataElement=>{
-              const element = numList.find(item => {  return item.value == numDataElement.name;});
-              numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
-            });
-
+            if(!Betools.tools.isNull(numList) && numList.length > 0){
+              numData.map(numDataElement=>{
+                const element = numList.find(item => {  return item.value == numDataElement.name;});
+                numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+              });
+              numData[0].value = numList[0].num + numList[1].num;
+              numRatioData.map(numDataElement=>{
+                const element = numList.find(item => {  return item.value == numDataElement.name;});
+                numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+              });
+            }
             const caseNumConfig = { data: numData, img: [ 'https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, };
             this.caseNumConfig = { ...caseNumConfig };
             const caseNumRatioConfig = { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], };
@@ -290,7 +292,6 @@ export default {
               const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
               stageElement.value = Betools.tools.isNull(element) ? 0 : element.num;
             });
-            debugger;
             const caseNumStageConfig = { data: stageData, unit: '单位', showValue: true, };
             this.caseNumStageConfig = { ...caseNumStageConfig };
             const caseNumStageRatioConfig = { radius: '40%', activeRadius: '45%', data: stageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
