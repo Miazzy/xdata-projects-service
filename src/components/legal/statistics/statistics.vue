@@ -2,25 +2,7 @@
   
   <div id="reward-home">
 
-      <div style="background-color:#f0f0f0;">
-
-      <a-menu mode="horizontal">
-        <a-sub-menu>
-            <span slot="title" class="submenu-title-wrapper" >
-              <a-avatar :src="userinfo.avatar" style="margin-left:0.25rem; margin-right:0.55rem;" />
-              {{ usertitle }} 
-            </span>
-            <a-menu-item-group title="应用中心">
-            <a-menu-item key="setting:1" :to="`/stock/message`"  @click="redirectView('/stock/message')" >
-                审批
-            </a-menu-item>
-            <a-menu-item key="setting:2" :to="`/legal/workspace`" @click="redirectView('/legal/workspace')" >
-                工作台
-            </a-menu-item>
-            </a-menu-item-group>
-        </a-sub-menu>
-      </a-menu>
-
+      <div style="background-color:#f0f0f0;width:100%;">
       <a-row :gutter="24">
         <keep-alive>
 
@@ -201,7 +183,6 @@
                 </dv-border-box-5>
 
               </div>
-
             </div>
           </a-col>
         </keep-alive>
@@ -418,13 +399,14 @@ export default {
               });
               moneyStageData.map(stageElement=>{
                 const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
-                stageElement.value = Betools.tools.isNull(element) ? 0 : parseFloat(element.money/10000).toFixed(2);
+                stageElement.value = Betools.tools.isNull(element) ? 0 : parseFloat(parseFloat(element.money/10000).toFixed(2));
               });
               debugger;
               const caseMoneyStageConfig = { data: moneyStageData, unit: '单位', showValue: true, };
               this.caseMoneyStageConfig = { ...caseMoneyStageConfig };
               const caseMoneyStageRatioConfig = { radius: '40%', activeRadius: '45%', data: moneyStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
               this.caseMoneyStageRatioConfig = { ...caseMoneyStageRatioConfig };
+              debugger;
               Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 0.5);
               Betools.storage.setStore(`system_case_money_stage`, JSON.stringify(moneyStageData) , 3600 * 24 * 0.5);
             }
