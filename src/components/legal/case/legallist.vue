@@ -440,14 +440,27 @@ export default {
       async queryInfo() {
         try {
           const tableName = this.tablename;
+
+          try {
+            this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+            this.legal.stage = Betools.tools.getUrlParam('stage') || '全部';
+          } catch (error) {
+            console.error(`url param error:`, error);
+          }
+
+          try {
+            this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
+            this.iswework = Betools.tools.isWework(); //查询是否为企业微信
+            const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+            this.userinfo = weworkinfo.userinfo;
+            this.usertitle = weworkinfo.usertitle;
+          } catch (error) {
+            console.error(`wework login error:`, error);
+          }
+
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
-          this.iswework = Betools.tools.isWework(); //查询是否为企业微信
-          const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
-          this.userinfo = weworkinfo.userinfo;
-          this.usertitle = weworkinfo.usertitle;
-          this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
-          this.legal.stage = Betools.tools.getUrlParam('stage') || '全部';
+          await Betools.query.queryIsolation(userinfo); // const isolation = userinfo.isolation || '集团';
+
           this.execSearch('view');
         } catch (error) {
           console.log(error);
@@ -758,7 +771,10 @@ export default {
         const toast = value == 'view' ? vant.Toast.loading({ duration: 5000,  forbidClick: false,  message: '刷新中...', }):null;
         const { legal } = this;
         const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
+        await Betools.query.queryIsolation(userinfo); 
+        const isolation = userinfo.isolation || '集团';
         const resp = await Betools.query.queryRoleGroupList('LEGAL_OPERATE_ADMIN', userinfo.username); // 如果是修改或者追加或者是知会，需要检查是否是同部门，如果是同部门，则可以进行修改或追加或者知会操作
+        let isolationSQL = Betools.tools.isNull(isolation) ? '':`~and(isolation,eq,${isolation})`;
         let permissionSQL = (resp && resp.length > 0 && (JSON.stringify(resp).includes('领地集团总部')||JSON.stringify(resp).includes('ALL_PERMISSION'))) ? '':``;
         let scopeSQL = this.legal.scope.includes('全集团') ? '':`~and(apply_username,in,${resp[0].userlist})`;
         let searchSql = typeof legal.value == 'string' ? `~and((title,like,~${legal.value}~)~or(create_by,like,~${legal.value}~)~or(fstPlan,like,~${legal.value}~)~or(legalType,like,~${legal.value}~)~or(plate,like,~${legal.value}~)~or(firm,like,~${legal.value}~)~or(legalTname,like,~${legal.value}~)~or(zone,like,~${legal.value}~)~or(zoneProject,like,~${legal.value}~)~or(caseID,like,~${legal.value}~)~or(caseType,like,~${legal.value}~)~or(caseSType,like,~${legal.value}~)~or(stage,like,~${legal.value}~)~or(accuser,like,~${legal.value}~)~or(defendant,like,~${legal.value}~)~or(court,like,~${legal.value}~)~or(judge,like,~${legal.value}~)~or(judgeMobile,like,~${legal.value}~)~or(inHouseLawyers,like,~${legal.value}~)~or(disclosure,like,~${legal.value}~)~or(lawcase,like,~${legal.value}~)~or(thirdParty,like,~${legal.value}~)~or(lawOffice,like,~${legal.value}~)~or(lawyer,like,~${legal.value}~)~or(lawyerMobile,like,~${legal.value}~)~or(claims,like,~${legal.value}~))` : '';
@@ -779,7 +795,7 @@ export default {
         let zoneProjectSQL = Betools.tools.isNull(legal.zoneProject) ? '': `~and(zoneProject,like,~${legal.zoneProject}~)`;
         let createbySQL = Betools.tools.isNull(legal.create_by) ? '': `~and(create_by,like,~${legal.create_by}~)`;
         let progressSQL = Betools.tools.isNull(legal.progress) ? '': `~and(progress,like,~${legal.progress}~)`;
-        searchSql = plateSQL + zoneProjectSQL + createbySQL + progressSQL + scopeSQL + zoneSQL + courtSQL + accuserSQL + defendantSQL + caseTypeSQL + lawOfficeSQL + lawyerSQL + judgeSQL + claimsSQL + disclosureSQL + searchSql;
+        searchSql = isolationSQL + plateSQL + zoneProjectSQL + createbySQL + progressSQL + scopeSQL + zoneSQL + courtSQL + accuserSQL + defendantSQL + caseTypeSQL + lawOfficeSQL + lawyerSQL + judgeSQL + claimsSQL + disclosureSQL + searchSql;
         
         (async()=>{
           if(size <= 10000){
