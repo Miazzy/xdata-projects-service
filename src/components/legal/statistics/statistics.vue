@@ -13,6 +13,13 @@
 
               <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
+                <div style="background-color:#f0f0f0; height:10px; margin-top:0px;">
+                </div>
+
+                <div class="reward-apply-header" style="background-color:#f0f0f0; height:50px; width:100%; text-align:center; margin-top:0px; font-size: 1.5rem; ">
+                  法务可视化数据分析
+                </div>
+
                 <dv-border-box-5 title="统计分析">
                   
                   <div style="position:absolute; left:10px; width: 350px;">
