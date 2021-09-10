@@ -131,7 +131,7 @@
                     <div id="nav-content-law-num-count" style="margin-top:10px;">
                         <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
                           <div style="background:#000000;">
-                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:25px; margin-left:10px; ">数量统计：</div>
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:25px; margin-left:10px; ">标的金额统计(万)：</div>
                             <dv-conical-column-chart :config="caseMoneyConfig" style="width:350px;height:180px;" />
                           </div>
                         </dv-border-box-7>
@@ -157,6 +157,47 @@
                     </div>
 
                   </div>
+
+                  <div style="position:absolute; left:1090px; width: 350px;">
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">标的金额阶段统计(万)：</div>
+                            <dv-capsule-chart :config="caseMoneyStageConfig" style="width:350px;height:auto;margin-top:30px; " />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:270px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">标的金额阶段比率：</div>
+                            <dv-active-ring-chart :config="caseMoneyStageRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+                  </div>
                 </dv-border-box-5>
 
               </div>
@@ -180,10 +221,12 @@ export default {
     const { $router } = this;
     const numList = Betools.storage.getStore(`system_case_num`);
     const numStageData = Betools.storage.getStore(`system_case_num_stage`);
+    const moneyStageData = Betools.storage.getStore(`system_case_money_stage`);
     const numData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
     const numRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
     const moneyData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
     const moneyRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+    
     if(!Betools.tools.isNull(numList) && numList.length > 0){
       numData.map(numDataElement=>{
         const element = numList.find(item => {  return item.value == numDataElement.name;});
@@ -199,14 +242,17 @@ export default {
     if(!Betools.tools.isNull(numList) && numList.length > 0){
       moneyData.map(dataElement=>{
         const element = numList.find(item => {  return item.value == dataElement.name;});
-        dataElement.value = Betools.tools.isNull(element) ? 0 : element.money;
+        dataElement.value = Betools.tools.isNull(element) ? 0 : parseFloat(element.money/10000).toFixed(2);
       });
       moneyData[0].value = numList[0].money + (numList.length >= 2 ? numList[1].money : 0);
+      moneyData[0].value = parseFloat(moneyData[0].value/10000).toFixed(2);
       moneyRatioData.map(dataElement=>{
         const element = numList.find(item => {  return item.value == dataElement.name;});
         dataElement.value = Betools.tools.isNull(element) ? 0 : element.money;
       });
     }
+
+    debugger;
 
     return {
       iswechat:false,
@@ -264,8 +310,10 @@ export default {
       caseNumRatioConfig: { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
       caseNumStageConfig:{ data: numStageData, unit: '单位', showValue: true, },
       caseNumStageRatioConfig:{ radius: '40%', activeRadius: '45%', data: numStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],},
-      caseMoneyConfig:{ data: numData, img: ['https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, },
-      caseMoneyRatioConfig: { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
+      caseMoneyConfig:{ data: moneyData, img: ['https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, },
+      caseMoneyRatioConfig: { radius: '40%', activeRadius: '45%', data: moneyRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
+      caseMoneyStageConfig:{ data: moneyStageData, unit: '单位', showValue: true, },
+      caseMoneyStageRatioConfig:{ radius: '40%', activeRadius: '45%', data: moneyStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],},
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
@@ -328,6 +376,12 @@ export default {
               console.error(error);
           }
 
+          const stageMap = { '仲裁阶段':'仲裁阶段', '一审阶段':'一审阶段', '二审阶段':'二审阶段', '再审阶段':'再审阶段', '执行阶段':'执行阶段', '结案阶段':'归档闭单',};
+          const stageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
+          const moneyStageData = [{ name: '仲裁阶段', value: 0 }, { name: '一审阶段', value: 0 }, { name: '二审阶段', value: 0 }, { name: '再审阶段', value: 0 }, { name: '执行阶段', value: 0 }, { name: '结案阶段', value: 0 }]
+          const numData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+          const numRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+
           let userinfo = await Betools.storage.getStore('system_userinfo');
           userinfo = await Betools.query.queryIsolation(userinfo);
           const isolation = userinfo.isolation;
@@ -354,18 +408,25 @@ export default {
               Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 0.5);
             }
     
-            let numStageList = Betools.storage.getStore(`system_case_num_stage`);
+            let numStageList = Betools.storage.getStore(`system_case_num_stage_list`);
             if(Betools.tools.isNull(numStageList)){
               numStageList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,${isolation})~and(type,eq,阶段)&_sort=type,value&_p=0&_size=10`);
+              Betools.storage.getStore(`system_case_num_stage_list`, JSON.stringify(numStageList), 3600 * 24 * 0.5);
               stageData.map(stageElement=>{
                 const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
                 stageElement.value = Betools.tools.isNull(element) ? 0 : element.num;
               });
-              const caseNumStageConfig = { data: stageData, unit: '单位', showValue: true, };
-              this.caseNumStageConfig = { ...caseNumStageConfig };
-              const caseNumStageRatioConfig = { radius: '40%', activeRadius: '45%', data: stageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
-              this.caseNumStageRatioConfig = { ...caseNumStageRatioConfig };
+              moneyStageData.map(stageElement=>{
+                const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
+                stageElement.value = Betools.tools.isNull(element) ? 0 : parseFloat(element.money/10000).toFixed(2);
+              });
+              debugger;
+              const caseMoneyStageConfig = { data: moneyStageData, unit: '单位', showValue: true, };
+              this.caseMoneyStageConfig = { ...caseMoneyStageConfig };
+              const caseMoneyStageRatioConfig = { radius: '40%', activeRadius: '45%', data: moneyStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
+              this.caseMoneyStageRatioConfig = { ...caseMoneyStageRatioConfig };
               Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 0.5);
+              Betools.storage.setStore(`system_case_money_stage`, JSON.stringify(moneyStageData) , 3600 * 24 * 0.5);
             }
           } catch (error) {
             console.error(`isolation statistics error:`, error);
