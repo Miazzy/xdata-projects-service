@@ -259,8 +259,8 @@ export default {
           console.error(`wework login error:`, error);
         }
 
-        const userinfo = await Betools.storage.getStore('system_userinfo');
-        await Betools.query.queryIsolation(userinfo);
+        let userinfo = await Betools.storage.getStore('system_userinfo');
+        userinfo = await Betools.query.queryIsolation(userinfo);
         const isolation = userinfo.isolation;
 
         try {
