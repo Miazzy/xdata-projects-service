@@ -786,7 +786,7 @@ export const getRewardQuickTag = ($router) => {
         name: '统计分析',
         color: 'blue',
         click: () => {
-
+            $router.push(`/legal/statistics`, '_blank');
         },
     }, {
         name: '退出系统',
