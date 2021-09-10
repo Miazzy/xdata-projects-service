@@ -202,7 +202,7 @@ export default {
         const element = numList.find(item => {  return item.value == numDataElement.name;});
         numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
       });
-      numData[0].value = numList[0].num + numList[1].num;
+      numData[0].value = numList[0].num + (numList.length >= 2 ? numList[1].num : 0);
       numRatioData.map(numDataElement=>{
         const element = numList.find(item => {  return item.value == numDataElement.name;});
         numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
@@ -272,7 +272,7 @@ export default {
                 const element = numList.find(item => {  return item.value == numDataElement.name;});
                 numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
               });
-              numData[0].value = numList[0].num + numList.length >= 2 ? numList[1].num : 0;
+              numData[0].value = numList[0].num + (numList.length >= 2 ? numList[1].num : 0);
               numRatioData.map(numDataElement=>{
                 const element = numList.find(item => {  return item.value == numDataElement.name;});
                 numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
