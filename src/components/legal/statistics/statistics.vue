@@ -31,12 +31,91 @@
 
               <div id="legal-apply-content" class="reward-apply-content" :style="`height:auto; background-color:#fefefe; margin-top:0px; margin-left: 0.0rem; margin-right: 0.0rem; margin-bottom: 5rem; border: 1px solid #f0f0f0; front-size: 1rem; ${iswechat ? `width:180%;` : '' }`" >
 
-                <div class="reward-apply-header" style="height:80px; width:100%; text-align:center; margin-top:20px; font-size: 1.5rem; ">
-                  统计分析
-                </div>
+                <dv-border-box-5 title="统计分析">
+                  
+                  <div style="position:absolute; left:10px; width: 350px;">
 
-                <div style="height:100px;">
-                </div>
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:25px; margin-left:10px; ">数量统计：</div>
+                            <dv-conical-column-chart :config="caseNumConfig" style="width:350px;height:180px;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:270px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">数量比率：</div>
+                            <dv-active-ring-chart :config="caseNumRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                  </div>
+
+                  <div style="position:absolute; left:370px; width: 350px;">
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段统计：</div>
+                            <dv-capsule-chart :config="caseNumStageConfig" style="width:350px;height:auto;margin-top:30px; " />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:270px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">阶段比率：</div>
+                            <dv-active-ring-chart :config="caseNumStageRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+                  </div>
+                </dv-border-box-5>
 
               </div>
 
@@ -55,6 +134,26 @@ import * as workprocess from '@/request/wflow.process';
 export default {
   mixins: [window.mixin],
   data() {
+
+    const { $router } = this;
+    const numList = Betools.storage.getStore(`system_case_num`);
+    const numStageData = Betools.storage.getStore(`system_case_num_stage`);
+    const numData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+    const numRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+    if(!Betools.tools.isNull(numList) && numList.length > 0){
+      numData.map(numDataElement=>{
+        const element = numList.find(item => {  return item.value == numDataElement.name;});
+        numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+      });
+      numData[0].value = numList[0].num + (numList.length >= 2 ? numList[1].num : 0);
+      numRatioData.map(numDataElement=>{
+        const element = numList.find(item => {  return item.value == numDataElement.name;});
+        numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+      });
+    }
+
+    debugger;
+
     return {
       iswechat:false,
       iswework:false,
@@ -107,6 +206,10 @@ export default {
       acceptType: workconfig.compcolumns.acceptType,
       commonTypeColumns: workconfig.compcolumns.commonTypeColumns,
       sealTypeColumns: workconfig.compcolumns.sealTypeColumns,
+      caseNumConfig:{ data: numData, img: ['https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, },
+      caseNumRatioConfig: { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
+      caseNumStageConfig:{ data: numStageData, unit: '单位', showValue: true, },
+      caseNumStageRatioConfig:{ radius: '40%', activeRadius: '45%', data: numStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],},
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
@@ -169,7 +272,49 @@ export default {
               console.error(error);
           }
 
-          const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息  
+          let userinfo = await Betools.storage.getStore('system_userinfo');
+          userinfo = await Betools.query.queryIsolation(userinfo);
+          const isolation = userinfo.isolation;
+
+          try {
+            let numList = Betools.storage.getStore(`system_case_num`);
+            if(Betools.tools.isNull(numList)){
+              numList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,${isolation})~and(type,eq,类别)&_sort=type,value&_p=0&_size=10`);
+              if(!Betools.tools.isNull(numList) && numList.length > 0){
+                numData.map(numDataElement=>{
+                  const element = numList.find(item => {  return item.value == numDataElement.name;});
+                  numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+                });
+                numData[0].value = numList[0].num + (numList.length >= 2 ? numList[1].num : 0);
+                numRatioData.map(numDataElement=>{
+                  const element = numList.find(item => {  return item.value == numDataElement.name;});
+                  numDataElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+                });
+              }
+              const caseNumConfig = { data: numData, img: [ 'https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, };
+              this.caseNumConfig = { ...caseNumConfig };
+              const caseNumRatioConfig = { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], };
+              this.caseNumRatioConfig = { ...caseNumRatioConfig };
+              Betools.storage.setStore(`system_case_num`, JSON.stringify(numList) , 3600 * 24 * 0.5);
+            }
+    
+            let numStageList = Betools.storage.getStore(`system_case_num_stage`);
+            if(Betools.tools.isNull(numStageList)){
+              numStageList = await Betools.manage.queryTableData('v_legal_num', `_where=(isolation,eq,${isolation})~and(type,eq,阶段)&_sort=type,value&_p=0&_size=10`);
+              stageData.map(stageElement=>{
+                const element = numStageList.find(item => {  return item.value == stageMap[stageElement.name];});
+                stageElement.value = Betools.tools.isNull(element) ? 0 : element.num;
+              });
+              const caseNumStageConfig = { data: stageData, unit: '单位', showValue: true, };
+              this.caseNumStageConfig = { ...caseNumStageConfig };
+              const caseNumStageRatioConfig = { radius: '40%', activeRadius: '45%', data: stageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], }
+              this.caseNumStageRatioConfig = { ...caseNumStageRatioConfig };
+              Betools.storage.setStore(`system_case_num_stage`, JSON.stringify(stageData) , 3600 * 24 * 0.5);
+            }
+          } catch (error) {
+            console.error(`isolation statistics error:`, error);
+          }
+          
           try {
             this.element.create_time = dayjs().format('YYYY-MM-DD');
             this.element.create_by = (userinfo ? userinfo.realname || userinfo.name || userinfo.lastname : '');
