@@ -2368,32 +2368,48 @@ export default {
         try {
           vant.Toast.loading({ duration: 3000,  forbidClick: false,  message: '刷新中...', });
           const id = this.id = Betools.tools.getUrlParam('id');
-          this.legal.caseSType = (Betools.tools.getUrlParam('legalTname') || '起诉') + '案件';
-          this.role = Betools.tools.getUrlParam('role');
-          this.stage = Betools.tools.getUrlParam('stage');
-          this.apply = Betools.tools.getUrlParam('apply') || 'view';
-          this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
-          this.legal.legalTname = (Betools.tools.getUrlParam('type') || '0') == '0' ? '起诉' : '应诉';  //查询type
           
+          try {
+            this.legal.caseSType = (Betools.tools.getUrlParam('legalTname') || '起诉') + '案件';
+            this.role = Betools.tools.getUrlParam('role');
+            this.stage = Betools.tools.getUrlParam('stage');
+            this.apply = Betools.tools.getUrlParam('apply') || 'view';
+            this.back = Betools.tools.getUrlParam('back') || '/legal/workspace'; //查询上一页
+            this.legal.legalTname = (Betools.tools.getUrlParam('type') || '0') == '0' ? '起诉' : '应诉';  //查询type
+          } catch (error) {
+            console.error(`url param error:`, error);
+          }
+          
+          try {
+            this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
+            this.iswework = Betools.tools.isWework(); //查询是否为企业微信
+            const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
+            this.userinfo = weworkinfo.userinfo;
+            this.usertitle = weworkinfo.usertitle;
+          } catch (error) {
+            console.error(`wework login error:`, error);
+          }
+
           const userinfo = await Betools.storage.getStore('system_userinfo');  //获取用户基础信息
-          this.iswechat = Betools.tools.isWechat(); //查询当前是否微信端
-          this.iswework = Betools.tools.isWework(); //查询是否为企业微信
-          const weworkinfo = await this.weworkLogin('search','search','v5'); //查询当前登录用户
-          this.userinfo = weworkinfo.userinfo;
-          this.usertitle = weworkinfo.usertitle;
+          await Betools.query.queryIsolation(userinfo);
+          const isolation = userinfo.isolation || '集团';
           vant.Toast.clear();
 
-          this.legal.create_by = this.legal.apply_realname = userinfo && userinfo.realname ? userinfo.realname : '';
-          this.legal.create_username = this.legal.apply_username = userinfo && userinfo.username ? userinfo.username : '';
-          this.options.courtOptions = await workconfig.courtList();
-           
+          try {
+            this.legal.isolation = isolation;
+            this.legal.create_by = this.legal.apply_realname = userinfo && userinfo.realname ? userinfo.realname : '';
+            this.legal.create_username = this.legal.apply_username = userinfo && userinfo.username ? userinfo.username : '';
+            this.options.courtOptions = await workconfig.courtList();
+          } catch (error) {
+            console.error(`legal init error:`, error);
+          }
+          
           if(!Betools.tools.isNull(id)){
             this.legal = null;
 
             (async()=>{
               const elem = await this.handleList(this.tablename , id);
               Betools.tools.isNull(this.legal)?this.legal = elem:null;
-              debugger;
             })();
 
             (async()=>{
