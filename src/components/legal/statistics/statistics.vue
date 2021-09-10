@@ -115,6 +115,48 @@
                         </dv-border-box-7>
                     </div>
                   </div>
+
+                  <div style="position:absolute; left:730px; width: 350px;">
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:250px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:25px; margin-left:10px; ">数量统计：</div>
+                            <dv-conical-column-chart :config="caseMoneyConfig" style="width:350px;height:180px;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-num-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:15px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                            <dv-decoration-3 style="width:115px;height:15px;float:left;" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                    <div id="nav-content-law-sum-count" style="margin-top:10px;">
+                        <dv-border-box-7 style="height:270px;width:350px;background:#000000;">
+                          <div style="background:#000000;">
+                            <div style="color:#f0f0f0; height:20px; font-size:15px; margin-top:10px; margin-bottom:-20px; margin-left:10px; ">数量比率：</div>
+                            <dv-active-ring-chart :config="caseMoneyRatioConfig" style="width:350px;height:250px;transform:scale(1.2);" />
+                          </div>
+                        </dv-border-box-7>
+                    </div>
+
+                  </div>
                 </dv-border-box-5>
 
               </div>
@@ -140,6 +182,8 @@ export default {
     const numStageData = Betools.storage.getStore(`system_case_num_stage`);
     const numData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
     const numRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+    const moneyData = [{ name: '所有案件', value: 0 }, { name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
+    const moneyRatioData = [{ name: '起诉案件', value: 0 }, { name: '应诉案件', value: 0 },];
     if(!Betools.tools.isNull(numList) && numList.length > 0){
       numData.map(numDataElement=>{
         const element = numList.find(item => {  return item.value == numDataElement.name;});
@@ -152,7 +196,17 @@ export default {
       });
     }
 
-    debugger;
+    if(!Betools.tools.isNull(numList) && numList.length > 0){
+      moneyData.map(dataElement=>{
+        const element = numList.find(item => {  return item.value == dataElement.name;});
+        dataElement.value = Betools.tools.isNull(element) ? 0 : element.money;
+      });
+      moneyData[0].value = numList[0].money + (numList.length >= 2 ? numList[1].money : 0);
+      moneyRatioData.map(dataElement=>{
+        const element = numList.find(item => {  return item.value == dataElement.name;});
+        dataElement.value = Betools.tools.isNull(element) ? 0 : element.money;
+      });
+    }
 
     return {
       iswechat:false,
@@ -210,6 +264,8 @@ export default {
       caseNumRatioConfig: { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
       caseNumStageConfig:{ data: numStageData, unit: '单位', showValue: true, },
       caseNumStageRatioConfig:{ radius: '40%', activeRadius: '45%', data: numStageData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'],},
+      caseMoneyConfig:{ data: numData, img: ['https://wechat.yunwisdom.club:30443/static/img/1st.png', 'https://wechat.yunwisdom.club:30443/static/img/2st.png', 'https://wechat.yunwisdom.club:30443/static/img/5st.png', ], showValue: true, },
+      caseMoneyRatioConfig: { radius: '40%', activeRadius: '45%', data: numRatioData, digitalFlopStyle: { fontSize: 12 }, lineWidth: 15, color: ['#e062ae', '#32c5e9', '#fb7293', '#e690d1', '#96bfff'], },
       statusList:['存续','注销','经营异常'],
       natureList:['关联公司','非关联公司'],
       industryList:[ '房地产行业', '物业行业', '商管行业', '金融行业', '商贸行业', '建筑行业', '高新技术行业', '监理行业', '医疗行业', '商务咨询行业', '环保行业', '教育行业'],
